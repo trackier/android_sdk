@@ -1,0 +1,37 @@
+package com.cloudstuff.trackiersdk
+
+object TrackierSDK {
+    private var isInitialized = false
+    private val logger = Factory.logger
+    private var instance = TrackierSDKInstance()
+
+    fun initialize(config: TrackierSDKConfig) {
+        if (isInitialized) {
+            logger.finest("SDK Already initialized")
+            return
+        }
+        isInitialized = true
+        logger.info("Trackier SDK ${Constants.SDK_VERSION} initialized")
+        instance.initialize(config)
+    }
+
+    fun isEnabled(): Boolean {
+        return instance.isEnabled
+    }
+
+    fun setEnabled(value: Boolean) {
+        instance.isEnabled = value
+    }
+
+    fun trackEvent(event: TrackierEvent) {
+        if (!isInitialized) {
+            logger.finest("SDK Not Initialized")
+            return
+        }
+        if (!isEnabled()) {
+            logger.finest("SDK Disabled")
+            return
+        }
+        instance.trackEvent(event)
+    }
+}

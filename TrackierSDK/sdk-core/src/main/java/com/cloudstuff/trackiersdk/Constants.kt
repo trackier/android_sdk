@@ -1,0 +1,26 @@
+package com.cloudstuff.trackiersdk
+
+object Constants {
+    const val SDK_VERSION = "1.0.0"
+    const val USER_AGENT = "com.cloudstuff.trackiersdk:trackier-android:" + SDK_VERSION
+    const val API_VERSION = "v1"
+//    const val BASE_URL = "https://events.trackier.io/" + API_VERSION + "/"
+    const val BASE_URL = "https://requestbin.offersoptimize.com/"
+
+    const val LOG_TAG = "trackiersdk"
+    const val LOG_WORK_TAG = "trackiersdk:work"
+    const val LOG_WORK_INPUT_KEY = "trackiersdk:work_request"
+    const val SHARED_PREF_NAME = "com.trackiersdk"
+    const val SHARED_PREF_INSTALL_URL = "install_referrer"
+    const val SHARED_PREF_CLICK_TIME = "click_time"
+    const val SHARED_PREF_INSTALL_TIME = "install_time"
+    const val SHARED_PREF_IS_INSTALL_TRACKED = ""
+
+    const val ENV_PRODUCTION = "production"
+    const val ENV_SANDBOX = "sandbox"
+
+    const val DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+
+    const val UUID_EMPTY = "00000000-0000-0000-0000-000000000000"
+    const val UNKNOWN_EVENT = "unknown"
+}
