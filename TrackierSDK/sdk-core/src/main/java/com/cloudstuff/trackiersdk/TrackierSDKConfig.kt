@@ -4,6 +4,7 @@ import android.content.Context
 import java.util.logging.Level
 
 class TrackierSDKConfig(var context: Context, val appToken: String, val env: String) {
+    private var enableApkTracking = false
     private val logger = Factory.logger
 
     init {
@@ -13,5 +14,13 @@ class TrackierSDKConfig(var context: Context, val appToken: String, val env: Str
 
     fun setLogLevel(value: Level) {
         logger.level = value
+    }
+
+    fun setApkTracking(value: Boolean) {
+        enableApkTracking = value
+    }
+
+    fun isApkTrackingEnabled(): Boolean {
+        return enableApkTracking
     }
 }

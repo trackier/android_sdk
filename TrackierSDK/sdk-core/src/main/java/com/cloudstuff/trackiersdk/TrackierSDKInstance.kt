@@ -2,18 +2,21 @@ package com.cloudstuff.trackiersdk
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.Exception
 
 class TrackierSDKInstance {
     private val device = DeviceInfo()
     private val logger = Factory.logger
+    lateinit var config: TrackierSDKConfig
+    private var refDetails: RefererDetails? = null
+
     var isEnabled = true
     var isInitialized = false
     var configLoaded = false
     var gaid: String? = null
     var isLAT = false
-    lateinit var config: TrackierSDKConfig
 
     /**
      * Initialize method should be called to initialize the sdk
@@ -48,16 +51,21 @@ class TrackierSDKInstance {
     }
 
     private fun getReferrerDetails(): RefererDetails {
+        if (refDetails != null) {
+            return refDetails!!
+        }
         var url = Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_INSTALL_URL)
         val clickTime = Util.getSharedPrefString(this.config.context,Constants.SHARED_PREF_CLICK_TIME)
         val installTime = Util.getSharedPrefString(this.config.context,Constants.SHARED_PREF_INSTALL_TIME)
         if (url.isBlank()) {
             url = RefererDetails.ORGANIC_REF
         }
-        return RefererDetails(url, clickTime, installTime)
+        refDetails = RefererDetails(url, clickTime, installTime)
+        return refDetails!!
     }
 
     private fun setReferrerDetails(refererDetails: RefererDetails) {
+        refDetails = refererDetails
         val prefs = Util.getSharedPref(this.config.context)
         prefs.edit().putString(Constants.SHARED_PREF_INSTALL_URL, refererDetails.url)
             .putString(Constants.SHARED_PREF_CLICK_TIME, refererDetails.clickTime)
@@ -91,6 +99,9 @@ class TrackierSDKInstance {
         if (isInstallTracked()) {
             return
         }
+        if (config.isApkTrackingEnabled()) {
+            // TODO: implement APK tracking logic
+        }
         if (!isReferrerStored()) {
             val installRef = InstallReferrer(this.config.context)
             val refDetails = installRef.getRefDetails()
@@ -101,18 +112,32 @@ class TrackierSDKInstance {
         setInstallTracked()
     }
 
+    private fun _trackEvent(event: TrackierEvent) {
+        val wrkRequest = makeWorkRequest(TrackierWorkRequest.KIND_EVENT)
+        wrkRequest.event = event
+        TrackierWorkRequest.enqueue(wrkRequest)
+    }
+
     fun trackEvent(event: TrackierEvent) {
         if (!isEnabled || !configLoaded) {
             return
         }
-        if (!isInstallTracked()) {
-            logger.warning("Event Tracking request sent before install was tracked")
-        }
         if (!isInitialized) {
             logger.warning("Event Tracking request sent before SDK data was initialized")
         }
-        val wrkRequest = makeWorkRequest(TrackierWorkRequest.KIND_EVENT)
-        wrkRequest.event = event
-        TrackierWorkRequest.enqueue(wrkRequest)
+        if (!isInstallTracked()) {
+            CoroutineScope(Dispatchers.IO).launch {
+                for (i in 1..5) {
+                    delay(1000 * i.toLong())
+                    if (isInstallTracked()) {
+                        _trackEvent(event)
+                        break
+                    }
+                }
+            }
+        } else {
+            _trackEvent(event)
+        }
+
     }
 }
