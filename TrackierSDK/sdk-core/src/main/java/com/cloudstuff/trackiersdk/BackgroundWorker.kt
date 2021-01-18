@@ -29,11 +29,9 @@ class BackgroundWorker(appContext: Context, val workerParameters: WorkerParamete
                 APIRepository.doWork(workRequest!!)
             } catch (ex: HttpException) {
                 Log.d("background_workder_Htt", "${ex}")
-                return Result.success()
                 return Result.retry()
             } catch (ex: Exception) {
                 Log.d("background_workder_Ex", "${ex}")
-                return Result.success()
                 return Result.retry()
             }
             return Result.success()

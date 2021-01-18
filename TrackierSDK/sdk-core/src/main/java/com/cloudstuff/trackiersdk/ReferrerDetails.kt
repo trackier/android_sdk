@@ -8,7 +8,7 @@ data class RefererDetails(
     val isOrganic: Boolean get() = clickId.isEmpty()
 
     val clickId: String
-    get() {
+    get() { // TODO:
         return ""
     }
 

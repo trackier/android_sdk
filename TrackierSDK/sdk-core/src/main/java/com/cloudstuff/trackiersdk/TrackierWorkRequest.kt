@@ -26,6 +26,7 @@ class TrackierWorkRequest(val kind: String = KIND_UNKNOWN) {
         body["clickId"] = refDetails.clickId
         body["clickTime"] = refDetails.clickTime
         body["installTime"] = refDetails.installTime
+        body["installId"] = "XXX-XXX-XXX"   // TODO: fix me
         return body
     }
 
