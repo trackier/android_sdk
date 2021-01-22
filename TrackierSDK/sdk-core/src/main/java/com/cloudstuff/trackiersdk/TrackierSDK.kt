@@ -5,6 +5,7 @@ object TrackierSDK {
     private val logger = Factory.logger
     private var instance = TrackierSDKInstance()
 
+    @JvmStatic
     fun initialize(config: TrackierSDKConfig) {
         if (isInitialized) {
             logger.finest("SDK Already initialized")
@@ -23,6 +24,7 @@ object TrackierSDK {
         instance.isEnabled = value
     }
 
+    @JvmStatic
     fun trackEvent(event: TrackierEvent) {
         if (!isInitialized) {
             logger.finest("SDK Not Initialized")
