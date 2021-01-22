@@ -1,21 +1,21 @@
 package com.cloudstuff.trackiersdk
 
-data class TrackierEvent(val id: String) { //changed from name to id
-    @JvmField var orderId: String? = null
-    @JvmField var currency: String? = null
-    @JvmField var param1: String? = null
-    @JvmField var param2: String? = null
-    @JvmField var param3: String? = null
-    @JvmField var param4: String? = null
-    @JvmField var param5: String? = null
-    @JvmField var param6: String? = null
-    @JvmField var param7: String? = null
-    @JvmField var param8: String? = null
-    @JvmField var param9: String? = null
-    @JvmField var param10: String? = null
+data class TrackierEvent(val name: String) {
+    var orderId: String? = null
+    var currency: String? = null
+    var param1: String? = null
+    var param2: String? = null
+    var param3: String? = null
+    var param4: String? = null
+    var param5: String? = null
+    var param6: String? = null
+    var param7: String? = null
+    var param8: String? = null
+    var param9: String? = null
+    var param10: String? = null
 
-    @JvmField var revenue: Double? = null
-    @JvmField var eventValue = mutableMapOf<String, Any>()
+    var revenue: Double? = null
+    var eventValue = mutableMapOf<String, Any>()
 
     companion object {
         const val LEVEL_ACHIEVED = "xxx"

@@ -24,8 +24,7 @@ data class DeviceInfo(
     val manufacturer: String = Build.MANUFACTURER,
     val hardwareName: String = Build.DISPLAY,
     val model: String = Build.MODEL,
-    val apiLevel: String = "${VERSION.SDK_INT}",
-    val brand: String = Build.BRAND
+    val apiLevel: String = "${VERSION.SDK_INT}"
 ) {
     lateinit var packageName: String
     var appVersion: String? = null

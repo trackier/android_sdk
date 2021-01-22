@@ -15,9 +15,6 @@ class TrackierWorkRequest(val kind: String = KIND_UNKNOWN) {
     var refDetails = RefererDetails.default()
     private val createdAt = Util.dateFormatter.format(Date())
 
-     var UIID = ""    //change by prak24 20 jan 2021
-     var appToken = ""  //change by prak24 20 jan 2021
-
     private fun setDefaults(): MutableMap<String, Any> {
         val body = mutableMapOf<String, Any>()
         body["device"] = this.device
@@ -29,8 +26,7 @@ class TrackierWorkRequest(val kind: String = KIND_UNKNOWN) {
         body["clickId"] = refDetails.clickId
         body["clickTime"] = refDetails.clickTime
         body["installTime"] = refDetails.installTime
-        body["installId"] = UIID  // TODO: fix me  //chnage by prak24 20 jan 2021
-        body["appKey"] = appToken    //chnage by prak24 20 jan 2021
+        body["installId"] = "XXX-XXX-XXX"   // TODO: fix me
         return body
     }
 
