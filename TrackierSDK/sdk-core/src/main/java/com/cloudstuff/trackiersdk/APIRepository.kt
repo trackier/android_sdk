@@ -1,17 +1,22 @@
 package com.cloudstuff.trackiersdk
 
+import android.util.Log
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 
 object APIRepository {
+
+    val logging = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+
     private val client: OkHttpClient by lazy {
-        OkHttpClient().newBuilder()
-            .connectTimeout(60, TimeUnit.SECONDS)
+        OkHttpClient.Builder().connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
             .retryOnConnectionFailure(true)
+                .addInterceptor(logging)
             .build()
     }
 
@@ -26,10 +31,14 @@ object APIRepository {
     }
 
     private suspend fun sendInstall(body: MutableMap<String, Any>): ResponseData {
+        Log.d("sendInstall body",body.toString())
         return trackierApi.sendInstallData(body)
     }
 
     private suspend fun sendEvent(body: MutableMap<String, Any>): ResponseData {
+        Log.d("sendEvent body",body.toString())
+        val x = trackierApi.sendEventData(body);
+        Log.d("sendEvent response",body.toString())
         return trackierApi.sendEventData(body)
     }
 
