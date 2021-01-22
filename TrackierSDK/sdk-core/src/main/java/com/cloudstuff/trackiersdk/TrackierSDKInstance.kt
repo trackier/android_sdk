@@ -4,6 +4,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.*
 import kotlin.Exception
 
 class TrackierSDKInstance {
@@ -11,6 +12,7 @@ class TrackierSDKInstance {
     private val logger = Factory.logger
     lateinit var config: TrackierSDKConfig
     private var refDetails: RefererDetails? = null
+    private var appToken: String = ""     // change by prak24
 
     var isEnabled = true
     var isInitialized = false
@@ -27,12 +29,14 @@ class TrackierSDKInstance {
         }
         this.config = config
         this.configLoaded = true
+        this.appToken=this.config.appToken // change by prak24 20 jan 2021
         DeviceInfo.init(device, this.config.context)
         CoroutineScope(Dispatchers.IO).launch {
             initGaid()
             initAttributionInfo()
             trackInstall()
         }
+
     }
 
     private suspend fun initGaid() {
@@ -60,7 +64,7 @@ class TrackierSDKInstance {
         if (url.isBlank()) {
             url = RefererDetails.ORGANIC_REF
         }
-        refDetails = RefererDetails(url, clickTime, installTime)
+        refDetails = RefererDetails(url,clickTime, installTime)
         return refDetails!!
     }
 
@@ -71,6 +75,27 @@ class TrackierSDKInstance {
             .putString(Constants.SHARED_PREF_CLICK_TIME, refererDetails.clickTime)
             .putString(Constants.SHARED_PREF_INSTALL_TIME, refererDetails.installTime)
             .apply()
+
+    }
+
+    //created by prak24 20 jan 2021
+    private fun setUIIDDetails():String {
+            val UIIDString=  UUID.randomUUID().toString()
+            val prefs = Util.getSharedPref(this.config.context)
+            prefs.edit().putString(Constants.SHARED_PREF_INSTALL_ID, UIIDString)
+                    .apply()
+           return UIIDString
+    }
+
+    //created by prak24 20 jan 2021
+    private fun getUIIDDetials(): String {
+        var UIIDString = Util.getSharedPrefString(this.config.context,Constants.SHARED_PREF_INSTALL_ID)
+        if (UIIDString.isBlank()) {
+            return  setUIIDDetails()
+        }else {
+            logger.info("UIID:- " + UIIDString);
+            return UIIDString
+        }
     }
 
     private fun makeWorkRequest(kind: String): TrackierWorkRequest {
@@ -78,6 +103,9 @@ class TrackierSDKInstance {
         trackierWorkRequest.device = device
         trackierWorkRequest.gaid = gaid
         trackierWorkRequest.refDetails = getReferrerDetails()
+
+        trackierWorkRequest.UIID= getUIIDDetials()     //change by prak24 20 jan 2021
+        trackierWorkRequest.appToken=this.appToken    //change by prak24 20 jan 2021
         return trackierWorkRequest
     }
 
@@ -96,12 +124,18 @@ class TrackierSDKInstance {
     }
 
     private suspend fun trackInstall() {
+        val installRef = InstallReferrer(this.config.context)
+        val refDetails = installRef.getRefDetails()
+        logger.info("prak24reffere click: "+refDetails.clickId)
+        logger.info("prak24reffere url : "+refDetails.url)
+
         if (isInstallTracked()) {
             return
         }
         if (config.isApkTrackingEnabled()) {
             // TODO: implement APK tracking logic
         }
+
         if (!isReferrerStored()) {
             val installRef = InstallReferrer(this.config.context)
             val refDetails = installRef.getRefDetails()
