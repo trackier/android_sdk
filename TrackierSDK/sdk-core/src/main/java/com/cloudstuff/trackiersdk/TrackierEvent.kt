@@ -1,6 +1,6 @@
 package com.cloudstuff.trackiersdk
 
-data class TrackierEvent(val id: String) { //changed from name to id
+data class TrackierEvent(val id: String) {
     @JvmField var orderId: String? = null
     @JvmField var currency: String? = null
     @JvmField var param1: String? = null
