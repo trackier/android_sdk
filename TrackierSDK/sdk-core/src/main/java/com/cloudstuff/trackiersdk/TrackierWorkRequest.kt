@@ -7,13 +7,14 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class TrackierWorkRequest(val kind: String = KIND_UNKNOWN) {
+class TrackierWorkRequest(val kind: String = KIND_UNKNOWN, val appToken: String) {
     var gaid: String? = null
     var isLAT = false
     lateinit var device: DeviceInfo
     var event = TrackierEvent(Constants.UNKNOWN_EVENT)
     var refDetails = RefererDetails.default()
     private val createdAt = Util.dateFormatter.format(Date())
+    var installID = ""
 
     private fun setDefaults(): MutableMap<String, Any> {
         val body = mutableMapOf<String, Any>()
@@ -26,7 +27,8 @@ class TrackierWorkRequest(val kind: String = KIND_UNKNOWN) {
         body["clickId"] = refDetails.clickId
         body["clickTime"] = refDetails.clickTime
         body["installTime"] = refDetails.installTime
-        body["installId"] = "XXX-XXX-XXX"   // TODO: fix me
+        body["installId"] = installID
+        body["appKey"] = appToken
         return body
     }
 

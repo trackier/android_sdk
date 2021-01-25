@@ -13,7 +13,8 @@ object Constants {
     const val SHARED_PREF_INSTALL_URL = "install_referrer"
     const val SHARED_PREF_CLICK_TIME = "click_time"
     const val SHARED_PREF_INSTALL_TIME = "install_time"
-    const val SHARED_PREF_IS_INSTALL_TRACKED = ""
+    const val SHARED_PREF_IS_INSTALL_TRACKED = "is_install_tracked"
+    const val SHARED_PREF_INSTALL_ID = "install_id"
 
     const val ENV_PRODUCTION = "production"
     const val ENV_SANDBOX = "sandbox"

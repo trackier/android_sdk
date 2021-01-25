@@ -7,8 +7,7 @@ import java.util.concurrent.TimeUnit
 
 object APIRepository {
     private val client: OkHttpClient by lazy {
-        OkHttpClient().newBuilder()
-            .connectTimeout(60, TimeUnit.SECONDS)
+        OkHttpClient.Builder().connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
             .retryOnConnectionFailure(true)

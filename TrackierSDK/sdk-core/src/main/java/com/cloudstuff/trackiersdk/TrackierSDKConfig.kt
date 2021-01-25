@@ -12,6 +12,7 @@ class TrackierSDKConfig(var context: Context, val appToken: String, val env: Str
         setLogLevel(if (env == Constants.ENV_PRODUCTION) Level.SEVERE else Level.FINEST)
     }
 
+
     fun setLogLevel(value: Level) {
         logger.level = value
     }
