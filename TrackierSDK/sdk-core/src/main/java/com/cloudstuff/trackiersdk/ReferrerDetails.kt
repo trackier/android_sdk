@@ -15,26 +15,9 @@ data class RefererDetails(
 
         init {
             val afterDecode = URLDecoder.decode(url, "UTF-8").toString()
-            Log.d("prak24 afterDecode", ":$afterDecode")
             val params = getQueryKeyValueMap(afterDecode);
-            if (params != null) {
-                clickId= params["tr_clickid"].toString()
-            }
-            else clickId= ""
+            clickId = if (params != null) params["tr_clickid"].toString() else ""
         }
-//
-//        get() {
-//            var clickIdNew:String =""
-//            val afterDecode = URLDecoder.decode(url, "UTF-8").toString()
-//            Log.d("prak24 afterDecode", ":$afterDecode")
-//            val params = getQueryKeyValueMap(afterDecode);
-//            if (params != null) {
-//                clickIdNew= params["tr_clickid"].toString()
-//            }
-//            else clickIdNew= ""
-//
-//            return clickIdNew
-//        }
 
     fun getQueryKeyValueMap(url: String): Map<String, String> {
         val map = url.split("?").associate {

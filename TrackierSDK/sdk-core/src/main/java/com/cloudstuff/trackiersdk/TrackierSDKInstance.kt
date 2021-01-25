@@ -30,8 +30,8 @@ class TrackierSDKInstance {
         }
         this.config = config
         this.configLoaded = true
-        this.appToken=this.config.appToken
-        this.installId = getUIIDDetials()
+        this.appToken= this.config.appToken
+        this.installId = getInstallID()
         DeviceInfo.init(device, this.config.context)
         CoroutineScope(Dispatchers.IO).launch {
             initGaid()
@@ -60,8 +60,8 @@ class TrackierSDKInstance {
             return refDetails!!
         }
         var url = Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_INSTALL_URL)
-        val clickTime = Util.getSharedPrefString(this.config.context,Constants.SHARED_PREF_CLICK_TIME)
-        val installTime = Util.getSharedPrefString(this.config.context,Constants.SHARED_PREF_INSTALL_TIME)
+        val clickTime = Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_CLICK_TIME)
+        val installTime = Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_INSTALL_TIME)
         if (url.isBlank()) {
             url = RefererDetails.ORGANIC_REF
         }
@@ -76,36 +76,25 @@ class TrackierSDKInstance {
             .putString(Constants.SHARED_PREF_CLICK_TIME, refererDetails.clickTime)
             .putString(Constants.SHARED_PREF_INSTALL_TIME, refererDetails.installTime)
             .apply()
-
     }
 
-    private fun isUIIDDetailsRestored(): Boolean {
-        var installId = Util.getSharedPrefString(this.config.context,Constants.SHARED_PREF_INSTALL_ID)
-        if (installId.isBlank()) {
-            installId.isBlank()
-        }
-        return installId.isNotBlank()
-    }
-
-    private fun setUIIDDetails(installID: String) {
+    private fun setInstallID(installID: String) {
             val prefs = Util.getSharedPref(this.config.context)
             prefs.edit().putString(Constants.SHARED_PREF_INSTALL_ID, installID)
                     .apply()
     }
 
-    private fun getUIIDDetials(): String {
-        var installId = ""
-        if (isUIIDDetailsRestored()) {
-            installId = Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_INSTALL_ID)
-        }else {
-             installId = UUID.randomUUID().toString()
-             setUIIDDetails(installId)
+    private fun getInstallID(): String {
+        var installId = Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_INSTALL_ID)
+        if(!installId.isNotBlank()){
+            installId = UUID.randomUUID().toString()
+            setInstallID(installId)
         }
         return installId
     }
 
     private fun makeWorkRequest(kind: String): TrackierWorkRequest {
-        val trackierWorkRequest = TrackierWorkRequest(kind,appToken)
+        val trackierWorkRequest = TrackierWorkRequest(kind, appToken)
         trackierWorkRequest.device = device
         trackierWorkRequest.gaid = gaid
         trackierWorkRequest.refDetails = getReferrerDetails()
@@ -134,7 +123,6 @@ class TrackierSDKInstance {
         if (config.isApkTrackingEnabled()) {
             // TODO: implement APK tracking logic
         }
-
         if (!isReferrerStored()) {
             val installRef = InstallReferrer(this.config.context)
             val refDetails = installRef.getRefDetails()
