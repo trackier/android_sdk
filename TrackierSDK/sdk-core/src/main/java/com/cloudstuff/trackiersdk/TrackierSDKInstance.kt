@@ -30,7 +30,7 @@ class TrackierSDKInstance {
         }
         this.config = config
         this.configLoaded = true
-        this.appToken= this.config.appToken
+        this.appToken = this.config.appToken
         this.installId = getInstallID()
         DeviceInfo.init(device, this.config.context)
         CoroutineScope(Dispatchers.IO).launch {
@@ -86,7 +86,7 @@ class TrackierSDKInstance {
 
     private fun getInstallID(): String {
         var installId = Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_INSTALL_ID)
-        if(!installId.isNotBlank()){
+        if(installId.isBlank()){
             installId = UUID.randomUUID().toString()
             setInstallID(installId)
         }
