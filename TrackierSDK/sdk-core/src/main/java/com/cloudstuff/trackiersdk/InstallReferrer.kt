@@ -1,5 +1,6 @@
 package com.cloudstuff.trackiersdk
 
+import RefererDetails
 import android.content.Context
 import com.android.installreferrer.api.InstallReferrerClient
 import com.android.installreferrer.api.InstallReferrerStateListener
