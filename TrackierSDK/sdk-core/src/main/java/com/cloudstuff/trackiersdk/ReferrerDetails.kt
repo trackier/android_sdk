@@ -1,30 +1,27 @@
 package com.cloudstuff.trackiersdk
 
-import android.net.Uri
-import android.util.Log
 import java.net.URLDecoder
 
 data class RefererDetails(
-        val url: String,
-        val clickTime: String,
-        val installTime: String,
+    val url: String,
+    val clickTime: String,
+    val installTime: String,
 ) {
     val isOrganic: Boolean get() = clickId.isEmpty()
 
     val clickId : String
 
-        init {
-            val afterDecode = URLDecoder.decode(url, "UTF-8").toString()
-            val params = getQueryKeyValueMap(afterDecode);
-            clickId = if (params != null) params["tr_clickid"].toString() else ""
-        }
+    init {
+        val afterDecode = URLDecoder.decode(url, "UTF-8").toString()
+        val params = getQueryKeyValueMap(afterDecode);
+        clickId = params["tr_clickid"] ?: ""
+    }
 
-    fun getQueryKeyValueMap(url: String): Map<String, String> {
-        val map = url.split("?").associate {
+    private fun getQueryKeyValueMap(url: String): Map<String, String> {
+        return url.split("?").associate {
             val (left, right) = url.split("=")
             left to right
         }
-        return map
     }
 
     companion object {
