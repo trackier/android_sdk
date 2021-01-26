@@ -1,6 +1,8 @@
 package com.cloudstuff.trackiersdk
 
 import android.content.Context
+import com.cloudstuff.trackiersdk.Constants
+import com.cloudstuff.trackiersdk.Factory
 import java.util.logging.Level
 
 class TrackierSDKConfig(var context: Context, val appToken: String, val env: String) {
