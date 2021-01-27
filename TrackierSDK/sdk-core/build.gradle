@@ -6,17 +6,13 @@ plugins {
 }
 
 apply plugin: 'com.github.dcendents.android-maven'
-group='com.cloudstuff.trackiersdk'
+group = 'com.trackier'
 
 repositories {
     mavenCentral()
     google()
     jcenter()
-    maven { url "https://jitpack.io" }
 }
-
-group = 'com.github.jitpack'
-version = '1.0.1'
 
 android {
     compileSdkVersion 30
@@ -61,8 +57,6 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-
-
 }
 
 afterEvaluate {
@@ -71,9 +65,9 @@ afterEvaluate {
             // Creates a Maven publication called "release".
             release(MavenPublication) {
                 from components.release
-                groupId = 'com.cloudstuff.trackiersdk'
+                groupId = 'com.trackier'
                 artifactId = 'android-sdk'
-                version = '1.0'
+                version = '1.0.0'
             }
         }
     }
