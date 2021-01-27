@@ -1,4 +1,4 @@
-package com.cloudstuff.trackiersdk
+package com.trackier.sdk
 
 import androidx.work.*
 import com.squareup.moshi.JsonAdapter

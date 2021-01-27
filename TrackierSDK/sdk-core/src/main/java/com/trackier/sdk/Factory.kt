@@ -1,4 +1,4 @@
-package com.cloudstuff.trackiersdk
+package com.trackier.sdk
 
 import java.util.logging.Logger
 import java.util.logging.Level

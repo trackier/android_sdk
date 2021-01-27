@@ -1,4 +1,4 @@
-package com.cloudstuff.trackiersdk
+package com.trackier.sdk
 
 object Constants {
     const val SDK_VERSION = "1.0.0"

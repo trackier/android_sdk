@@ -1,4 +1,4 @@
-package com.cloudstuff.trackiersdk
+package com.trackier.sdk
 
 import retrofit2.http.Body
 import retrofit2.http.Headers

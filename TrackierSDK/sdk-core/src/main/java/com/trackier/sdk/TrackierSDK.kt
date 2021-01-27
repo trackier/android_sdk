@@ -1,4 +1,4 @@
-package com.cloudstuff.trackiersdk
+package com.trackier.sdk
 
 import androidx.annotation.Keep
 

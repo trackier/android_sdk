@@ -1,4 +1,4 @@
-package com.cloudstuff.trackiersdk
+package com.trackier.sdk
 
 import android.content.Context
 import android.content.SharedPreferences

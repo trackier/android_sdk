@@ -1,6 +1,6 @@
 #proguard rules for library
--keep public class com.cloudstuff.trackiersdk.TrackierSDK**{*;}
--keep public class com.cloudstuff.trackiersdk.TrackierSDKConfig**{*;}
+-keep public class com.trackier.sdk.TrackierSDK**{*;}
+-keep public class com.trackier.sdk.TrackierSDKConfig**{*;}
 
 
 #proguard  rules for intallreferrer

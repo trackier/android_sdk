@@ -1,4 +1,4 @@
-package com.cloudstuff.trackiersdk
+package com.trackier.sdk
 
 import android.annotation.SuppressLint
 import android.content.Context

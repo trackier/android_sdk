@@ -1,4 +1,4 @@
-package com.cloudstuff.trackiersdk
+package com.trackier.sdk
 
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
