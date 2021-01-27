@@ -1,5 +1,8 @@
 package com.cloudstuff.trackiersdk
 
+import androidx.annotation.Keep
+
+@Keep
 data class TrackierEvent(val id: String) {
     @JvmField var orderId: String? = null
     @JvmField var currency: String? = null
@@ -15,7 +18,8 @@ data class TrackierEvent(val id: String) {
     @JvmField var param10: String? = null
 
     @JvmField var revenue: Double? = null
-    @JvmField var eventValue = mutableMapOf<String, Any>()
+    @JvmField var ev = mutableMapOf<String, Any>()
+
 
     companion object {
         const val LEVEL_ACHIEVED = "xxx"

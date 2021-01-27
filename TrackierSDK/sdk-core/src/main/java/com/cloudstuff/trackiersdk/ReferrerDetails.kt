@@ -1,7 +1,7 @@
-package com.cloudstuff.trackiersdk
-
+import androidx.annotation.Keep
 import java.net.URLDecoder
 
+@Keep
 data class RefererDetails(
     val url: String,
     val clickTime: String,

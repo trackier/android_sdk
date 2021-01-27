@@ -13,9 +13,11 @@ import android.os.Build.VERSION
 import android.provider.Settings
 import android.telephony.TelephonyManager
 import android.util.DisplayMetrics
+import androidx.annotation.Keep
 import java.lang.ref.WeakReference
 import java.util.*
 
+@Keep
 data class DeviceInfo(
     val osName: String = "android",
     val name: String = Build.DEVICE,
