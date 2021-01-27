@@ -15,13 +15,9 @@
 -keepclasseswithmembers class * {
     @retrofit2.http.* <methods>;
 }
--keepclasseswithmembers class * {
-    @com.squareup.moshi.* <methods>;
-}
--keepclassmembers class * {
-    @com.squareup.moshi.FromJson <methods>;
-    @com.squareup.moshi.ToJson <methods>;
-}
+-keep class com.squareup.moshi.**{*;}
+-keep class com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory**{*;}
+
 -keep @com.squareup.moshi.JsonQualifier interface *
 
 # Kotlin and kotlinx proguard rules
@@ -29,8 +25,18 @@
 -keep class kotlin.Metadata { *; }
 -keep class kotlin.** { *; }
 -dontwarn kotlin.**
--keep class kotlinx.** { *; }
+-keep class kotlinx.** {  volatile <fields>; }
 -dontwarn kotlinx.**
 -keepclassmembers class kotlin.Metadata {
     public <methods>;
 }
+
+-keep class com.google.android.material.** { *; }
+
+-dontwarn com.google.android.material.**
+-dontnote com.google.android.material.**
+
+-dontwarn androidx.**
+-keep class androidx.** { *; }
+-keep interface androidx.** { *; }
+
