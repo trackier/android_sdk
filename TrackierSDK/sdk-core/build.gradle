@@ -5,8 +5,7 @@ plugins {
     id 'kotlin-android-extensions'
 }
 
-apply plugin: 'com.github.dcendents.android-maven'
-group = 'com.trackier'
+apply from: 'maven-push.gradle'
 
 repositories {
     mavenCentral()
@@ -52,23 +51,9 @@ dependencies {
     def retrofit2_version = "2.6.0"
     api "com.squareup.retrofit2:retrofit:$retrofit2_version"
     api "com.squareup.retrofit2:converter-moshi:$retrofit2_version"
-    api 'com.squareup.okhttp3:logging-interceptor:3.11.0'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 }
 
-afterEvaluate {
-    publishing {
-        publications {
-            // Creates a Maven publication called "release".
-            release(MavenPublication) {
-                from components.release
-                groupId = 'com.trackier'
-                artifactId = 'android-sdk'
-                version = '1.0.0'
-            }
-        }
-    }
-}
