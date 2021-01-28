@@ -216,7 +216,7 @@ data class DeviceInfo(
         private fun setCarrierInfo(deviceInfo: DeviceInfo, context: Context) {
             try {
                 val tm = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager?
-                deviceInfo.countryCode = tm?.networkCountryIso
+                deviceInfo.countryCode = tm?.networkCountryIso?.toUpperCase()
                 deviceInfo.carrier = tm?.networkOperatorName
             } catch (ex: Exception) {}
         }

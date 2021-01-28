@@ -1,3 +1,5 @@
+package com.trackier.sdk
+
 import androidx.annotation.Keep
 import java.net.URLDecoder
 
