@@ -25,8 +25,8 @@ You can find the latest version here.
 ```
  
 #### Sync the project to retrieve the dependencies – see the following screenshot:
- 
-![4Lk2bMchmcsmo9WofrAwNlLdX_2y7NsJcA](https://user-images.githubusercontent.com/34488320/108321633-75593a80-71ea-11eb-9b26-d26062fe8fba.png)
+
+<IMAGE>
  
 ### Add required permissions
 
@@ -57,7 +57,7 @@ dependencies {
  
 #### Sync the project to retrieve the dependencies – see the following screenshot:
  
-![installreferee](https://user-images.githubusercontent.com/34488320/108321810-aafe2380-71ea-11eb-9880-049b4735dc7d.png)
+<Image>
  
  
 ## Implement and initialize the SDK
