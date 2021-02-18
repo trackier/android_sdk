@@ -19,7 +19,7 @@ Android SDK integration for developers
 
 #### Add the latest version of Trackier SDK as a dependency.
 
-You can find the latest version here.
+You can find the latest version [here](https://mvnrepository.com/artifact/com.trackier/android-sdk).
 ```
   implementation 'com.trackier:android-sdk:1.0.1'
 ```
@@ -128,9 +128,9 @@ KOTLIN:-
 
 JAVA :-
 ```java
-TrackierEvent event = new TrackierEvent(TrackierEvent.UPDATE);
-                      event.param1 = “Praram Name”;
-                      TrackierSDK.trackEvent(event);
+  TrackierEvent event = new TrackierEvent(TrackierEvent.UPDATE);
+  event.param1 = “Praram Name”;
+  TrackierSDK.trackEvent(event);
  
 ```
  
@@ -149,8 +149,8 @@ KOTLIN :-
 JAVA :-
 ```java
           TrackierEvent event = new TrackierEvent(TrackierEvent.UPDATE);
-                                event.param1 = “Praram Name”;
-                                event.revenue = 0.5;
-                                event.currency = “USD”;
-                                TrackierSDK.trackEvent(event);
+          event.param1 = “Praram Name”;
+          event.revenue = 0.5;
+          event.currency = “USD”;
+          TrackierSDK.trackEvent(event);
 ```
