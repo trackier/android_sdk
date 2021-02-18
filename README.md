@@ -104,10 +104,10 @@ JAVA:
     TrackierSDK.initialize(sdkConfig);
 ```
  
-Note:- Don’t forgot to register the global application class inside Manifest. You can register your global class in Manifest like this, suppose the name of global class is TrackeirApplication:
+Note:- Don’t forgot to register the global application class inside Manifest. You can register your global class in Manifest like this, suppose the name of global class is TrackierApplication:
 
 ```java 
-android:name = "APP_PACAGE_NAME.TrackeirApplication"
+android:name = "APP_PACAGE_NAME.TrackierApplication"
 ```
  
 ### Track Events :-
@@ -121,15 +121,15 @@ android:name = "APP_PACAGE_NAME.TrackeirApplication"
    
 KOTLIN:-
 ```kotlin
-          val event = TrackierEvent(TrackierEvent.UPDATE)
-          event.param1 = "Param Name"
+          val event = TrackierEvent(TrackierEvent.LEVEL_ACHIEVED)
+          event.param1 = "Level 10"
           TrackierSDK.trackEvent(event)
 ```
 
 JAVA :-
 ```java
-  TrackierEvent event = new TrackierEvent(TrackierEvent.UPDATE);
-  event.param1 = “Praram Name”;
+  TrackierEvent event = new TrackierEvent(TrackierEvent.LEVEL_ACHIEVED);
+  event.param1 = "Level 10";
   TrackierSDK.trackEvent(event);
  
 ```
@@ -139,18 +139,36 @@ JAVA :-
  
 KOTLIN :-
 ```kotlin
-          val event = TrackierEvent(TrackierEvent.UPDATE)
+          val event = TrackierEvent(TrackierEvent.PURCHASE)
           event.param1 = "Praram Name"
-          event.revenue = 0.5
+          event.revenue = 2.5
           event.currency = "USD"
           TrackierSDK.trackEvent(event)
 ```
  
 JAVA :-
 ```java
-          TrackierEvent event = new TrackierEvent(TrackierEvent.UPDATE);
-          event.param1 = “Praram Name”;
-          event.revenue = 0.5;
-          event.currency = “USD”;
+          TrackierEvent event = new TrackierEvent(TrackierEvent.PURCHASE);
+          event.param1 = "Praram Name";
+          event.revenue = 2.5;
+          event.currency = "USD";
           TrackierSDK.trackEvent(event);
+```
+### Proguard Settings
+
+If your app is using proguard then add these lines to the proguard config file
+
+```
+-keep class com.trackier.sdk.** { *; }
+-keep class com.google.android.gms.common.ConnectionResult {
+    int SUCCESS;
+}
+-keep class com.google.android.gms.ads.identifier.AdvertisingIdClient {
+    com.google.android.gms.ads.identifier.AdvertisingIdClient$Info getAdvertisingIdInfo(android.content.Context);
+}
+-keep class com.google.android.gms.ads.identifier.AdvertisingIdClient$Info {
+    java.lang.String getId();
+    boolean isLimitAdTrackingEnabled();
+}
+-keep public class com.android.installreferrer.** { *; }
 ```
