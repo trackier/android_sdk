@@ -26,7 +26,7 @@ You can find the latest version here.
  
 #### Sync the project to retrieve the dependencies – see the following screenshot:
 
-<IMAGE>
+![Screenshot 2021-02-18 at 1 20 16 PM](https://user-images.githubusercontent.com/34488320/108324546-0e3d8500-71ee-11eb-9c8b-2c06c96d2f00.png)
  
 ### Add required permissions
 
@@ -57,7 +57,7 @@ dependencies {
  
 #### Sync the project to retrieve the dependencies – see the following screenshot:
  
-<Image>
+![Screenshot 2021-02-18 at 1 20 51 PM](https://user-images.githubusercontent.com/34488320/108324596-1dbcce00-71ee-11eb-925a-a05b7c4035ef.png)
  
  
 ## Implement and initialize the SDK
@@ -94,21 +94,21 @@ JAVA :-
 
 KOTLIN
 ```kotlin
-    val sdkConfig = TrackierSDKConfig(this,  TR_DEV_KEY,  "put environment here you working on")
+    val sdkConfig = TrackierSDKConfig(this, TR_DEV_KEY, "production")
     TrackierSDK.initialize(sdkConfig)
 ```
  
 JAVA:
 ```java
-    TrackierSDKConfig  sdkConfig = new TrackierSDKConfig(this, TR_DEV_KEY,"test");
+    TrackierSDKConfig  sdkConfig = new TrackierSDKConfig(this, TR_DEV_KEY, "production");
     TrackierSDK.initialize(sdkConfig);
 ```
  
 Note:- Don’t forgot to register the global application class inside Manifest. You can register your global class in Manifest like this, suppose the name of global class is TrackeirApplication:
- 
+
+```java 
 android:name = "APP_PACAGE_NAME.TrackeirApplication"
- 
- 
+```
  
 ### Track Events :-
  
