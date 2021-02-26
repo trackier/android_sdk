@@ -25,10 +25,14 @@ object APIRepository {
     }
 
     private suspend fun sendInstall(body: MutableMap<String, Any>): ResponseData {
+        val logger = Factory.logger
+        logger.info("Install body is: ${body}")
         return trackierApi.sendInstallData(body)
     }
 
     private suspend fun sendEvent(body: MutableMap<String, Any>): ResponseData {
+        val logger = Factory.logger
+        logger.info("Event body is: ${body}")
         return trackierApi.sendEventData(body)
     }
 

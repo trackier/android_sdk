@@ -8,4 +8,8 @@ object Factory {
     init {
         logger.level = Level.SEVERE
     }
+
+    fun setLogLevel(value: Level) {
+        logger.level = value
+    }
 }
