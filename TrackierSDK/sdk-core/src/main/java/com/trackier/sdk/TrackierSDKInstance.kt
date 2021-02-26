@@ -9,7 +9,6 @@ import kotlin.Exception
 
 class TrackierSDKInstance {
     private val device = DeviceInfo()
-    private val logger = Factory.logger
     lateinit var config: TrackierSDKConfig
     private var refDetails: RefererDetails? = null
     private var appToken: String = ""
@@ -144,7 +143,7 @@ class TrackierSDKInstance {
             return
         }
         if (!isInitialized) {
-            logger.warning("Event Tracking request sent before SDK data was initialized")
+            Factory.logger.warning("Event Tracking request sent before SDK data was initialized")
         }
         if (!isInstallTracked()) {
             CoroutineScope(Dispatchers.IO).launch {
