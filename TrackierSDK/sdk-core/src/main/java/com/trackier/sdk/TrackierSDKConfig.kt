@@ -17,7 +17,7 @@ class TrackierSDKConfig(var context: Context, val appToken: String, val env: Str
 
 
     fun setLogLevel(value: Level) {
-        Factory.setLogLevel(level)
+        Factory.setLogLevel(value)
     }
 
     fun setApkTracking(value: Boolean) {
