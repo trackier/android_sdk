@@ -7,7 +7,7 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class TrackierWorkRequest(val kind: String = KIND_UNKNOWN, val appToken: String) {
+class TrackierWorkRequest(val kind: String, private val appToken: String, private val mode: String) {
     var gaid: String? = null
     var isLAT = false
     lateinit var device: DeviceInfo
@@ -29,6 +29,7 @@ class TrackierWorkRequest(val kind: String = KIND_UNKNOWN, val appToken: String)
         body["installTime"] = refDetails.installTime
         body["installId"] = installID
         body["appKey"] = appToken
+        body["mode"] = mode
         return body
     }
 
