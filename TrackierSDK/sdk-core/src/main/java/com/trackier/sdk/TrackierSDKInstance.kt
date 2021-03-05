@@ -93,7 +93,7 @@ class TrackierSDKInstance {
     }
 
     private fun makeWorkRequest(kind: String): TrackierWorkRequest {
-        val trackierWorkRequest = TrackierWorkRequest(kind, appToken)
+        val trackierWorkRequest = TrackierWorkRequest(kind, appToken, this.config.env)
         trackierWorkRequest.device = device
         trackierWorkRequest.gaid = gaid
         trackierWorkRequest.refDetails = getReferrerDetails()
