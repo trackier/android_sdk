@@ -22,8 +22,8 @@ public class MainApplication extends Application {
         setmContext(getApplicationContext());
         mInstance = this;
 
-        final String TR_DEV_KEY  = "c814db62-c196-4505-bc8b-46fa8e37f688";
-        TrackierSDKConfig sdkConfig = new   TrackierSDKConfig(this, TR_DEV_KEY,"test");
+        final String TR_DEV_KEY  = "xxxx-xx-4505-bc8b-xx";
+        TrackierSDKConfig sdkConfig = new   TrackierSDKConfig(this, TR_DEV_KEY,"production");
         TrackierSDK.initialize(sdkConfig);
     }
     public static synchronized MainApplication getInstance() {
