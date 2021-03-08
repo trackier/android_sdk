@@ -28,7 +28,7 @@ class MainApplication : Application() {
         // example: SharedPreferences etc...
         val context: Context = MainApplication.applicationContext()
 
-        val sdkConfig = TrackierSDKConfig(this, TR_DEV_KEY, "test")
+        val sdkConfig = TrackierSDKConfig(this, TR_DEV_KEY, "production")
         TrackierSDK.initialize(sdkConfig)
     }
 }
