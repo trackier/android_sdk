@@ -22,7 +22,7 @@ class MainApplication : Application() {
         super.onCreate()
         // initialize for any
 
-         val TR_DEV_KEY: String = "c814db62-c196-4505-bc8b-46fa8e37f688"
+         val TR_DEV_KEY: String = "xxxx-xx-4505-bc8b-xx"
 
         // Use ApplicationContext.
         // example: SharedPreferences etc...
