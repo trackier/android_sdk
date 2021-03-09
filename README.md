@@ -26,7 +26,7 @@ You can find the latest version [here](https://mvnrepository.com/artifact/com.tr
  
 #### Sync the project to retrieve the dependencies – see the following screenshot:
 
-![Screenshot 2021-02-18 at 1 20 16 PM](https://user-images.githubusercontent.com/34488320/108324546-0e3d8500-71ee-11eb-9c8b-2c06c96d2f00.png)
+![Screenshot 2021-03-08 at 3 33 09 PM](https://user-images.githubusercontent.com/34488320/110306675-1423ca80-8024-11eb-9117-07ed04c5072c.jpg)
  
 ### Add required permissions
 
@@ -57,7 +57,7 @@ dependencies {
  
 #### Sync the project to retrieve the dependencies – see the following screenshot:
  
-![Screenshot 2021-02-18 at 1 20 51 PM](https://user-images.githubusercontent.com/34488320/108324596-1dbcce00-71ee-11eb-925a-a05b7c4035ef.png)
+![Screenshot 2021-03-08 at 3 30 10 PM](https://user-images.githubusercontent.com/34488320/110306113-76300000-8023-11eb-9732-94598bae53ce.jpg)
  
  
 ## Implement and initialize the SDK
