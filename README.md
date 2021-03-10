@@ -94,20 +94,20 @@ JAVA :-
 
 KOTLIN
 ```kotlin
-    val sdkConfig = TrackierSDKConfig(this, TR_DEV_KEY, "production")
-    TrackierSDK.initialize(sdkConfig)
+       val sdkConfig = TrackierSDKConfig(this, TR_DEV_KEY, "production")
+       TrackierSDK.initialize(sdkConfig)
 ```
  
 JAVA:
 ```java
-    TrackierSDKConfig  sdkConfig = new TrackierSDKConfig(this, TR_DEV_KEY, "production");
-    TrackierSDK.initialize(sdkConfig);
+      TrackierSDKConfig  sdkConfig = new TrackierSDKConfig(this, TR_DEV_KEY, "production");
+      TrackierSDK.initialize(sdkConfig);
 ```
  
 Note:- Don’t forgot to register the global application class inside Manifest. You can register your global class in Manifest like this, suppose the name of global class is TrackierApplication:
 
 ```java 
-android:name = "APP_PACAGE_NAME.TrackierApplication"
+      android:name = "APP_PACAGE_NAME.TrackierApplication"
 ```
  
 ### Track Events :-
@@ -121,16 +121,16 @@ android:name = "APP_PACAGE_NAME.TrackierApplication"
    
 KOTLIN:-
 ```kotlin
-          val event = TrackierEvent(TrackierEvent.LEVEL_ACHIEVED)
-          event.param1 = "Level 10"
-          TrackierSDK.trackEvent(event)
+      val event = TrackierEvent(TrackierEvent.LEVEL_ACHIEVED)
+      event.param1 = "Level 10"
+      TrackierSDK.trackEvent(event)
 ```
 
 JAVA :-
 ```java
-  TrackierEvent event = new TrackierEvent(TrackierEvent.LEVEL_ACHIEVED);
-  event.param1 = "Level 10";
-  TrackierSDK.trackEvent(event);
+      TrackierEvent event = new TrackierEvent(TrackierEvent.LEVEL_ACHIEVED);
+      event.param1 = "Level 10";
+      TrackierSDK.trackEvent(event);
  
 ```
  
@@ -139,20 +139,20 @@ JAVA :-
  
 KOTLIN :-
 ```kotlin
-          val event = TrackierEvent(TrackierEvent.PURCHASE)
-          event.param1 = "Praram Name"
-          event.revenue = 2.5
-          event.currency = "USD"
-          TrackierSDK.trackEvent(event)
+       val event = TrackierEvent(TrackierEvent.PURCHASE)
+       event.param1 = "Praram Name"
+       event.revenue = 2.5
+       event.currency = "USD"
+       TrackierSDK.trackEvent(event)
 ```
  
 JAVA :-
 ```java
-          TrackierEvent event = new TrackierEvent(TrackierEvent.PURCHASE);
-          event.param1 = "Praram Name";
-          event.revenue = 2.5;
-          event.currency = "USD";
-          TrackierSDK.trackEvent(event);
+       TrackierEvent event = new TrackierEvent(TrackierEvent.PURCHASE);
+       event.param1 = "Praram Name";
+       event.revenue = 2.5;
+       event.currency = "USD";
+       TrackierSDK.trackEvent(event);
 ```
 ### Proguard Settings
 
