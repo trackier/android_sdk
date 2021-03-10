@@ -16,6 +16,8 @@ object Constants {
     const val SHARED_PREF_IS_INSTALL_TRACKED = "is_install_tracked"
     const val SHARED_PREF_INSTALL_ID = "install_id"
 
+    const val SHARED_PREF_LAST_TRACKING_TIME = "last_tracking_time"
+
     const val ENV_PRODUCTION = "production"
     const val ENV_SANDBOX = "sandbox"
 

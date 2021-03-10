@@ -1,5 +1,6 @@
 package com.trackier.sdk
 
+import android.content.Context
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -159,5 +160,56 @@ class TrackierSDKInstance {
             _trackEvent(event)
         }
 
+    }
+
+    suspend fun trackSession() {
+        if (!isEnabled || !configLoaded) {
+            return
+        }
+        if (!isInitialized) {
+            Factory.logger.warning("Event Tracking request sent before SDK data was initialized")
+        }
+        if (isInstallTracked()) {
+            _trackSession()
+        }
+    }
+
+    private suspend fun _trackSession() {
+        try {
+            val wrkRequest = makeWorkRequest(TrackierWorkRequest.KIND_SESSION_TRACK)
+            wrkRequest.sessionTime = getTrackSessionTime()
+            APIRepository.doWork(wrkRequest)
+        }
+        catch (e: Exception){
+        }
+    }
+
+    fun getTrackSessionTime():String{
+        if (!isTrackSessionStored()) {
+            val lastSessionTime = Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_LAST_TRACKING_TIME)
+            val currentTime =  Util.dateFormatter.format(Date().time)
+            val diff: Long = currentTime.toLong() - lastSessionTime.toLong()
+            if(diff < 10 ){
+                return ""
+            }
+            val prefs = Util.getSharedPref(this.config.context)
+            prefs.edit().putString(Constants.SHARED_PREF_LAST_TRACKING_TIME, currentTime)
+                    .apply()
+            return currentTime
+        }
+        else{
+            val currentTime =  Util.dateFormatter.format(Date().time)
+            val prefs = Util.getSharedPref(this.config.context)
+            prefs.edit().putString(Constants.SHARED_PREF_LAST_TRACKING_TIME, currentTime)
+                    .apply()
+
+            return currentTime
+        }
+
+    }
+
+    private fun isTrackSessionStored(): Boolean {
+        val lastSessionTime = Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_LAST_TRACKING_TIME)
+        return lastSessionTime.isNotBlank()
     }
 }
