@@ -185,7 +185,7 @@ class TrackierSDKInstance {
 
     }
 
-    private fun setTrackSession(time : String){
+    private fun setTrackSession(time: String){
         val prefs = Util.getSharedPref(this.config.context)
         prefs.edit().putString(Constants.SHARED_PREF_LAST_TRACKING_TIME, time)
                 .apply()
