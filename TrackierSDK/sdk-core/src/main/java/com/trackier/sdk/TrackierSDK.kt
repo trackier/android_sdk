@@ -1,10 +1,6 @@
 package com.trackier.sdk
 
-import android.content.Context
-import android.content.SharedPreferences
 import androidx.annotation.Keep
-import com.trackier.sdk.Constants.SHARED_PREF_LAST_TRACKING_TIME
-import java.util.*
 
 @Keep
 object TrackierSDK {

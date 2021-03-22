@@ -1,6 +1,5 @@
 package com.trackier.sdk
 
-import android.content.Context
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -152,6 +151,7 @@ class TrackierSDKInstance {
                     delay(1000 * i.toLong())
                     if (isInstallTracked()) {
                         _trackEvent(event)
+                        _trackSession()
                         break
                     }
                 }
@@ -162,7 +162,7 @@ class TrackierSDKInstance {
 
     }
 
-    suspend fun trackSession() {
+    suspend fun _trackSession() {
         if (!isEnabled || !configLoaded) {
             return
         }
@@ -170,50 +170,31 @@ class TrackierSDKInstance {
             Factory.logger.warning("Event Tracking request sent before SDK data was initialized")
         }
         if (isInstallTracked()) {
-            _trackSession()
+            trackSession()
         }
-    }
-    
-    private fun isTrackSessionStored(): Boolean {
-        val lastSessionTime = Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_LAST_TRACKING_TIME)
-        return lastSessionTime.isNotBlank()
     }
 
     private fun getTrackSession(): String {
-        val lastSessionTime = Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_LAST_TRACKING_TIME)
-        return lastSessionTime
-
+        return Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_LAST_SESSION_TIME)
     }
 
-    private fun setTrackSession(time: String){
+    private fun setTrackSession(time: String) {
         val prefs = Util.getSharedPref(this.config.context)
-        prefs.edit().putString(Constants.SHARED_PREF_LAST_TRACKING_TIME, time)
+        prefs.edit().putString(Constants.SHARED_PREF_LAST_SESSION_TIME, time)
                 .apply()
     }
 
-    suspend fun _trackSession(){
-        if (!isTrackSessionStored()) {
-            val currentTime =  Util.dateFormatter.format(Date().time)
-            setTrackSession(currentTime)
-        }
-        else{
-            val lastSessionTime = getTrackSession()
-            val currentTime =  Util.dateFormatter.format(Date().time)
-            val diff: Long = currentTime.toLong() - lastSessionTime.toLong()
-            if(diff < 10 ){
-                return
-            }
-            try {
-            val wrkRequest = makeWorkRequest(TrackierWorkRequest.KIND_SESSION_TRACK)
-            wrkRequest.sessionTime = lastSessionTime
-            APIRepository.doWork(wrkRequest)
-        }
-        catch (e: Exception){
+    suspend fun trackSession() {
+        val currentTime =  Util.dateFormatter.format(Date().time)
+        try {
+        val wrkRequest = makeWorkRequest(TrackierWorkRequest.KIND_SESSION_TRACK)
+        wrkRequest.sessionTime = getTrackSession()
+        APIRepository.doWork(wrkRequest)
+    }
+    catch (e: Exception) {
 
-        }
-            setTrackSession(currentTime)
-        }
-
+    }
+        setTrackSession(currentTime)
     }
 
 
