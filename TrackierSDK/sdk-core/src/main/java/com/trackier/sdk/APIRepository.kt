@@ -27,7 +27,7 @@ object APIRepository {
     private suspend fun sendInstall(body: MutableMap<String, Any>): ResponseData {
         val logger = Factory.logger
         logger.info("Install body is: ${body}")
-        var response = trackierApi.sendInstallData(body)
+        val response = trackierApi.sendInstallData(body)
         return response
     }
 
