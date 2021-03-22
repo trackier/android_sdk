@@ -37,7 +37,7 @@ object APIRepository {
         return trackierApi.sendEventData(body)
     }
 
-    private suspend fun getSessionData(body: MutableMap<String, Any>): ResponseData {
+    private suspend fun sendSession(body: MutableMap<String, Any>): ResponseData {
         val logger = Factory.logger
         logger.info("Event body is: ${body}")
         return trackierApi.sendSessionData(body)
@@ -48,7 +48,7 @@ object APIRepository {
             TrackierWorkRequest.KIND_INSTALL -> sendInstall(workRequest.getData())
             TrackierWorkRequest.KIND_EVENT -> sendEvent(workRequest.getEventData())
             TrackierWorkRequest.KIND_UNKNOWN -> null
-            TrackierWorkRequest.KIND_SESSION_TRACK -> getSessionData(workRequest.getTrackSessionTime())
+            TrackierWorkRequest.KIND_SESSION_TRACK -> sendSession(workRequest.getSessionData())
             else -> null
         }
     }

@@ -36,6 +36,7 @@ class TrackierSDKInstance {
             initGaid()
             initAttributionInfo()
             trackInstall()
+            trackSession()
         }
     }
 
@@ -151,7 +152,6 @@ class TrackierSDKInstance {
                     delay(1000 * i.toLong())
                     if (isInstallTracked()) {
                         _trackEvent(event)
-                        _trackSession()
                         break
                     }
                 }
@@ -174,11 +174,11 @@ class TrackierSDKInstance {
         }
     }
 
-    private fun getTrackSession(): String {
+    private fun getLastSessionTime(): String {
         return Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_LAST_SESSION_TIME)
     }
 
-    private fun setTrackSession(time: String) {
+    private fun setLastSessionTime(time: String) {
         val prefs = Util.getSharedPref(this.config.context)
         prefs.edit().putString(Constants.SHARED_PREF_LAST_SESSION_TIME, time)
                 .apply()
@@ -187,14 +187,11 @@ class TrackierSDKInstance {
     suspend fun trackSession() {
         val currentTime =  Util.dateFormatter.format(Date().time)
         try {
-        val wrkRequest = makeWorkRequest(TrackierWorkRequest.KIND_SESSION_TRACK)
-        wrkRequest.sessionTime = getTrackSession()
-        APIRepository.doWork(wrkRequest)
-    }
-    catch (e: Exception) {
-
-    }
-        setTrackSession(currentTime)
+            val wrkRequest = makeWorkRequest(TrackierWorkRequest.KIND_SESSION_TRACK)
+            wrkRequest.sessionTime = getLastSessionTime()
+            APIRepository.doWork(wrkRequest)
+        } catch (e: Exception) {}
+        setLastSessionTime(currentTime)
     }
 
 

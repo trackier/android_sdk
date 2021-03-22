@@ -44,9 +44,9 @@ class TrackierWorkRequest(val kind: String, private val appToken: String, privat
         return body
     }
 
-    fun getTrackSessionTime(): MutableMap<String, Any> {
+    fun getSessionData(): MutableMap<String, Any> {
         val body = setDefaults()
-        body["session_time"] = this.sessionTime
+        body["lastSessionTime"] = this.sessionTime
         return body
     }
 
