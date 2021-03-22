@@ -41,7 +41,7 @@ object TrackierSDK {
     }
 
     @JvmStatic
-    suspend fun trackSession(){
+    suspend fun trackSession() {
         instance.trackSession()
     }
 }
