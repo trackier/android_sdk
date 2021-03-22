@@ -39,7 +39,7 @@ object APIRepository {
 
     private suspend fun sendSession(body: MutableMap<String, Any>): ResponseData {
         val logger = Factory.logger
-        logger.info("Event body is: ${body}")
+        logger.info("Session body is: ${body}")
         return trackierApi.sendSessionData(body)
     }
 
