@@ -84,3 +84,4 @@ hs_err_pid*
 /captures
 **/*.iml
 *.class
+TrackierSDK/java_pid2531.hprof

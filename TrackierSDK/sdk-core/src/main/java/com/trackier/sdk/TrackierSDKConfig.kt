@@ -7,6 +7,8 @@ import java.util.logging.Level
 class TrackierSDKConfig(var context: Context, val appToken: String, val env: String) {
     private var enableApkTracking = false
     private val logger: Logger
+    private var apkAttributes: APKAttributes? = null
+    private var sdtk: String = "android"
 
     init {
         context = context.applicationContext
@@ -26,5 +28,21 @@ class TrackierSDKConfig(var context: Context, val appToken: String, val env: Str
 
     fun isApkTrackingEnabled(): Boolean {
         return enableApkTracking
+    }
+
+    fun setAPKAttributes(apkAttributes: APKAttributes){
+        this.apkAttributes = apkAttributes
+    }
+
+    fun getAPKAttributes(): APKAttributes? {
+        return this.apkAttributes
+    }
+
+    fun setSDKType(sdtk: String = "android"){
+        this.sdtk = sdtk
+    }
+
+    fun getSDKType(): String{
+        return this.sdtk
     }
 }

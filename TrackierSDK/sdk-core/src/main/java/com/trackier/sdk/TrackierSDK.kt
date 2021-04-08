@@ -8,6 +8,7 @@ object TrackierSDK {
     private val logger = Factory.logger
     private var instance = TrackierSDKInstance()
 
+
     @JvmStatic
     fun initialize(config: TrackierSDKConfig) {
         if (isInitialized) {
@@ -44,4 +45,5 @@ object TrackierSDK {
     suspend fun trackSession() {
         instance.trackSession()
     }
+
 }

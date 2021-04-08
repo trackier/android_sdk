@@ -20,7 +20,6 @@ data class TrackierEvent(val id: String) {
     @JvmField var revenue: Double? = null
     @JvmField var ev = mutableMapOf<String, Any>()
 
-
     companion object {
         const val LEVEL_ACHIEVED = "1CFfUn3xEY"
         const val ADD_TO_CART = "Fy4uC1_FlN"

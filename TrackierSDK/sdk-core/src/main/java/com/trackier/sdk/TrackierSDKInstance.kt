@@ -12,6 +12,7 @@ class TrackierSDKInstance {
     lateinit var config: TrackierSDKConfig
     private var refDetails: RefererDetails? = null
     private var appToken: String = ""
+    private var apkAttributes = APKAttributes()
 
     var isEnabled = true
     var isInitialized = false
@@ -19,6 +20,7 @@ class TrackierSDKInstance {
     var gaid: String? = null
     var isLAT = false
     var installId = ""
+    var sdtk = ""
 
     /**
      * Initialize method should be called to initialize the sdk
@@ -31,6 +33,8 @@ class TrackierSDKInstance {
         this.configLoaded = true
         this.appToken = this.config.appToken
         this.installId = getInstallID()
+        this.apkAttributes = config.getAPKAttributes()!!
+        this.sdtk = config.getSDKType()
         DeviceInfo.init(device, this.config.context)
         CoroutineScope(Dispatchers.IO).launch {
             initGaid()
@@ -99,6 +103,9 @@ class TrackierSDKInstance {
         trackierWorkRequest.gaid = gaid
         trackierWorkRequest.refDetails = getReferrerDetails()
         trackierWorkRequest.installID = installId
+        trackierWorkRequest.apkAttributes = apkAttributes
+        trackierWorkRequest.sdtk = sdtk
+
         return trackierWorkRequest
     }
 
@@ -193,7 +200,4 @@ class TrackierSDKInstance {
         } catch (e: Exception) {}
         setLastSessionTime(currentTime)
     }
-
-
-
 }
