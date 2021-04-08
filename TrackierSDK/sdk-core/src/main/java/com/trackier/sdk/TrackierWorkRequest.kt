@@ -17,7 +17,7 @@ class TrackierWorkRequest(val kind: String, private val appToken: String, privat
     var installID = ""
     var sessionTime = ""
     var sdtk = ""
-    lateinit var apkAttributes : APKAttributes
+    var apkAttributes: APKAttributes? = null
 
     private fun setDefaults(): MutableMap<String, Any> {
         val body = mutableMapOf<String, Any>()
@@ -34,7 +34,7 @@ class TrackierWorkRequest(val kind: String, private val appToken: String, privat
         body["appKey"] = appToken
         body["mode"] = mode
         body["sdkt"] = sdtk
-        return body.mergeWith(this.apkAttributes.getApkAttributes())
+        return body.mergeWith(this.apkAttributes?.getApkAttributes()!!)
     }
 
     fun getData(): MutableMap<String, Any> {

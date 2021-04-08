@@ -30,7 +30,7 @@ class TrackierSDKConfig(var context: Context, val appToken: String, val env: Str
         return enableApkTracking
     }
 
-    fun setAPKAttributes(apkAttributes: APKAttributes){
+    fun setAPKAttributes(apkAttributes: APKAttributes) {
         this.apkAttributes = apkAttributes
     }
 
@@ -38,11 +38,11 @@ class TrackierSDKConfig(var context: Context, val appToken: String, val env: Str
         return this.apkAttributes
     }
 
-    fun setSDKType(sdtk: String = "android"){
+    fun setSDKType(sdtk: String = "android") {
         this.sdtk = sdtk
     }
 
-    fun getSDKType(): String{
+    fun getSDKType(): String {
         return this.sdtk
     }
 }

@@ -12,7 +12,7 @@ class TrackierSDKInstance {
     lateinit var config: TrackierSDKConfig
     private var refDetails: RefererDetails? = null
     private var appToken: String = ""
-    private var apkAttributes = APKAttributes()
+    private var apkAttributes: APKAttributes? = null
 
     var isEnabled = true
     var isInitialized = false
@@ -33,7 +33,7 @@ class TrackierSDKInstance {
         this.configLoaded = true
         this.appToken = this.config.appToken
         this.installId = getInstallID()
-        this.apkAttributes = config.getAPKAttributes()!!
+        this.apkAttributes = config.getAPKAttributes()
         this.sdtk = config.getSDKType()
         DeviceInfo.init(device, this.config.context)
         CoroutineScope(Dispatchers.IO).launch {
