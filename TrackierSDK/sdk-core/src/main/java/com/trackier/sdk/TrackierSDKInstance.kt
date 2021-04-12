@@ -169,18 +169,6 @@ class TrackierSDKInstance {
 
     }
 
-    suspend fun _trackSession() {
-        if (!isEnabled || !configLoaded) {
-            return
-        }
-        if (!isInitialized) {
-            Factory.logger.warning("Event Tracking request sent before SDK data was initialized")
-        }
-        if (isInstallTracked()) {
-            trackSession()
-        }
-    }
-
     private fun getLastSessionTime(): String {
         return Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_LAST_SESSION_TIME)
     }
@@ -192,11 +180,23 @@ class TrackierSDKInstance {
     }
 
     suspend fun trackSession() {
-        val currentTime =  Util.dateFormatter.format(Date().time)
+        val currentTs = Date().time
+        val currentTime = Util.dateFormatter.format(currentTs)
         try {
-            val wrkRequest = makeWorkRequest(TrackierWorkRequest.KIND_SESSION_TRACK)
-            wrkRequest.sessionTime = getLastSessionTime()
-            APIRepository.doWork(wrkRequest)
+            val lastSessionTime = getLastSessionTime()
+            var lastSessTs: Long = 0
+            if (lastSessionTime != "") {
+                val lst = Util.dateFormatter.parse(lastSessionTime)?.time
+                if (lst?.equals(0) == false) {
+                    lastSessTs = lst!!
+                }
+            }
+            val sessionDiff = (currentTs - lastSessTs).toInt()
+            if (sessionDiff > this.config.getMinSessionDuration()) {
+                val wrkRequest = makeWorkRequest(TrackierWorkRequest.KIND_SESSION_TRACK)
+                wrkRequest.sessionTime = lastSessionTime
+                APIRepository.doWork(wrkRequest)   
+            }
         } catch (e: Exception) {}
         setLastSessionTime(currentTime)
     }

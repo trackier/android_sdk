@@ -9,6 +9,7 @@ class TrackierSDKConfig(var context: Context, val appToken: String, val env: Str
     private val logger: Logger
     private var apkAttributes: APKAttributes? = null
     private var sdtk: String = "android"
+    private var minSessionTime: Int = 10
 
     init {
         context = context.applicationContext
@@ -44,5 +45,15 @@ class TrackierSDKConfig(var context: Context, val appToken: String, val env: Str
 
     fun getSDKType(): String {
         return this.sdtk
+    }
+
+    fun setMinSessionDuration(value: Int) {
+        if (value > 0) {
+            this.minSessionTime = value
+        }
+    }
+
+    fun getMinSessionDuration(): Int {
+        return this.minSessionTime
     }
 }

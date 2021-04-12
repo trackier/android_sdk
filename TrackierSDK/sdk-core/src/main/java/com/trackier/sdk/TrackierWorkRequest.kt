@@ -34,7 +34,12 @@ class TrackierWorkRequest(val kind: String, private val appToken: String, privat
         body["appKey"] = appToken
         body["mode"] = mode
         body["sdkt"] = sdtk
-        return body.mergeWith(this.apkAttributes?.getApkAttributes()!!)
+
+        val adnAttributes = this.apkAttributes?.getApkAttributes()
+        adnAttributes?.forEach { k, v -> 
+            body[k] = v
+        }
+        return body
     }
 
     fun getData(): MutableMap<String, Any> {
@@ -83,13 +88,5 @@ class TrackierWorkRequest(val kind: String, private val appToken: String, privat
 
             WorkManager.getInstance().enqueue(myWorkRequest)
         }
-    }
-
-    fun MutableMap<String, Any>.mergeWith(another: MutableMap<String, Any>): MutableMap<String, Any> {
-        val unionList: MutableMap<String, Any> = toMutableMap()
-        for ((key, value) in another) {
-            unionList[key] = listOfNotNull(unionList[key], value).toSet().joinToString(", ")
-        }
-        return unionList
     }
 }
