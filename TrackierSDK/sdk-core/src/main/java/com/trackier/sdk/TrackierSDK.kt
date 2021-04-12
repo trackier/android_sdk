@@ -4,7 +4,7 @@ import android.net.Uri
 import androidx.annotation.Keep
 
 @Keep
-object TrackierSDK{
+object TrackierSDK {
     private var isInitialized = false
     private val logger = Factory.logger
     private var instance = TrackierSDKInstance()
