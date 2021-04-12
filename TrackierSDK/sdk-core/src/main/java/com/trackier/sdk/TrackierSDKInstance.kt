@@ -12,6 +12,7 @@ class TrackierSDKInstance {
     lateinit var config: TrackierSDKConfig
     private var refDetails: RefererDetails? = null
     private var appToken: String = ""
+    private var apkAttributes: APKAttributes? = null
 
     var isEnabled = true
     var isInitialized = false
@@ -19,6 +20,7 @@ class TrackierSDKInstance {
     var gaid: String? = null
     var isLAT = false
     var installId = ""
+    var sdtk = ""
 
     /**
      * Initialize method should be called to initialize the sdk
@@ -31,11 +33,14 @@ class TrackierSDKInstance {
         this.configLoaded = true
         this.appToken = this.config.appToken
         this.installId = getInstallID()
+        this.apkAttributes = config.getAPKAttributes()
+        this.sdtk = config.getSDKType()
         DeviceInfo.init(device, this.config.context)
         CoroutineScope(Dispatchers.IO).launch {
             initGaid()
             initAttributionInfo()
             trackInstall()
+            trackSession()
         }
     }
 
@@ -98,6 +103,9 @@ class TrackierSDKInstance {
         trackierWorkRequest.gaid = gaid
         trackierWorkRequest.refDetails = getReferrerDetails()
         trackierWorkRequest.installID = installId
+        trackierWorkRequest.apkAttributes = apkAttributes
+        trackierWorkRequest.sdtk = sdtk
+
         return trackierWorkRequest
     }
 
@@ -159,5 +167,37 @@ class TrackierSDKInstance {
             _trackEvent(event)
         }
 
+    }
+
+    private fun getLastSessionTime(): String {
+        return Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_LAST_SESSION_TIME)
+    }
+
+    private fun setLastSessionTime(time: String) {
+        val prefs = Util.getSharedPref(this.config.context)
+        prefs.edit().putString(Constants.SHARED_PREF_LAST_SESSION_TIME, time)
+                .apply()
+    }
+
+    suspend fun trackSession() {
+        val currentTs = Date().time
+        val currentTime = Util.dateFormatter.format(currentTs)
+        try {
+            val lastSessionTime = getLastSessionTime()
+            var lastSessTs: Long = 0
+            if (lastSessionTime != "") {
+                val lst = Util.dateFormatter.parse(lastSessionTime)?.time
+                if (lst?.equals(0) == false) {
+                    lastSessTs = lst!!
+                }
+            }
+            val sessionDiff = (currentTs - lastSessTs).toInt()
+            if (sessionDiff > this.config.getMinSessionDuration()) {
+                val wrkRequest = makeWorkRequest(TrackierWorkRequest.KIND_SESSION_TRACK)
+                wrkRequest.sessionTime = lastSessionTime
+                APIRepository.doWork(wrkRequest)   
+            }
+        } catch (e: Exception) {}
+        setLastSessionTime(currentTime)
     }
 }

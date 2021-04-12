@@ -12,4 +12,9 @@ interface APIService {
     @POST("event")
     @Headers( "X-Client-SDK: ${Constants.SDK_VERSION}", "User-Agent: ${Constants.USER_AGENT}" )
     suspend fun sendEventData(@Body data: MutableMap<String, Any>): ResponseData
+
+
+    @POST("session")
+    @Headers( "X-Client-SDK: ${Constants.SDK_VERSION}", "User-Agent: ${Constants.USER_AGENT}" )
+    suspend fun sendSessionData(@Body data: MutableMap<String, Any>): ResponseData
 }

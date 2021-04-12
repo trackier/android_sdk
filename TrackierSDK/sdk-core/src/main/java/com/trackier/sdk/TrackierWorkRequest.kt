@@ -15,6 +15,9 @@ class TrackierWorkRequest(val kind: String, private val appToken: String, privat
     var refDetails = RefererDetails.default()
     private val createdAt = Util.dateFormatter.format(Date())
     var installID = ""
+    var sessionTime = ""
+    var sdtk = ""
+    var apkAttributes: APKAttributes? = null
 
     private fun setDefaults(): MutableMap<String, Any> {
         val body = mutableMapOf<String, Any>()
@@ -30,6 +33,12 @@ class TrackierWorkRequest(val kind: String, private val appToken: String, privat
         body["installId"] = installID
         body["appKey"] = appToken
         body["mode"] = mode
+        body["sdkt"] = sdtk
+
+        val adnAttributes = this.apkAttributes?.getApkAttributes()
+        adnAttributes?.forEach { k, v -> 
+            body[k] = v
+        }
         return body
     }
 
@@ -43,10 +52,17 @@ class TrackierWorkRequest(val kind: String, private val appToken: String, privat
         return body
     }
 
+    fun getSessionData(): MutableMap<String, Any> {
+        val body = setDefaults()
+        body["lastSessionTime"] = this.sessionTime
+        return body
+    }
+
     companion object {
         const val KIND_UNKNOWN = "unknown"
         const val KIND_INSTALL = "install"
         const val KIND_EVENT = "event"
+        const val KIND_SESSION_TRACK = "session_track"
 
         private fun getConstraints(): Constraints {
             return Constraints.Builder()

@@ -7,6 +7,9 @@ import java.util.logging.Level
 class TrackierSDKConfig(var context: Context, val appToken: String, val env: String) {
     private var enableApkTracking = false
     private val logger: Logger
+    private var apkAttributes: APKAttributes? = null
+    private var sdtk: String = "android"
+    private var minSessionTime: Int = 10
 
     init {
         context = context.applicationContext
@@ -26,5 +29,31 @@ class TrackierSDKConfig(var context: Context, val appToken: String, val env: Str
 
     fun isApkTrackingEnabled(): Boolean {
         return enableApkTracking
+    }
+
+    fun setAPKAttributes(apkAttributes: APKAttributes) {
+        this.apkAttributes = apkAttributes
+    }
+
+    fun getAPKAttributes(): APKAttributes? {
+        return this.apkAttributes
+    }
+
+    fun setSDKType(sdtk: String = "android") {
+        this.sdtk = sdtk
+    }
+
+    fun getSDKType(): String {
+        return this.sdtk
+    }
+
+    fun setMinSessionDuration(value: Int) {
+        if (value > 0) {
+            this.minSessionTime = value
+        }
+    }
+
+    fun getMinSessionDuration(): Int {
+        return this.minSessionTime
     }
 }
