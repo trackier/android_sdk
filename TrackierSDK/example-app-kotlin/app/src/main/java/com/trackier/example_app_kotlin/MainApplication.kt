@@ -34,7 +34,7 @@ class MainApplication : Application() {
         val apkAttributes = APKA
 
         sdkConfig.setAPKAttributes(apkAttributes)
-        sdkConfig.setSDKType()
+        
         TrackierSDK.initialize(sdkConfig)
     }
 }
