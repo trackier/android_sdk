@@ -1,6 +1,5 @@
 package com.trackier.sdk
 
-import android.net.Uri
 import androidx.annotation.Keep
 
 @Keep
@@ -46,11 +45,5 @@ object TrackierSDK {
     suspend fun trackSession() {
         instance.trackSession()
     }
-
-    @JvmStatic
-     fun appWillOpenUrl(uri : Uri) {
-         val deeplinkListner = this as DeeplinkEvent.DeeplinkListner
-         deeplinkListner.receivedDeeplink(uri)
-     }
 
 }
