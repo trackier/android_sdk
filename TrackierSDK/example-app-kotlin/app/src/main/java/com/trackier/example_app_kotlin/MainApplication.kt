@@ -31,7 +31,7 @@ class MainApplication : Application() {
 
         val sdkConfig = TrackierSDKConfig(this, TR_DEV_KEY, "production")
 //        val apkAttributes = APKAttributes("p1d","si23","ssite122","cha12","ad111","adid23")
-        val apkAttributes = APKA
+        val apkAttributes = APKAttributes("demo_partner", subSiteID= "sub_partner_tiktok", siteId = "google")
 
         sdkConfig.setAPKAttributes(apkAttributes)
         
