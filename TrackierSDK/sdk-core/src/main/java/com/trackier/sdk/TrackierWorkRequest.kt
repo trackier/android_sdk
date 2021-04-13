@@ -36,8 +36,10 @@ class TrackierWorkRequest(val kind: String, private val appToken: String, privat
         body["sdkt"] = sdtk
 
         val adnAttributes = this.apkAttributes?.getApkAttributes()
-        adnAttributes?.forEach { k, v -> 
-            body[k] = v
+        if (adnAttributes != null) {
+            for ((k, v) in adnAttributes) {
+                body[k] = v
+            }
         }
         return body
     }
