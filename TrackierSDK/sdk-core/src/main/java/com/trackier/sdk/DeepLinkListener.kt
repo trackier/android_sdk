@@ -1,6 +1,6 @@
 package com.trackier.sdk
 
 interface DeepLinkListener {
-    fun onDeepLinking()
+    fun onDeepLinking(result: DeepLinkResult)
 }
 
