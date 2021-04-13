@@ -55,6 +55,16 @@ object Util {
         return ""
     }
 
+    fun setSharedPrefString(context: Context, key: String, value: String) {
+        val prefs = getSharedPref(context)
+        prefs.edit().putString(key, value).apply()
+    }
+
+    fun delSharedPrefKey(context: Context, key: String) {
+        val prefs = getSharedPref(context)
+        prefs.edit().remove(key).apply()
+    }
+
     fun sha1(input: String) = hashString("SHA-1", input)
     fun md5(input: String) = hashString("MD5", input)
 

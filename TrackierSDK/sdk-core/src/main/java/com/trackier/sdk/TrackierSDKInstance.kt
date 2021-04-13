@@ -37,8 +37,7 @@ class TrackierSDKInstance {
             initAttributionInfo()
             trackInstall()
             trackSession()
-            // fire dl hook
-//            config.getDeepLinkListener()?.onDeepLinking()
+            callDeepLinkListener()
         }
     }
 
@@ -183,7 +182,7 @@ class TrackierSDKInstance {
             if (lastSessionTime != "") {
                 val lst = Util.dateFormatter.parse(lastSessionTime)?.time
                 if (lst?.equals(0) == false) {
-                    lastSessTs = lst!!
+                    lastSessTs = lst
                 }
             }
             val sessionDiff = (currentTs - lastSessTs).toInt()
@@ -194,5 +193,28 @@ class TrackierSDKInstance {
             }
         } catch (e: Exception) {}
         setLastSessionTime(currentTime)
+    }
+
+    fun callDeepLinkListener() {
+        val dlt = this.config.getDeepLinkListener() ?: return
+        val isDeeplinkCalled = Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_DEEP_LINK_CALLED)
+        if (isDeeplinkCalled == "true") return
+
+        val prefs = Util.getSharedPref(this.config.context)
+        val dlstr = Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_DEEP_LINK)
+        val dlResult: DeepLink
+        if (dlstr.isBlank()) {
+            val ref = getReferrerDetails()
+            if (!ref.isDeepLink) {
+                return
+            }
+            dlResult = DeepLink(ref.url, true)
+            prefs.edit().putString(Constants.SHARED_PREF_DEEP_LINK_CALLED, "true").apply()
+        } else {
+            dlResult = DeepLink(dlstr, false)
+            prefs.edit().putString(Constants.SHARED_PREF_DEEP_LINK_CALLED, "true")
+                .remove(Constants.SHARED_PREF_DEEP_LINK).apply()
+        }
+        dlt.onDeepLinking(dlResult)
     }
 }

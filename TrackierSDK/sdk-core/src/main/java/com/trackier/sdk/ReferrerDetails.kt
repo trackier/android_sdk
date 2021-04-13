@@ -9,12 +9,17 @@ data class RefererDetails(
     val clickTime: String,
     val installTime: String,
 ) {
-    val clickId : String
+    val clickId: String
+    private val params: Map<String, String>
     val isOrganic: Boolean get() = clickId.isEmpty()
+    val isDeepLink: Boolean get() {
+        val dlv = params["dlv"] ?: ""
+        return dlv.isNotBlank()
+    }
 
     init {
         val decodedUrl = URLDecoder.decode(url, "UTF-8").toString()
-        val params = Util.getQueryParams(decodedUrl);
+        params = Util.getQueryParams(decodedUrl);
         clickId = params["tr_clickid"] ?: ""
     }
 
