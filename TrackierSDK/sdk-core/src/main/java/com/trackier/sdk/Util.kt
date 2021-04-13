@@ -14,6 +14,14 @@ object Util {
     private val HEX_CHARS = "0123456789ABCDEF".toCharArray()
     val dateFormatter = SimpleDateFormat(Constants.DATE_TIME_FORMAT, Locale.US)
 
+    fun getMapStringVal(data: MutableMap<String, String>, key: String): String {
+        return if (data.containsKey(key)) {
+            data[key].toString()
+        } else {
+            ""
+        }
+    }
+
     fun getLocale(config: Configuration): Locale? {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             val localeList = config.locales
