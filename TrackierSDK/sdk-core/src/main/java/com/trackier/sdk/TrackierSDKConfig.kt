@@ -8,6 +8,7 @@ class TrackierSDKConfig(var context: Context, val appToken: String, val env: Str
     private var enableApkTracking = false
     private val logger: Logger
     private var apkAttributes: APKAttributes? = null
+    private var deepLinkListener: DeepLinkListener? = null
     private var sdtk: String = "android"
     private var minSessionTime: Int = 10
 
@@ -55,5 +56,9 @@ class TrackierSDKConfig(var context: Context, val appToken: String, val env: Str
 
     fun getMinSessionDuration(): Int {
         return this.minSessionTime
+    }
+
+    fun setDeepLinkListener(lt: DeepLinkListener) {
+        this.deepLinkListener = lt
     }
 }
