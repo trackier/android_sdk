@@ -6,7 +6,7 @@ import java.util.logging.Level
 
 class TrackierSDKConfig(var context: Context, val appToken: String, val env: String) {
     private val logger: Logger
-    private var apkAttributes: APKAttributes? = null
+    private var attributionParams: AttributionParams? = null
     private var deepLinkListener: DeepLinkListener? = null
     private var sdtk: String = "android"
     private var minSessionTime: Int = 10
@@ -23,12 +23,12 @@ class TrackierSDKConfig(var context: Context, val appToken: String, val env: Str
         Factory.setLogLevel(value)
     }
 
-    fun setAPKAttributes(apkAttributes: APKAttributes) {
-        this.apkAttributes = apkAttributes
+    fun setAttributionParams(attributionParams: AttributionParams) {
+        this.attributionParams = attributionParams
     }
 
-    fun getAPKAttributes(): APKAttributes? {
-        return this.apkAttributes
+    fun getAttributionParams(): AttributionParams? {
+        return this.attributionParams
     }
 
     fun setSDKType(sdtk: String) {

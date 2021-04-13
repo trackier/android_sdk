@@ -101,7 +101,7 @@ class TrackierSDKInstance {
         trackierWorkRequest.gaid = gaid
         trackierWorkRequest.refDetails = getReferrerDetails()
         trackierWorkRequest.installID = installId
-        trackierWorkRequest.apkAttributes = this.config.getAPKAttributes()
+        trackierWorkRequest.attributionParams = this.config.getAttributionParams()
         trackierWorkRequest.sdtk = this.config.getSDKType()
 
         return trackierWorkRequest
