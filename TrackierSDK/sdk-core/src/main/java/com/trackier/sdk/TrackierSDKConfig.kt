@@ -5,7 +5,6 @@ import java.util.logging.Logger
 import java.util.logging.Level
 
 class TrackierSDKConfig(var context: Context, val appToken: String, val env: String) {
-    private var enableApkTracking = false
     private val logger: Logger
     private var apkAttributes: APKAttributes? = null
     private var deepLinkListener: DeepLinkListener? = null
@@ -24,14 +23,6 @@ class TrackierSDKConfig(var context: Context, val appToken: String, val env: Str
         Factory.setLogLevel(value)
     }
 
-    fun setApkTracking(value: Boolean) {
-        enableApkTracking = value
-    }
-
-    fun isApkTrackingEnabled(): Boolean {
-        return enableApkTracking
-    }
-
     fun setAPKAttributes(apkAttributes: APKAttributes) {
         this.apkAttributes = apkAttributes
     }
@@ -40,7 +31,7 @@ class TrackierSDKConfig(var context: Context, val appToken: String, val env: Str
         return this.apkAttributes
     }
 
-    fun setSDKType(sdtk: String = "android") {
+    fun setSDKType(sdtk: String) {
         this.sdtk = sdtk
     }
 

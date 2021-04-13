@@ -12,7 +12,6 @@ class TrackierSDKInstance {
     lateinit var config: TrackierSDKConfig
     private var refDetails: RefererDetails? = null
     private var appToken: String = ""
-    private var apkAttributes: APKAttributes? = null
 
     var isEnabled = true
     var isInitialized = false
@@ -20,7 +19,6 @@ class TrackierSDKInstance {
     var gaid: String? = null
     var isLAT = false
     var installId = ""
-    var sdtk = ""
 
     /**
      * Initialize method should be called to initialize the sdk
@@ -33,8 +31,6 @@ class TrackierSDKInstance {
         this.configLoaded = true
         this.appToken = this.config.appToken
         this.installId = getInstallID()
-        this.apkAttributes = config.getAPKAttributes()
-        this.sdtk = config.getSDKType()
         DeviceInfo.init(device, this.config.context)
         CoroutineScope(Dispatchers.IO).launch {
             initGaid()
@@ -103,8 +99,8 @@ class TrackierSDKInstance {
         trackierWorkRequest.gaid = gaid
         trackierWorkRequest.refDetails = getReferrerDetails()
         trackierWorkRequest.installID = installId
-        trackierWorkRequest.apkAttributes = apkAttributes
-        trackierWorkRequest.sdtk = sdtk
+        trackierWorkRequest.apkAttributes = this.config.getAPKAttributes()
+        trackierWorkRequest.sdtk = this.config.getSDKType()
 
         return trackierWorkRequest
     }
@@ -126,9 +122,6 @@ class TrackierSDKInstance {
     private suspend fun trackInstall() {
         if (isInstallTracked()) {
             return
-        }
-        if (config.isApkTrackingEnabled()) {
-            // TODO: implement APK tracking logic
         }
         if (!isReferrerStored()) {
             val installRef = InstallReferrer(this.config.context)
