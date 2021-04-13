@@ -53,5 +53,9 @@ object TrackierSDK {
         val prefs = Util.getSharedPref(ctx)
         prefs.edit().putString(Constants.SHARED_PREF_DEEP_LINK, uri.query)
             .remove(Constants.SHARED_PREF_DEEP_LINK_CALLED).apply()
+
+        if (instance.isInitialized) {
+            instance.callDeepLinkListener()
+        }
     }
 }
