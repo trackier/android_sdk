@@ -52,4 +52,8 @@ class TrackierSDKConfig(var context: Context, val appToken: String, val env: Str
     fun setDeepLinkListener(lt: DeepLinkListener) {
         this.deepLinkListener = lt
     }
+
+    fun getDeepLinkListener(): DeepLinkListener? {
+        return this.deepLinkListener
+    }
 }

@@ -9,21 +9,13 @@ data class RefererDetails(
     val clickTime: String,
     val installTime: String,
 ) {
+    val clickId : String
     val isOrganic: Boolean get() = clickId.isEmpty()
 
-    val clickId : String
-
     init {
-        val afterDecode = URLDecoder.decode(url, "UTF-8").toString()
-        val params = getQueryKeyValueMap(afterDecode);
+        val decodedUrl = URLDecoder.decode(url, "UTF-8").toString()
+        val params = Util.getQueryParams(decodedUrl);
         clickId = params["tr_clickid"] ?: ""
-    }
-
-    private fun getQueryKeyValueMap(url: String): Map<String, String> {
-        return url.split("?").associate {
-            val (left, right) = url.split("=")
-            left to right
-        }
     }
 
     companion object {

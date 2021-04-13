@@ -1,8 +1,7 @@
 package com.trackier.sdk
 
-class DeepLink {
-    private var data = mutableMapOf<String, String>()
-    private val deferred = false
+class DeepLink(val uri: String, val deferred: Boolean) {
+    private var data: Map<String, String> = Util.getQueryParams(uri)
 
     fun isDeferred(): Boolean {
         return deferred
@@ -51,5 +50,4 @@ class DeepLink {
     fun getStringValue(key: String): String {
         return Util.getMapStringVal(data, key)
     }
-
 }

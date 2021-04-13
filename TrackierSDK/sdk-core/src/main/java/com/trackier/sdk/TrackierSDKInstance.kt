@@ -37,6 +37,8 @@ class TrackierSDKInstance {
             initAttributionInfo()
             trackInstall()
             trackSession()
+            // fire dl hook
+//            config.getDeepLinkListener()?.onDeepLinking()
         }
     }
 

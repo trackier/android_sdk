@@ -14,11 +14,18 @@ object Util {
     private val HEX_CHARS = "0123456789ABCDEF".toCharArray()
     val dateFormatter = SimpleDateFormat(Constants.DATE_TIME_FORMAT, Locale.US)
 
-    fun getMapStringVal(data: MutableMap<String, String>, key: String): String {
+    fun getMapStringVal(data: Map<String, String>, key: String): String {
         return if (data.containsKey(key)) {
             data[key].toString()
         } else {
             ""
+        }
+    }
+
+    fun getQueryParams(url: String): Map<String, String> {
+        return url.split("?").associate {
+            val (left, right) = url.split("=")
+            left to right
         }
     }
 
