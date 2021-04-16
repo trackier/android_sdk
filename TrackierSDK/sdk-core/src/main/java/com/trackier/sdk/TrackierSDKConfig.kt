@@ -5,9 +5,9 @@ import java.util.logging.Logger
 import java.util.logging.Level
 
 class TrackierSDKConfig(var context: Context, val appToken: String, val env: String) {
-    private var enableApkTracking = false
     private val logger: Logger
-    private var apkAttributes: APKAttributes? = null
+    private var attributionParams: AttributionParams? = null
+    private var deepLinkListener: DeepLinkListener? = null
     private var sdtk: String = "android"
     private var minSessionTime: Int = 10
 
@@ -23,23 +23,15 @@ class TrackierSDKConfig(var context: Context, val appToken: String, val env: Str
         Factory.setLogLevel(value)
     }
 
-    fun setApkTracking(value: Boolean) {
-        enableApkTracking = value
+    fun setAttributionParams(attributionParams: AttributionParams) {
+        this.attributionParams = attributionParams
     }
 
-    fun isApkTrackingEnabled(): Boolean {
-        return enableApkTracking
+    fun getAttributionParams(): AttributionParams? {
+        return this.attributionParams
     }
 
-    fun setAPKAttributes(apkAttributes: APKAttributes) {
-        this.apkAttributes = apkAttributes
-    }
-
-    fun getAPKAttributes(): APKAttributes? {
-        return this.apkAttributes
-    }
-
-    fun setSDKType(sdtk: String = "android") {
+    fun setSDKType(sdtk: String) {
         this.sdtk = sdtk
     }
 
@@ -55,5 +47,13 @@ class TrackierSDKConfig(var context: Context, val appToken: String, val env: Str
 
     fun getMinSessionDuration(): Int {
         return this.minSessionTime
+    }
+
+    fun setDeepLinkListener(lt: DeepLinkListener) {
+        this.deepLinkListener = lt
+    }
+
+    fun getDeepLinkListener(): DeepLinkListener? {
+        return this.deepLinkListener
     }
 }

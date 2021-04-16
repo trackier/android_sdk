@@ -17,7 +17,7 @@ class TrackierWorkRequest(val kind: String, private val appToken: String, privat
     var installID = ""
     var sessionTime = ""
     var sdtk = ""
-    var apkAttributes: APKAttributes? = null
+    var attributionParams: AttributionParams? = null
 
     private fun setDefaults(): MutableMap<String, Any> {
         val body = mutableMapOf<String, Any>()
@@ -35,9 +35,11 @@ class TrackierWorkRequest(val kind: String, private val appToken: String, privat
         body["mode"] = mode
         body["sdkt"] = sdtk
 
-        val adnAttributes = this.apkAttributes?.getApkAttributes()
-        adnAttributes?.forEach { k, v -> 
-            body[k] = v
+        val adnAttributes = this.attributionParams?.getData()
+        if (adnAttributes != null) {
+            for ((k, v) in adnAttributes) {
+                body[k] = v
+            }
         }
         return body
     }

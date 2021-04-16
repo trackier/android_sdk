@@ -12,7 +12,6 @@ class TrackierSDKInstance {
     lateinit var config: TrackierSDKConfig
     private var refDetails: RefererDetails? = null
     private var appToken: String = ""
-    private var apkAttributes: APKAttributes? = null
 
     var isEnabled = true
     var isInitialized = false
@@ -20,7 +19,6 @@ class TrackierSDKInstance {
     var gaid: String? = null
     var isLAT = false
     var installId = ""
-    var sdtk = ""
 
     /**
      * Initialize method should be called to initialize the sdk
@@ -33,14 +31,13 @@ class TrackierSDKInstance {
         this.configLoaded = true
         this.appToken = this.config.appToken
         this.installId = getInstallID()
-        this.apkAttributes = config.getAPKAttributes()
-        this.sdtk = config.getSDKType()
         DeviceInfo.init(device, this.config.context)
         CoroutineScope(Dispatchers.IO).launch {
             initGaid()
             initAttributionInfo()
             trackInstall()
             trackSession()
+            callDeepLinkListener()
         }
     }
 
@@ -103,8 +100,8 @@ class TrackierSDKInstance {
         trackierWorkRequest.gaid = gaid
         trackierWorkRequest.refDetails = getReferrerDetails()
         trackierWorkRequest.installID = installId
-        trackierWorkRequest.apkAttributes = apkAttributes
-        trackierWorkRequest.sdtk = sdtk
+        trackierWorkRequest.attributionParams = this.config.getAttributionParams()
+        trackierWorkRequest.sdtk = this.config.getSDKType()
 
         return trackierWorkRequest
     }
@@ -126,9 +123,6 @@ class TrackierSDKInstance {
     private suspend fun trackInstall() {
         if (isInstallTracked()) {
             return
-        }
-        if (config.isApkTrackingEnabled()) {
-            // TODO: implement APK tracking logic
         }
         if (!isReferrerStored()) {
             val installRef = InstallReferrer(this.config.context)
@@ -188,7 +182,7 @@ class TrackierSDKInstance {
             if (lastSessionTime != "") {
                 val lst = Util.dateFormatter.parse(lastSessionTime)?.time
                 if (lst?.equals(0) == false) {
-                    lastSessTs = lst!!
+                    lastSessTs = lst
                 }
             }
             val sessionDiff = (currentTs - lastSessTs).toInt()
@@ -199,5 +193,28 @@ class TrackierSDKInstance {
             }
         } catch (e: Exception) {}
         setLastSessionTime(currentTime)
+    }
+
+    fun callDeepLinkListener() {
+        val dlt = this.config.getDeepLinkListener() ?: return
+        val isDeeplinkCalled = Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_DEEP_LINK_CALLED)
+        if (isDeeplinkCalled == "true") return
+
+        val prefs = Util.getSharedPref(this.config.context)
+        val dlstr = Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_DEEP_LINK)
+        val dlResult: DeepLink
+        if (dlstr.isBlank()) {
+            val ref = getReferrerDetails()
+            if (!ref.isDeepLink) {
+                return
+            }
+            dlResult = DeepLink(ref.url, true)
+            prefs.edit().putString(Constants.SHARED_PREF_DEEP_LINK_CALLED, "true").apply()
+        } else {
+            dlResult = DeepLink(dlstr, false)
+            prefs.edit().putString(Constants.SHARED_PREF_DEEP_LINK_CALLED, "true")
+                .remove(Constants.SHARED_PREF_DEEP_LINK).apply()
+        }
+        dlt.onDeepLinking(dlResult)
     }
 }

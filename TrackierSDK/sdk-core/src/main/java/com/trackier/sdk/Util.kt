@@ -14,6 +14,28 @@ object Util {
     private val HEX_CHARS = "0123456789ABCDEF".toCharArray()
     val dateFormatter = SimpleDateFormat(Constants.DATE_TIME_FORMAT, Locale.US)
 
+    fun getMapStringVal(data: Map<String, String>, key: String): String {
+        return if (data.containsKey(key)) {
+            data[key].toString()
+        } else {
+            ""
+        }
+    }
+
+    fun getQueryParams(query: String): Map<String, String> {
+        val params = query.split("&")
+        val map = mutableMapOf<String, String>()
+        for (param in params) {
+            val parts = param.split("=")
+            if (parts.size == 2) {
+                val name = parts[0]
+                val value = parts[1]
+                map[name] = value
+            }
+        }
+        return map
+    }
+
     fun getLocale(config: Configuration): Locale? {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             val localeList = config.locales
@@ -26,7 +48,10 @@ object Util {
     }
 
     fun getSharedPref(context: Context): SharedPreferences {
-        return context.applicationContext.getSharedPreferences(Constants.SHARED_PREF_NAME, Context.MODE_PRIVATE)
+        return context.applicationContext.getSharedPreferences(
+            Constants.SHARED_PREF_NAME,
+            Context.MODE_PRIVATE
+        )
     }
 
     fun getSharedPrefString(context: Context, key: String): String {
@@ -38,6 +63,16 @@ object Util {
             }
         } catch (ex: Exception) {}
         return ""
+    }
+
+    fun setSharedPrefString(context: Context, key: String, value: String) {
+        val prefs = getSharedPref(context)
+        prefs.edit().putString(key, value).apply()
+    }
+
+    fun delSharedPrefKey(context: Context, key: String) {
+        val prefs = getSharedPref(context)
+        prefs.edit().remove(key).apply()
     }
 
     fun sha1(input: String) = hashString("SHA-1", input)
