@@ -22,11 +22,18 @@ object Util {
         }
     }
 
-    fun getQueryParams(url: String): Map<String, String> {
-        return url.split("?").associate {
-            val (left, right) = url.split("=")
-            left to right
+    fun getQueryParams(query: String): Map<String, String> {
+        val params = query.split("&")
+        val map = mutableMapOf<String, String>()
+        for (param in params) {
+            val parts = param.split("=")
+            if (parts.size == 2) {
+                val name = parts[0]
+                val value = parts[1]
+                map[name] = value
+            }
         }
+        return map
     }
 
     fun getLocale(config: Configuration): Locale? {
@@ -41,7 +48,10 @@ object Util {
     }
 
     fun getSharedPref(context: Context): SharedPreferences {
-        return context.applicationContext.getSharedPreferences(Constants.SHARED_PREF_NAME, Context.MODE_PRIVATE)
+        return context.applicationContext.getSharedPreferences(
+            Constants.SHARED_PREF_NAME,
+            Context.MODE_PRIVATE
+        )
     }
 
     fun getSharedPrefString(context: Context, key: String): String {
