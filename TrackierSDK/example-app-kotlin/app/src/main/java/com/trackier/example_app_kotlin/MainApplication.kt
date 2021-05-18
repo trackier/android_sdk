@@ -2,7 +2,8 @@ package com.trackier.example_app_kotlin
 
 import android.app.Application
 import android.content.Context
-import com.trackier.sdk.APKAttributes
+import com.trackier.sdk.AttributionParams
+import com.trackier.sdk.DeepLink
 import com.trackier.sdk.TrackierSDK
 import com.trackier.sdk.TrackierSDKConfig
 
@@ -30,11 +31,11 @@ class MainApplication : Application() {
         val context: Context = MainApplication.applicationContext()
 
         val sdkConfig = TrackierSDKConfig(this, TR_DEV_KEY, "production")
-//        val apkAttributes = APKAttributes("p1d","si23","ssite122","cha12","ad111","adid23")
-        val apkAttributes = APKAttributes("demo_partner", subSiteID= "sub_partner_tiktok", siteId = "google")
+        val apkAttributes = AttributionParams("demo_partner", subSiteID= "sub_partner_tiktok", siteId = "google")
+        sdkConfig.setAttributionParams(apkAttributes)
 
-        sdkConfig.setAPKAttributes(apkAttributes)
-        
         TrackierSDK.initialize(sdkConfig)
     }
+
+
 }
