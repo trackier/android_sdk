@@ -19,8 +19,6 @@ object TrackierSDK {
         isInitialized = true
         logger.info("Trackier SDK ${Constants.SDK_VERSION} initialized")
         instance.initialize(config)
-
-        FacebookHelper(config.context)
     }
 
     fun isEnabled(): Boolean {

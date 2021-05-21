@@ -1,12 +1,15 @@
 package com.trackier.sdk
 
 import android.annotation.SuppressLint
+import android.content.ContentResolver
 import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.database.Cursor
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
+import android.net.Uri
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.Build.VERSION
@@ -14,6 +17,7 @@ import android.provider.Settings
 import android.telephony.TelephonyManager
 import android.util.DisplayMetrics
 import androidx.annotation.Keep
+import com.trackier.sdk.Factory.logger
 import java.lang.ref.WeakReference
 import java.util.*
 
@@ -58,6 +62,8 @@ data class DeviceInfo(
     var androidId: String? = null
     var isEmulator = false
 
+    var facebookAttributionId: String? = null
+
     companion object {
         fun init(deviceInfo: DeviceInfo, context: Context) {
             deviceInfo.packageName = context.packageName
@@ -84,6 +90,8 @@ data class DeviceInfo(
             deviceInfo.macMd5 = getMacAddress(context)
             deviceInfo.isEmulator = checkIsEmulator()
             deviceInfo.androidId = getAndroidID(context)
+
+            deviceInfo.facebookAttributionId = getFacebookAttributionId(context.contentResolver)
         }
 
         private fun appVersion(context: Context): String? {
@@ -257,6 +265,24 @@ data class DeviceInfo(
             } catch (ex: Exception) {
                 return Pair(null, false)
             }
+        }
+
+        fun getFacebookAttributionId(contentResolver: ContentResolver): String? {
+            val ATTRIBUTION_ID_CONTENT_URI = Uri.parse("content://com.facebook.katana.provider.AttributionIdProvider")
+            val ATTRIBUTION_ID_COLUMN_NAME = "aid"
+
+            if(contentResolver == null) return ""
+
+            val projection = arrayOf(ATTRIBUTION_ID_COLUMN_NAME)
+            val c: Cursor? = contentResolver.query(ATTRIBUTION_ID_CONTENT_URI, projection, null, null, null)
+            if (c == null || !c.moveToFirst()) {
+                return ""
+            }
+            val attributionId: String = c.getString(c.getColumnIndex(ATTRIBUTION_ID_COLUMN_NAME))
+            c.close()
+
+            logger.info("Facebook Attribution getAttributionId: "+ attributionId)
+            return attributionId
         }
     }
 }
