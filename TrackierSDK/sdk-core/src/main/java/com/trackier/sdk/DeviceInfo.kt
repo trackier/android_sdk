@@ -267,17 +267,17 @@ data class DeviceInfo(
         }
 
         fun getFBAttributionId(contentResolver: ContentResolver): String {
-            val ATTRIBUTION_ID_CONTENT_URI = Uri.parse("content://com.facebook.katana.provider.AttributionIdProvider")
-            val ATTRIBUTION_ID_COLUMN_NAME = "aid"
+            val attributionIdContentUri = Uri.parse("content://com.facebook.katana.provider.AttributionIdProvider")
+            val attributionIdColumnName = "aid"
 
             if(contentResolver == null) return ""
 
-            val projection = arrayOf(ATTRIBUTION_ID_COLUMN_NAME)
-            val c: Cursor? = contentResolver.query(ATTRIBUTION_ID_CONTENT_URI, projection, null, null, null)
+            val projection = arrayOf(attributionIdColumnName)
+            val c: Cursor? = contentResolver.query(attributionIdContentUri, projection, null, null, null)
             if (c == null || !c.moveToFirst()) {
                 return ""
             }
-            val attributionId: String = c.getString(c.getColumnIndex(ATTRIBUTION_ID_COLUMN_NAME))
+            val attributionId: String = c.getString(c.getColumnIndex(attributionIdColumnName))
             c.close()
 
             return attributionId
