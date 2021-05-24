@@ -1,12 +1,15 @@
 package com.trackier.sdk
 
 import android.annotation.SuppressLint
+import android.content.ContentResolver
 import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.database.Cursor
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
+import android.net.Uri
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.Build.VERSION
@@ -58,6 +61,8 @@ data class DeviceInfo(
     var androidId: String? = null
     var isEmulator = false
 
+    var fbAttributionId: String? = null
+
     companion object {
         fun init(deviceInfo: DeviceInfo, context: Context) {
             deviceInfo.packageName = context.packageName
@@ -84,6 +89,8 @@ data class DeviceInfo(
             deviceInfo.macMd5 = getMacAddress(context)
             deviceInfo.isEmulator = checkIsEmulator()
             deviceInfo.androidId = getAndroidID(context)
+
+            deviceInfo.fbAttributionId = getFBAttributionId(context.contentResolver)
         }
 
         private fun appVersion(context: Context): String? {
@@ -257,6 +264,23 @@ data class DeviceInfo(
             } catch (ex: Exception) {
                 return Pair(null, false)
             }
+        }
+
+        fun getFBAttributionId(contentResolver: ContentResolver): String {
+            val attributionIdContentUri = Uri.parse("content://com.facebook.katana.provider.AttributionIdProvider")
+            val attributionIdColumnName = "aid"
+
+            if (contentResolver == null) return ""
+
+            val projection = arrayOf(attributionIdColumnName)
+            val c: Cursor? = contentResolver.query(attributionIdContentUri, projection, null, null, null)
+            if (c == null || !c.moveToFirst()) {
+                return ""
+            }
+            val attributionId: String = c.getString(c.getColumnIndex(attributionIdColumnName))
+            c.close()
+
+            return attributionId
         }
     }
 }
