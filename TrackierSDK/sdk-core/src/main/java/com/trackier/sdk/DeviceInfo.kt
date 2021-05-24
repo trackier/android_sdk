@@ -17,7 +17,6 @@ import android.provider.Settings
 import android.telephony.TelephonyManager
 import android.util.DisplayMetrics
 import androidx.annotation.Keep
-import com.trackier.sdk.Factory.logger
 import java.lang.ref.WeakReference
 import java.util.*
 
@@ -62,7 +61,7 @@ data class DeviceInfo(
     var androidId: String? = null
     var isEmulator = false
 
-    var facebookAttributionId: String? = null
+    var fbAttributionId: String? = null
 
     companion object {
         fun init(deviceInfo: DeviceInfo, context: Context) {
@@ -91,7 +90,7 @@ data class DeviceInfo(
             deviceInfo.isEmulator = checkIsEmulator()
             deviceInfo.androidId = getAndroidID(context)
 
-            deviceInfo.facebookAttributionId = getFacebookAttributionId(context.contentResolver)
+            deviceInfo.fbAttributionId = getFBAttributionId(context.contentResolver)
         }
 
         private fun appVersion(context: Context): String? {
@@ -267,7 +266,7 @@ data class DeviceInfo(
             }
         }
 
-        fun getFacebookAttributionId(contentResolver: ContentResolver): String? {
+        fun getFBAttributionId(contentResolver: ContentResolver): String {
             val ATTRIBUTION_ID_CONTENT_URI = Uri.parse("content://com.facebook.katana.provider.AttributionIdProvider")
             val ATTRIBUTION_ID_COLUMN_NAME = "aid"
 
@@ -281,7 +280,6 @@ data class DeviceInfo(
             val attributionId: String = c.getString(c.getColumnIndex(ATTRIBUTION_ID_COLUMN_NAME))
             c.close()
 
-            logger.info("Facebook Attribution getAttributionId: "+ attributionId)
             return attributionId
         }
     }
