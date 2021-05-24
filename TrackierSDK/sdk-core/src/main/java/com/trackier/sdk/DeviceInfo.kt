@@ -270,7 +270,7 @@ data class DeviceInfo(
             val attributionIdContentUri = Uri.parse("content://com.facebook.katana.provider.AttributionIdProvider")
             val attributionIdColumnName = "aid"
 
-            if(contentResolver == null) return ""
+            if (contentResolver == null) return ""
 
             val projection = arrayOf(attributionIdColumnName)
             val c: Cursor? = contentResolver.query(attributionIdContentUri, projection, null, null, null)
