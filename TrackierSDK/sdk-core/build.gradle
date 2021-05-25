@@ -21,7 +21,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 30
         versionCode 1
-        versionName "1.5.2"
+        versionName "1.6.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -33,6 +33,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
 }
 
 dependencies {
@@ -43,7 +51,7 @@ dependencies {
     implementation "androidx.annotation:annotation:1.1.0"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2"
 
-    def work_version = "2.0.1"
+    def work_version = "2.2.0"
     api "androidx.work:work-runtime-ktx:$work_version"
 
     api "com.squareup.moshi:moshi-kotlin:1.8.0"
