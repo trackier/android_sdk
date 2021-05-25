@@ -21,7 +21,7 @@ Android SDK integration for developers
 
 You can find the latest version [here](https://mvnrepository.com/artifact/com.trackier/android-sdk).
 ```
-  implementation 'com.trackier:android-sdk:1.1.0'
+  implementation 'com.trackier:android-sdk:1.5.0'
 ```
  
 #### Sync the project to retrieve the dependencies – see the following screenshot:
