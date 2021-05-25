@@ -31,7 +31,7 @@ class MainApplication : Application() {
         val context: Context = MainApplication.applicationContext()
 
         val sdkConfig = TrackierSDKConfig(this, TR_DEV_KEY, "production")
-        val apkAttributes = AttributionParams("demo_partner", subSiteID= "sub_partner_tiktok", siteId = "google")
+        val apkAttributes = AttributionParams("kFyW2bEizc", subSiteID= "sub_partner_tiktok", siteId = "google")
         sdkConfig.setAttributionParams(apkAttributes)
 
         TrackierSDK.initialize(sdkConfig)
