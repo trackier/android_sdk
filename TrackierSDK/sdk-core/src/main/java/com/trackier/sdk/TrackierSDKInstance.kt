@@ -38,13 +38,20 @@ class TrackierSDKInstance {
             trackInstall()
             trackSession()
             callDeepLinkListener()
+
         }
     }
 
     private suspend fun initGaid() {
-        val (gaid, isLat) = DeviceInfo.getGAID(this.config.context)
-        this.gaid = gaid
-        this.isLAT = isLat
+        for (i in 1..5) {
+            delay(1000 * i.toLong())
+            if (DeviceInfo.getGAID(config.context).first!= null) {
+                val (gaid, isLat) = DeviceInfo.getGAID(this.config.context)
+                this.gaid = gaid
+                this.isLAT = isLat
+                break
+            }
+        }
     }
 
     private suspend fun initAttributionInfo() {
