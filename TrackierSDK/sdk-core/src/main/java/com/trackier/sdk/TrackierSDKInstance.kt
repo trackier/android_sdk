@@ -38,7 +38,6 @@ class TrackierSDKInstance {
             trackInstall()
             trackSession()
             callDeepLinkListener()
-
         }
     }
 
