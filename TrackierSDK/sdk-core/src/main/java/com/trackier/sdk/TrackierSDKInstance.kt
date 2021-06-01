@@ -46,7 +46,7 @@ class TrackierSDKInstance {
             val (gaid, isLat) = DeviceInfo.getGAID(this.config.context)
             this.gaid = gaid
             this.isLAT = isLat
-            if (this.gaid!= null) {
+            if (this.gaid != null) {
                 break
             }
             delay(1000 * i.toLong())
