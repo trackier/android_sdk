@@ -57,22 +57,23 @@ class TrackierSDKInstance {
         }
     }
 
-    private suspend fun initAttributionInfo(): Boolean? {
+    private suspend fun initAttributionInfo(): String? {
         isInitialized = true
         return suspendCoroutine {
-            val appLinkRqSucceeded: Boolean? = DeferredAppLinkDataHandler.fetchDeferredAppLinkData(config.context, object : AppLinkFetchEvents {
+            val appLinkRqSucceeded: Boolean = DeferredAppLinkDataHandler.fetchDeferredAppLinkData(config.context, object : AppLinkFetchEvents {
                     override fun onAppLinkFetchFinished(nativeAppLinkUrl: String?) {
-                        // callback returns when app link fetch finishes with success or failure. Report app link checked in both cases
                         if (nativeAppLinkUrl != null) {
                             val appLinkUri: Uri = Uri.parse(nativeAppLinkUrl)
                             val bncLinkClickId: String? = appLinkUri.getQueryParameter("link_click_id")
                             if (!TextUtils.isEmpty(bncLinkClickId)) {
-                                //got the click Id
+                                it.resume(bncLinkClickId)
                             }
                         }
                     }
                 })
-            it.resume(appLinkRqSucceeded)
+            if(!appLinkRqSucceeded){
+                it.resume("")
+            }
         }
     }
 

@@ -11,7 +11,7 @@ class DeferredAppLinkDataHandler {
     companion object {
         private val NATIVE_URL_KEY = "com.facebook.platform.APPLINK_NATIVE_URL"
         fun fetchDeferredAppLinkData(
-            context: Context, callback: AppLinkFetchEvents?): Boolean? {
+            context: Context, callback: AppLinkFetchEvents?): Boolean {
             var isRequestSucceeded = true
             try {
                 val FacebookSdkClass = Class.forName("com.facebook.FacebookSdk")
