@@ -42,9 +42,15 @@ class TrackierSDKInstance {
     }
 
     private suspend fun initGaid() {
-        val (gaid, isLat) = DeviceInfo.getGAID(this.config.context)
-        this.gaid = gaid
-        this.isLAT = isLat
+        for (i in 1..5) {
+            val (gaid, isLat) = DeviceInfo.getGAID(this.config.context)
+            this.gaid = gaid
+            this.isLAT = isLat
+            if (this.gaid != null) {
+                break
+            }
+            delay(1000 * i.toLong())
+        }
     }
 
     private suspend fun initAttributionInfo() {
