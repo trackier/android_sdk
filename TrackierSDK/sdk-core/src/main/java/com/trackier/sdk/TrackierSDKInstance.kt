@@ -1,11 +1,16 @@
 package com.trackier.sdk
 
+import android.net.Uri
+import android.text.TextUtils
+import com.android.installreferrer.api.InstallReferrerStateListener
+import com.trackier.sdk.DeferredAppLinkDataHandler.AppLinkFetchEvents
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.Exception
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class TrackierSDKInstance {
     private val device = DeviceInfo()
@@ -47,8 +52,23 @@ class TrackierSDKInstance {
         this.isLAT = isLat
     }
 
-    private suspend fun initAttributionInfo() {
+    private suspend fun initAttributionInfo(): Boolean? {
         isInitialized = true
+        return suspendCoroutine {
+            val appLinkRqSucceeded: Boolean? = DeferredAppLinkDataHandler.fetchDeferredAppLinkData(config.context, object : AppLinkFetchEvents {
+                    override fun onAppLinkFetchFinished(nativeAppLinkUrl: String?) {
+                        // callback returns when app link fetch finishes with success or failure. Report app link checked in both cases
+                        if (nativeAppLinkUrl != null) {
+                            val appLinkUri: Uri = Uri.parse(nativeAppLinkUrl)
+                            val bncLinkClickId: String? = appLinkUri.getQueryParameter("link_click_id")
+                            if (!TextUtils.isEmpty(bncLinkClickId)) {
+                                //got the click Id
+                            }
+                        }
+                    }
+                })
+            it.resume(appLinkRqSucceeded)
+        }
     }
 
     private fun isReferrerStored(): Boolean {
