@@ -2,7 +2,6 @@ package com.trackier.sdk
 
 import android.net.Uri
 import android.text.TextUtils
-import com.android.installreferrer.api.InstallReferrerStateListener
 import com.trackier.sdk.DeferredAppLinkDataHandler.AppLinkFetchEvents
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

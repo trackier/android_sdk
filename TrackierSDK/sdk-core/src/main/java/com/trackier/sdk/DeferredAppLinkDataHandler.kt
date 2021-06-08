@@ -21,7 +21,7 @@ class DeferredAppLinkDataHandler {
                 val AppLinkDataCompletionHandlerClass = Class.forName("com.facebook.applinks.AppLinkData\$CompletionHandler")
                 val fetchDeferredAppLinkDataMethod: Method = AppLinkDataClass.getMethod("fetchDeferredAppLinkData", Context::class.java, String::class.java, AppLinkDataCompletionHandlerClass)
                 val ALDataCompletionHandler = object : InvocationHandler {
-                    override  fun invoke(proxy: Any?, method: Method, args: Array<Any?>): Any? {
+                    override fun invoke(proxy: Any?, method: Method, args: Array<Any?>): Any? {
                         if (method.getName().equals("onDeferredAppLinkDataFetched") && args[0] != null) {
                             var appLinkUrl: String? = null
                             val appLinkDataClass = AppLinkDataClass.cast(args[0])
@@ -44,7 +44,7 @@ class DeferredAppLinkDataHandler {
                 } else {
                     fetchDeferredAppLinkDataMethod.invoke(null, context, fbAppID, completionListenerInterface)
                 }
-            } catch(ex: Exception) {
+            } catch (ex: Exception) {
                 isRequestSucceeded = false
             }
             return isRequestSucceeded
