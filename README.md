@@ -109,6 +109,22 @@ Note:- Don’t forgot to register the global application class inside Manifest. 
 ```java 
       android:name = "APP_PACAGE_NAME.TrackierApplication"
 ```
+
+Attribution Params:-
+
+You can set attribution params like  ParterId, SiteId, SubSiteId, ChannelId, Ad & AdId during the initialization of trackier sdk.
+
+Kotlin:-
+
+    val attributionParams = AttributionParams( parterId = "xxxx",siteId = "xxx",subSiteID = "xxx",channel = "xxxx",ad = "xxx",adId = "xxx")
+    sdkConfig.setAttributionParams(apkAttributes) 
+    TrackierSDK.initialize(sdkConfig);
+
+ Java :- 
+
+    AttributionParams attributionParams = new AttributionParams("parterId","siteId,"subSiteID","channel","ad","adId");
+    sdkConfig.setAttributionParams(apkAttributes)
+    TrackierSDK.initialize(sdkConfig);
  
 ### Track Events :-
  
