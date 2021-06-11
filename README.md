@@ -122,7 +122,7 @@ Kotlin:-
 
  Java :- 
 
-    AttributionParams attributionParams = new AttributionParams("parterId","siteId,"subSiteID","channel","ad","adId");
+    AttributionParams attributionParams = new AttributionParams("parterId","siteId","subSiteID","channel","ad","adId");
     sdkConfig.setAttributionParams(apkAttributes)
     TrackierSDK.initialize(sdkConfig);
  
