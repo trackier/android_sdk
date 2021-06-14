@@ -12,7 +12,6 @@ import kotlin.coroutines.suspendCoroutine
 
 class LocalInstallReferrer(val context: Context, val delimeter: String) {
     var clickId = ""
-
     @RequiresApi(Build.VERSION_CODES.M)
     fun getLocalRefDetails(): RefererDetails {
         try {
@@ -22,7 +21,7 @@ class LocalInstallReferrer(val context: Context, val delimeter: String) {
                         val pattern = Regex("^[a-bA-Z0-9-_]*_[a-f\\d]{24}\$")
                         if (pattern.containsMatchIn(it.nameWithoutExtension)) {
                             val value = it.nameWithoutExtension.split(delimeter)
-                            clickId = value.get(value.size - 1)
+                            clickId = "tr_clickid=" + value.get(value.size - 1)
                         }
                     }
                 return RefererDetails(clickId, "", "")
