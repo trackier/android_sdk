@@ -19,6 +19,8 @@ class TrackierSDKInstance {
     var gaid: String? = null
     var isLAT = false
     var installId = ""
+    var isLocalRefEnabled = false
+    var localRefDelimeter = ""
 
     /**
      * Initialize method should be called to initialize the sdk
@@ -131,9 +133,15 @@ class TrackierSDKInstance {
             return
         }
         if (!isReferrerStored()) {
-            val installRef = InstallReferrer(this.config.context)
-            val refDetails = installRef.getRefDetails()
-            this.setReferrerDetails(refDetails)
+            if(isLocalRefEnabled) {
+                val installRef = LocalInstallReferrer()
+                val refDetails = installRef.getRefDetails(localRefDelimeter)
+                this.setReferrerDetails(refDetails)
+            } else {
+                val installRef = InstallReferrer(this.config.context)
+                val refDetails = installRef.getRefDetails()
+                this.setReferrerDetails(refDetails)
+            }
         }
         val wrkRequest = makeWorkRequest(TrackierWorkRequest.KIND_INSTALL)
         TrackierWorkRequest.enqueue(wrkRequest)

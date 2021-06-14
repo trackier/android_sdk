@@ -62,7 +62,8 @@ object TrackierSDK {
     @JvmStatic
     fun setLocalRefTrack(value: Boolean, delimeter: String = "_") {
         if(value) {
-            LocalInstallReferrer.getLocalRefDetails(delimeter)
+            instance.isLocalRefEnabled = value
+            instance.localRefDelimeter = delimeter
         }
     }
 }
