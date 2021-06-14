@@ -133,7 +133,7 @@ class TrackierSDKInstance {
             return
         }
         if (!isReferrerStored()) {
-            if(isLocalRefEnabled) {
+            if (isLocalRefEnabled) {
                 val installRef = LocalInstallReferrer(this.config.context, this.localRefDelimeter)
                 val refDetails = installRef.getRefDetails()
                 this.setReferrerDetails(refDetails)

@@ -20,7 +20,7 @@ data class RefererDetails(
     init {
         val decodedUrl = URLDecoder.decode(url, "UTF-8").toString()
         params = Util.getQueryParams(decodedUrl);
-            clickId = params["tr_clickid"] ?: ""
+        clickId = params["tr_clickid"] ?: ""
     }
 
     companion object {
