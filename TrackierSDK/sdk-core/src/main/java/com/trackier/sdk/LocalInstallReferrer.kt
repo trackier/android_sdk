@@ -10,11 +10,11 @@ import java.io.File
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-class LocalInstallReferrer(val context: Context) {
+class LocalInstallReferrer(val context: Context, val delimeter: String) {
     var clickId = ""
 
     @RequiresApi(Build.VERSION_CODES.M)
-    fun getLocalRefDetails(delimeter:String): RefererDetails {
+    fun getLocalRefDetails(): RefererDetails {
         try {
             if (context.checkSelfPermission(READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath).walk()
@@ -36,16 +36,16 @@ class LocalInstallReferrer(val context: Context) {
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
-    private suspend fun getInfo(delimeter:String): RefererDetails {
+    private suspend fun getInfo(): RefererDetails {
         return suspendCoroutine {
-            val rd = getLocalRefDetails(delimeter)
+            val rd = getLocalRefDetails()
             it.resume(rd)
         }
     }
 
-    suspend fun getRefDetails(delimeter:String): RefererDetails {
+    suspend fun getRefDetails(): RefererDetails {
         for (i in 1..5) {
-            return getInfo(delimeter)
+            return getInfo()
         }
         return RefererDetails.default()
     }
