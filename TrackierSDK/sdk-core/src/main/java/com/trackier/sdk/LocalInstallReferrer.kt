@@ -18,7 +18,7 @@ class LocalInstallReferrer(val context: Context, val delimeter: String) {
             if (context.checkSelfPermission(READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath).walk()
                     .forEach {
-                        val pattern = Regex("[a-fA-F\\\\d]{24}\\\$")
+                        val pattern = Regex("[a-fA-F\\d]{24}\$")
                         if (pattern.containsMatchIn(it.nameWithoutExtension)) {
                             val value = it.nameWithoutExtension.split(delimeter)
                             clickId = "tr_clickid=" + value.get(value.size - 1)
