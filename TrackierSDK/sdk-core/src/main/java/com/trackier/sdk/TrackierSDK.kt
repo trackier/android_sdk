@@ -58,4 +58,12 @@ object TrackierSDK {
             instance.callDeepLinkListener()
         }
     }
+
+    @JvmStatic
+    fun setLocalRefTrack(value: Boolean, delimeter: String = "_") {
+        if(value) {
+            instance.isLocalRefEnabled = value
+            instance.localRefDelimeter = delimeter
+        }
+    }
 }
