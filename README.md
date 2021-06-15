@@ -126,9 +126,9 @@ Kotlin:-
     sdkConfig.setAttributionParams(apkAttributes)
     TrackierSDK.initialize(sdkConfig);
     
-### Tracking Via SDK :-
+### Tracking Via APK :-
 
-To enable tracking via sdk , call setLocalRefTrack method and intialize it to true and pass the delimeter which have been used as per naming convention of you apk           just before initializing Trackier SDK.
+To enable tracking via APK, call setLocalRefTrack method and intialize it to true and pass the delimeter which have been used as per naming convention of apk           just before initializing Trackier SDK.
 
 KOTLIN :-
 
