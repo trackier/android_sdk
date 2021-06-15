@@ -21,7 +21,7 @@ Android SDK integration for developers
 
 You can find the latest version [here](https://mvnrepository.com/artifact/com.trackier/android-sdk).
 ```
-  implementation 'com.trackier:android-sdk:1.6.0'
+  implementation 'com.trackier:android-sdk:1.6.1'
 ```
  
 #### Sync the project to retrieve the dependencies – see the following screenshot:
@@ -50,7 +50,7 @@ dependencies {
   // make sure to use the latest SDK version:
   // https://mvnrepository.com/artifact/com.trackier/android-sdk   
  
-  implementation 'com.trackier:android-sdk:1.1.0'
+  implementation 'com.trackier:android-sdk:1.6.1'
   implementation 'com.android.installreferrer:installreferrer:2.2'
 }
 ```
@@ -110,7 +110,7 @@ Note:- Don’t forgot to register the global application class inside Manifest. 
       android:name = "APP_PACAGE_NAME.TrackierApplication"
 ```
 
-Attribution Params:-
+### Attribution Params:-
 
 You can set attribution params like  ParterId, SiteId, SubSiteId, ChannelId, Ad & AdId during the initialization of trackier sdk.
 
@@ -125,6 +125,25 @@ Kotlin:-
     AttributionParams attributionParams = new AttributionParams("parterId","siteId","subSiteID","channel","ad","adId");
     sdkConfig.setAttributionParams(apkAttributes)
     TrackierSDK.initialize(sdkConfig);
+    
+### Tracking Via SDK :-
+
+To enable tracking via sdk , call setLocalRefTrack method and intialize it to true and pass the delimeter which have been used as per naming convention of you apk           just before initializing Trackier SDK.
+
+KOTLIN :-
+
+	TrackierSDK.setLocalRefTrack(true,"_") 
+	TrackierSDK.initialize(sdkConfig)
+
+JAVA :- 
+
+	TrackierSDK.setLocalRefTrack(true,"_");   
+	TrackierSDK.initialize(sdkConfig);   
+ 
+ Note:- Make sure to take EXTERNAL_STORAGE_READ permission before enabling this feature. For reference you can see [example directory](https://github.com/trackier/android_sdk/blob/master/TrackierSDK/example-app-kotlin/app/src/main/java/com/trackier/example_app_kotlin/MainActivity.kt) .
+ 
+ 
+ 
  
 ### Track Events :-
  
