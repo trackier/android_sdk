@@ -21,6 +21,7 @@ class TrackierSDKInstance {
     var installId = ""
     var isLocalRefEnabled = false
     var localRefDelimeter = ""
+    var isManualInstall = false
 
     /**
      * Initialize method should be called to initialize the sdk
@@ -35,12 +36,33 @@ class TrackierSDKInstance {
         this.installId = getInstallID()
         DeviceInfo.init(device, this.config.context)
         CoroutineScope(Dispatchers.IO).launch {
+            if (!isManualInstall) {
+                scheduleInstall()
+            }
+            for (i in 1..2) {
+                delay(600000L)
+                if(isInstallTracked()) {
+                    break;
+                }
+                scheduleInstall()
+            }
+        }
+    }
+
+    fun setManualInstall() {
+        CoroutineScope(Dispatchers.IO).launch {
+            if (isManualInstall) {
+                scheduleInstall()
+            }
+        }
+    }
+
+    private suspend fun scheduleInstall() {
             initGaid()
             initAttributionInfo()
-            trackInstall()
             trackSession()
             callDeepLinkListener()
-        }
+            trackInstall()
     }
 
     private suspend fun initGaid() {

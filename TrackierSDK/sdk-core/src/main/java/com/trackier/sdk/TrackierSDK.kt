@@ -66,4 +66,14 @@ object TrackierSDK {
             instance.localRefDelimeter = delimeter
         }
     }
+
+    @JvmStatic
+    fun setManualMode(value: Boolean) {
+        instance.isManualInstall = value
+    }
+
+    @JvmStatic
+     fun fireInstall() {
+        instance.setManualInstall()
+    }
 }

@@ -30,10 +30,16 @@ class MainApplication : Application() {
         // example: SharedPreferences etc...
         val context: Context = MainApplication.applicationContext()
 
-        val sdkConfig = TrackierSDKConfig(this, TR_DEV_KEY, "production")
+//        val sdkConfig = TrackierSDKConfig(this, TR_DEV_KEY, "production")
+//        val apkAttributes = AttributionParams("kFyW2bEizc", subSiteID= "sub_partner_tiktok", siteId = "google")
+//        sdkConfig.setAttributionParams(apkAttributes)
+//        TrackierSDK.initialize(sdkConfig)
+
+        val sdkConfig = TrackierSDKConfig(this, TR_DEV_KEY, "development")
         val apkAttributes = AttributionParams("kFyW2bEizc", subSiteID= "sub_partner_tiktok", siteId = "google")
         sdkConfig.setAttributionParams(apkAttributes)
-
+        TrackierSDK.setLocalRefTrack(true,"_")
+        TrackierSDK.setManualMode(true)
         TrackierSDK.initialize(sdkConfig)
     }
 
