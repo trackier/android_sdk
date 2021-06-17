@@ -200,6 +200,9 @@ class TrackierSDKInstance {
     }
 
     suspend fun trackSession() {
+        if (!isInstallTracked()) {
+            return
+        }
         val currentTs = Date().time
         val currentTime = Util.dateFormatter.format(currentTs)
         try {
