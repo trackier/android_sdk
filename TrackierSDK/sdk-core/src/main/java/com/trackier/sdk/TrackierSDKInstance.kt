@@ -36,18 +36,22 @@ class TrackierSDKInstance {
         this.installId = getInstallID()
         this.isManualInstall = config.getManualMode()
         DeviceInfo.init(device, this.config.context)
-        if (!isManualInstall) {
-            _fireInstall()
-        }
         CoroutineScope(Dispatchers.IO).launch {
-            trackSession()
             initGaid()
+            if (!isManualInstall) {
+                initAttributionInfo()
+                trackInstall()
+            }
+            trackSession()
+            callDeepLinkListener()
         }
     }
 
     fun fireInstall() {
-        if (isManualInstall) {
-            _fireInstall()
+        CoroutineScope(Dispatchers.IO).launch {
+            initAttributionInfo()
+            trackInstall()
+            trackSession()
         }
     }
 
