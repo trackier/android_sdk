@@ -38,10 +38,8 @@ class MainApplication : Application() {
         val sdkConfig = TrackierSDKConfig(this, TR_DEV_KEY, "development")
         val apkAttributes = AttributionParams("kFyW2bEizc", subSiteID= "sub_partner_tiktok", siteId = "google")
         sdkConfig.setAttributionParams(apkAttributes)
+        sdkConfig.setManualMode(true)
         TrackierSDK.setLocalRefTrack(true,"_")
-        TrackierSDK.setManualMode(true)
         TrackierSDK.initialize(sdkConfig)
     }
-
-
 }

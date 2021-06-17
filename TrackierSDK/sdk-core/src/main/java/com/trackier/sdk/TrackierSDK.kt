@@ -68,11 +68,6 @@ object TrackierSDK {
     }
 
     @JvmStatic
-    fun setManualMode(value: Boolean) {
-        instance.isManualInstall = value
-    }
-
-    @JvmStatic
      fun fireInstall() {
         instance.setManualInstall()
     }
