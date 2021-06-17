@@ -47,22 +47,6 @@ class TrackierSDKInstance {
         }
     }
 
-    fun fireInstall() {
-        CoroutineScope(Dispatchers.IO).launch {
-            initAttributionInfo()
-            trackInstall()
-            trackSession()
-        }
-    }
-
-    private fun _fireInstall() {
-        CoroutineScope(Dispatchers.IO).launch {
-            initAttributionInfo()
-            callDeepLinkListener()
-            trackInstall()
-        }
-    }
-
     private suspend fun initGaid() {
         for (i in 1..5) {
             val (gaid, isLat) = DeviceInfo.getGAID(this.config.context)
@@ -77,6 +61,14 @@ class TrackierSDKInstance {
 
     private suspend fun initAttributionInfo() {
         isInitialized = true
+    }
+
+    fun fireInstall() {
+        CoroutineScope(Dispatchers.IO).launch {
+            initAttributionInfo()
+            trackInstall()
+            trackSession()
+        }
     }
 
     private fun isReferrerStored(): Boolean {
