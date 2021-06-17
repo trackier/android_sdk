@@ -66,4 +66,9 @@ object TrackierSDK {
             instance.localRefDelimeter = delimeter
         }
     }
+
+    @JvmStatic
+     fun fireInstall() {
+        instance.fireInstall()
+    }
 }

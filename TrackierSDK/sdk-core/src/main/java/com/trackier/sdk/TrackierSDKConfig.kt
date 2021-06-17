@@ -10,6 +10,7 @@ class TrackierSDKConfig(var context: Context, val appToken: String, val env: Str
     private var deepLinkListener: DeepLinkListener? = null
     private var sdtk: String = "android"
     private var minSessionTime: Int = 10
+    private var manualTracking = false
 
     init {
         context = context.applicationContext
@@ -55,5 +56,13 @@ class TrackierSDKConfig(var context: Context, val appToken: String, val env: Str
 
     fun getDeepLinkListener(): DeepLinkListener? {
         return this.deepLinkListener
+    }
+
+    fun setManualMode(value: Boolean) {
+        this.manualTracking = value
+    }
+
+    fun getManualMode(): Boolean {
+        return this.manualTracking
     }
 }

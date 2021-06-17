@@ -14,12 +14,19 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.multidex.BuildConfig
+import com.trackier.sdk.AttributionParams
 import com.trackier.sdk.TrackierEvent
 import com.trackier.sdk.TrackierSDK
+import com.trackier.sdk.TrackierSDKConfig
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity(){
 
     private  val PERMS_STORAGE = 1337
+    val TR_DEV_KEY: String = "xxxx-xx-4505-bc8b-xx"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -41,6 +48,7 @@ class MainActivity : AppCompatActivity(){
             event.currency = "USD"
             TrackierSDK.trackEvent(event)
             Log.d("TAG", "onClick: event_curr_track ")
+
         }
 
         val action: String? = intent?.action
@@ -96,10 +104,12 @@ class MainActivity : AppCompatActivity(){
             if (hasAllFilesPermission()) {
                 Toast.makeText(this, "You have required permission", Toast.LENGTH_LONG)
                     .show()
+                CoroutineScope(Dispatchers.IO).launch {
+                    TrackierSDK.fireInstall()
+                }
             }
             else{
                 val uri = Uri.parse("package:${BuildConfig.APPLICATION_ID}")
-
                 startActivity(
                     Intent(
                         Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,
@@ -120,6 +130,9 @@ class MainActivity : AppCompatActivity(){
         if (hasStoragePermission()) {
             Toast.makeText(this, "You have required permission", Toast.LENGTH_LONG)
                 .show()
+            CoroutineScope(Dispatchers.IO).launch {
+                TrackierSDK.fireInstall()
+            }
         } else {
             ActivityCompat.requestPermissions(
                 this,
