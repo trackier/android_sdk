@@ -41,10 +41,11 @@ class TrackierSDKInstance {
         }
         CoroutineScope(Dispatchers.IO).launch {
             trackSession()
+            initGaid()
         }
     }
 
-    fun setManualInstall() {
+    fun fireInstall() {
         if (isManualInstall) {
             _fireInstall()
         }
@@ -52,7 +53,6 @@ class TrackierSDKInstance {
 
     private fun _fireInstall() {
         CoroutineScope(Dispatchers.IO).launch {
-            initGaid()
             initAttributionInfo()
             callDeepLinkListener()
             trackInstall()

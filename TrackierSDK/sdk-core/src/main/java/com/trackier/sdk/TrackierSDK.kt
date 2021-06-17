@@ -69,6 +69,6 @@ object TrackierSDK {
 
     @JvmStatic
      fun fireInstall() {
-        instance.setManualInstall()
+        instance.fireInstall()
     }
 }
