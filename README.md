@@ -149,14 +149,13 @@ Now you can  explicitly fire Install whenever desired,
 
 KOTLIN :-
  
-    CoroutineScope(Dispatchers.IO).launch {
-                TrackierSDK.fireInstall()
-            }
+            TrackierSDK.fireInstall()
+	    
+JAVA :- 
+
+            TrackierSDK.fireInstall();
 
 
- 
- 
- 
 ### Track Events :-
  
 #### Retrieve Event Id from dashboard:-
