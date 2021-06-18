@@ -15,7 +15,6 @@ class LocalInstallReferrer(val context: Context, val delimeter: String) {
     @RequiresApi(Build.VERSION_CODES.M)
     fun getLocalRefDetails(): RefererDetails {
         try {
-            if (context.checkSelfPermission(READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath).walk()
                     .forEach {
                         val pattern = Regex("[a-fA-F\\d]{24}\$")
@@ -25,10 +24,7 @@ class LocalInstallReferrer(val context: Context, val delimeter: String) {
                         }
                     }
                 return RefererDetails(clickId, "", "")
-            }
-            else {
-                return RefererDetails.default()
-            }
+
         } catch (e: Exception) {
              return RefererDetails.default()
         }

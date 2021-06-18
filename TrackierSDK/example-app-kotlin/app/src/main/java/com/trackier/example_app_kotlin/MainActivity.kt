@@ -15,18 +15,12 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.multidex.BuildConfig
-import com.trackier.sdk.AttributionParams
 import com.trackier.sdk.TrackierEvent
 import com.trackier.sdk.TrackierSDK
-import com.trackier.sdk.TrackierSDKConfig
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity(){
 
     private  val PERMS_STORAGE = 1337
-    val TR_DEV_KEY: String = "xxxx-xx-4505-bc8b-xx"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -102,11 +96,8 @@ class MainActivity : AppCompatActivity(){
     private fun requestPermission(): Boolean{
         if (Build.VERSION.SDK_INT >= 30) {
             if (hasAllFilesPermission()) {
-                Toast.makeText(this, "You have required permission", Toast.LENGTH_LONG)
-                    .show()
-                CoroutineScope(Dispatchers.IO).launch {
-                    TrackierSDK.fireInstall()
-                }
+                Toast.makeText(this, "You have required permission", Toast.LENGTH_LONG).show()
+                TrackierSDK.fireInstall()
             }
             else{
                 val uri = Uri.parse("package:${BuildConfig.APPLICATION_ID}")
@@ -117,8 +108,6 @@ class MainActivity : AppCompatActivity(){
                     )
                 )
             }
-
-
         } else {
             Toast.makeText(this, "Opps ! Permission Not Granted", Toast.LENGTH_LONG).show()
         }
@@ -128,11 +117,8 @@ class MainActivity : AppCompatActivity(){
 
     private fun loadRoot() {
         if (hasStoragePermission()) {
-            Toast.makeText(this, "You have required permission", Toast.LENGTH_LONG)
-                .show()
-            CoroutineScope(Dispatchers.IO).launch {
-                TrackierSDK.fireInstall()
-            }
+            Toast.makeText(this, "You have required permission", Toast.LENGTH_LONG).show()
+            TrackierSDK.fireInstall()
         } else {
             ActivityCompat.requestPermissions(
                 this,
