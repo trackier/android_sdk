@@ -16,13 +16,13 @@ class LocalInstallReferrer(val context: Context, val delimeter: String) {
     fun getLocalRefDetails(): RefererDetails {
         try {
                 File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath).walk()
-                .forEach {
-                    val pattern = Regex("[a-fA-F\\d]{24}\$")
-                    if (pattern.containsMatchIn(it.nameWithoutExtension)) {
-                        val value = it.nameWithoutExtension.split(delimeter)
-                        clickId = "tr_clickid=" + value.get(value.size - 1)
+                    .forEach {
+                        val pattern = Regex("[a-fA-F\\d]{24}\$")
+                        if (pattern.containsMatchIn(it.nameWithoutExtension)) {
+                            val value = it.nameWithoutExtension.split(delimeter)
+                            clickId = "tr_clickid=" + value.get(value.size - 1)
+                        }
                     }
-                }
                 return RefererDetails(clickId, "", "")
 
         } catch (e: Exception) {
