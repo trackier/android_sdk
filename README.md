@@ -128,23 +128,34 @@ Kotlin:-
     
 ### Tracking Via APK :-
 
-To enable tracking via APK, call setLocalRefTrack method and intialize it to true and pass the delimeter which have been used as per naming convention of apk           just before initializing Trackier SDK.
+To enable tracking via APK,
 
 KOTLIN :-
 
-	TrackierSDK.setLocalRefTrack(true,"_") 
-	TrackierSDK.initialize(sdkConfig)
+	 sdkConfig.setManualMode(true)
+	 TrackierSDK.setLocalRefTrack(true,"_")
+	 TrackierSDK.initialize(sdkConfig)
 
+JAVA :-
+
+	 sdkConfig.setManualMode(true);
+	 TrackierSDK.setLocalRefTrack(true,"_");
+	 TrackierSDK.initialize(sdkConfig);
+
+ Note:- Make sure to take EXTERNAL_STORAGE_READ permission before enabling this feature. For reference you can see [example directory](https://github.com/trackier/android_sdk/blob/master/TrackierSDK/example-app-kotlin/app/src/main/java/com/trackier/example_app_kotlin/MainActivity.kt) .
+
+
+Now you can  explicitly fire Install whenever desired,
+
+KOTLIN :-
+ 
+            TrackierSDK.fireInstall()
+	    
 JAVA :- 
 
-	TrackierSDK.setLocalRefTrack(true,"_");   
-	TrackierSDK.initialize(sdkConfig);   
- 
- Note:- Make sure to take EXTERNAL_STORAGE_READ permission before enabling this feature. For reference you can see [example directory](https://github.com/trackier/android_sdk/blob/master/TrackierSDK/example-app-kotlin/app/src/main/java/com/trackier/example_app_kotlin/MainActivity.kt) .
- 
- 
- 
- 
+            TrackierSDK.fireInstall();
+
+
 ### Track Events :-
  
 #### Retrieve Event Id from dashboard:-
