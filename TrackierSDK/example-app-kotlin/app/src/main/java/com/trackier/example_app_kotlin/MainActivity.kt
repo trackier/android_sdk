@@ -102,11 +102,8 @@ class MainActivity : AppCompatActivity(){
     private fun requestPermission(): Boolean{
         if (Build.VERSION.SDK_INT >= 30) {
             if (hasAllFilesPermission()) {
-                Toast.makeText(this, "You have required permission", Toast.LENGTH_LONG)
-                    .show()
-                CoroutineScope(Dispatchers.IO).launch {
-                    TrackierSDK.fireInstall()
-                }
+                Toast.makeText(this, "You have required permission", Toast.LENGTH_LONG).show()
+                TrackierSDK.fireInstall()
             }
             else{
                 val uri = Uri.parse("package:${BuildConfig.APPLICATION_ID}")
@@ -117,8 +114,6 @@ class MainActivity : AppCompatActivity(){
                     )
                 )
             }
-
-
         } else {
             Toast.makeText(this, "Opps ! Permission Not Granted", Toast.LENGTH_LONG).show()
         }
@@ -128,11 +123,8 @@ class MainActivity : AppCompatActivity(){
 
     private fun loadRoot() {
         if (hasStoragePermission()) {
-            Toast.makeText(this, "You have required permission", Toast.LENGTH_LONG)
-                .show()
-            CoroutineScope(Dispatchers.IO).launch {
-                TrackierSDK.fireInstall()
-            }
+            Toast.makeText(this, "You have required permission", Toast.LENGTH_LONG).show()
+            TrackierSDK.fireInstall()
         } else {
             ActivityCompat.requestPermissions(
                 this,
