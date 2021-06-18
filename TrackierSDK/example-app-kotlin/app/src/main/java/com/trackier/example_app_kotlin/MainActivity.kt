@@ -15,18 +15,12 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.multidex.BuildConfig
-import com.trackier.sdk.AttributionParams
 import com.trackier.sdk.TrackierEvent
 import com.trackier.sdk.TrackierSDK
-import com.trackier.sdk.TrackierSDKConfig
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity(){
 
     private  val PERMS_STORAGE = 1337
-    val TR_DEV_KEY: String = "xxxx-xx-4505-bc8b-xx"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
