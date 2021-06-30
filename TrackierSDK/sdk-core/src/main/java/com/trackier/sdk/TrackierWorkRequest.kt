@@ -4,6 +4,7 @@ import androidx.work.*
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import org.json.JSONObject
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -18,6 +19,9 @@ class TrackierWorkRequest(val kind: String, private val appToken: String, privat
     var sessionTime = ""
     var sdtk = ""
     var attributionParams: AttributionParams? = null
+    var customerId = ""
+    var customerEmail = ""
+    var customerOptionals: MutableMap<String, Any>? = null
 
     private fun setDefaults(): MutableMap<String, Any> {
         val body = mutableMapOf<String, Any>()
@@ -34,6 +38,12 @@ class TrackierWorkRequest(val kind: String, private val appToken: String, privat
         body["appKey"] = appToken
         body["mode"] = mode
         body["sdkt"] = sdtk
+        body["cuid"] = customerId
+        body["cmail"] = customerEmail
+        
+        if(customerOptionals != null){
+            body["opts"] = JSONObject(customerOptionals as Map<String, Any>).toString()
+        }
 
         val adnAttributes = this.attributionParams?.getData()
         if (adnAttributes != null) {

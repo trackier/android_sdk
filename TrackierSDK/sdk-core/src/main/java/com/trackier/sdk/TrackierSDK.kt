@@ -71,4 +71,19 @@ object TrackierSDK {
      fun fireInstall() {
         instance.fireInstall()
     }
+
+    @JvmStatic
+    fun setUserId(userId: String) {
+       instance.customerId = userId
+    }
+
+    @JvmStatic
+    fun setUserEmail(userEmail: String) {
+        instance.customerEmail = userEmail
+    }
+
+    @JvmStatic
+    fun setUserAdditionalDetails(userAdditionalDetails: MutableMap<String, Any>) {
+        instance.customerOptionals = userAdditionalDetails
+    }
 }

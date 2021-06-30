@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity(){
             }
         }
 
-        requestPermission()
+        //requestPermission()
 
     }
     private fun getUri(): Uri? {
