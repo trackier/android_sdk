@@ -7,12 +7,20 @@ import android.os.Build
 import java.io.BufferedReader
 import java.io.FileReader
 import java.security.MessageDigest
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
 object Util {
     private val HEX_CHARS = "0123456789ABCDEF".toCharArray()
     val dateFormatter = SimpleDateFormat(Constants.DATE_TIME_FORMAT, Locale.US)
+
+     fun getCurrentUtcTime(): String {
+        val simpleDateFormat = SimpleDateFormat("yyyy-MMM-dd HH:mm:ss")
+        simpleDateFormat.timeZone = TimeZone.getTimeZone("UTC")
+        val localDateFormat = SimpleDateFormat("yyyy-MMM-dd HH:mm:ss")
+        return SimpleDateFormat(Constants.DATE_TIME_FORMAT, Locale.US).format(localDateFormat.parse(simpleDateFormat.format(Date())))
+    }
 
     fun getMapStringVal(data: Map<String, String>, key: String): String {
         return if (data.containsKey(key)) {
