@@ -40,7 +40,7 @@ class TrackierWorkRequest(val kind: String, private val appToken: String, privat
         body["sdkt"] = sdtk
         body["cuid"] = customerId
         body["cmail"] = customerEmail
-        if(customerOptionals != null) {
+        if (customerOptionals != null) {
             body["opts"] = customerOptionals.toString()
         }
 
