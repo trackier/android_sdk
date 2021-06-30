@@ -13,6 +13,9 @@ import java.util.*
 object Util {
     private val HEX_CHARS = "0123456789ABCDEF".toCharArray()
     val dateFormatter = SimpleDateFormat(Constants.DATE_TIME_FORMAT, Locale.US)
+    init {
+        dateFormatter.timeZone = TimeZone.getTimeZone("UTC")
+    }
 
     fun getMapStringVal(data: Map<String, String>, key: String): String {
         return if (data.containsKey(key)) {
