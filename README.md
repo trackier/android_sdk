@@ -50,7 +50,7 @@ dependencies {
   // make sure to use the latest SDK version:
   // https://mvnrepository.com/artifact/com.trackier/android-sdk   
  
-  implementation 'com.trackier:android-sdk:1.6.1'
+  implementation 'com.trackier:android-sdk:1.6.3'
   implementation 'com.android.installreferrer:installreferrer:2.2'
 }
 ```
