@@ -18,6 +18,9 @@ class TrackierWorkRequest(val kind: String, private val appToken: String, privat
     var sessionTime = ""
     var sdtk = ""
     var attributionParams: AttributionParams? = null
+    var customerId = ""
+    var customerEmail = ""
+    var customerOptionals: MutableMap<String, Any>? = null
 
     private fun setDefaults(): MutableMap<String, Any> {
         val body = mutableMapOf<String, Any>()
@@ -34,6 +37,11 @@ class TrackierWorkRequest(val kind: String, private val appToken: String, privat
         body["appKey"] = appToken
         body["mode"] = mode
         body["sdkt"] = sdtk
+        body["cuid"] = customerId
+        body["cmail"] = customerEmail
+        if (customerOptionals != null) {
+            body["opts"] = customerOptionals!!
+        }
 
         val adnAttributes = this.attributionParams?.getData()
         if (adnAttributes != null) {

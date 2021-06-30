@@ -38,8 +38,13 @@ class MainApplication : Application() {
         val sdkConfig = TrackierSDKConfig(this, TR_DEV_KEY, "development")
         val apkAttributes = AttributionParams("kFyW2bEizc", subSiteID= "sub_partner_tiktok", siteId = "google")
         sdkConfig.setAttributionParams(apkAttributes)
-        sdkConfig.setManualMode(true)
-        TrackierSDK.setLocalRefTrack(true,"_")
+//        sdkConfig.setManualMode(true)
+//        TrackierSDK.setLocalRefTrack(true,"_")
+        TrackierSDK.setUserId("pppppp")
+        TrackierSDK.setUserEmail("abc@gmail.com")
+        val userAdditionalDetails: MutableMap<String,Any> = mutableMapOf()
+        userAdditionalDetails.put("userMobile",9999000000)
+        TrackierSDK.setUserAdditionalDetails(userAdditionalDetails)
         TrackierSDK.initialize(sdkConfig)
     }
 }

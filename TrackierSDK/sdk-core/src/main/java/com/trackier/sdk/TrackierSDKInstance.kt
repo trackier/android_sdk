@@ -23,6 +23,10 @@ class TrackierSDKInstance {
     var localRefDelimeter = ""
     var isManualInstall = false
 
+    var customerId = ""
+    var customerEmail = ""
+    var customerOptionals: MutableMap<String, Any>? = null
+
     /**
      * Initialize method should be called to initialize the sdk
      */
@@ -120,6 +124,9 @@ class TrackierSDKInstance {
         trackierWorkRequest.gaid = gaid
         trackierWorkRequest.refDetails = getReferrerDetails()
         trackierWorkRequest.installID = installId
+        trackierWorkRequest.customerId = this.customerId
+        trackierWorkRequest.customerEmail = this.customerEmail
+        trackierWorkRequest.customerOptionals = this.customerOptionals
         trackierWorkRequest.attributionParams = this.config.getAttributionParams()
         trackierWorkRequest.sdtk = this.config.getSDKType()
 
