@@ -40,9 +40,8 @@ class TrackierWorkRequest(val kind: String, private val appToken: String, privat
         body["sdkt"] = sdtk
         body["cuid"] = customerId
         body["cmail"] = customerEmail
-
-        if(customerOptionals != null){
-            body["opts"] = JSONObject(customerOptionals as Map<String, Any>).toString()
+        if(customerOptionals != null) {
+            body["opts"] = customerOptionals.toString()
         }
 
         val adnAttributes = this.attributionParams?.getData()
