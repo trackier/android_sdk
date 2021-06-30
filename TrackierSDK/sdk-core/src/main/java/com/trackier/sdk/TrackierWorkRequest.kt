@@ -13,7 +13,7 @@ class TrackierWorkRequest(val kind: String, private val appToken: String, privat
     lateinit var device: DeviceInfo
     var event = TrackierEvent(Constants.UNKNOWN_EVENT)
     var refDetails = RefererDetails.default()
-    private val createdAt = Util.dateFormatter.format(Date())
+    private val createdAt = Util.getCurrentUtcTime()
     var installID = ""
     var sessionTime = ""
     var sdtk = ""

@@ -14,6 +14,13 @@ object Util {
     private val HEX_CHARS = "0123456789ABCDEF".toCharArray()
     val dateFormatter = SimpleDateFormat(Constants.DATE_TIME_FORMAT, Locale.US)
 
+    fun getCurrentUtcTime(): String {
+        val simpleDateFormat = SimpleDateFormat("yyyy-MMM-dd HH:mm:ss")
+        simpleDateFormat.timeZone = TimeZone.getTimeZone("UTC")
+        val localDateFormat = SimpleDateFormat("yyyy-MMM-dd HH:mm:ss")
+        return SimpleDateFormat(Constants.DATE_TIME_FORMAT, Locale.US).format(localDateFormat.parse(simpleDateFormat.format(Date())))
+    }
+
     fun getMapStringVal(data: Map<String, String>, key: String): String {
         return if (data.containsKey(key)) {
             data[key].toString()
