@@ -13,13 +13,8 @@ import java.util.*
 object Util {
     private val HEX_CHARS = "0123456789ABCDEF".toCharArray()
     val dateFormatter = SimpleDateFormat(Constants.DATE_TIME_FORMAT, Locale.US)
-    val utcTimeZone = TimeZone.getTimeZone("UTC")
-
-    fun getCurrentUtcTime(): String {
-        val simpleDateFormat = SimpleDateFormat("yyyy-MMM-dd HH:mm:ss")
-        simpleDateFormat.timeZone = utcTimeZone
-        val localDateFormat = SimpleDateFormat("yyyy-MMM-dd HH:mm:ss")
-        return SimpleDateFormat(Constants.DATE_TIME_FORMAT, Locale.US).format(localDateFormat.parse(simpleDateFormat.format(Date())))
+    init {
+        dateFormatter.timeZone = TimeZone.getTimeZone("UTC")
     }
 
     fun getMapStringVal(data: Map<String, String>, key: String): String {
