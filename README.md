@@ -136,7 +136,7 @@ To assosiate Customer Id , Customer Email and Customer additional params during 
     TrackierSDK.setUserAdditionalDetails(userAdditionalDetails)
     TrackierSDK.initialize(sdkConfig)
 
-Note :- For assosiate additional user details , make a mutable map and pass it in setUserAdditionalDetails function. Eg:
+Note :- For additional user details , make a mutable map and pass it in setUserAdditionalDetails function. Eg:
 
     val userAdditionalDetails: MutableMap<String,Any> = mutableMapOf()
     userAdditionalDetails.put("userMobile",99XXXXXXXX)
