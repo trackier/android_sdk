@@ -21,7 +21,7 @@ Android SDK integration for developers
 
 You can find the latest version [here](https://mvnrepository.com/artifact/com.trackier/android-sdk).
 ```
-  implementation 'com.trackier:android-sdk:1.6.3'
+  implementation 'com.trackier:android-sdk:1.6.5'
 ```
  
 #### Sync the project to retrieve the dependencies – see the following screenshot:
@@ -50,7 +50,7 @@ dependencies {
   // make sure to use the latest SDK version:
   // https://mvnrepository.com/artifact/com.trackier/android-sdk   
  
-  implementation 'com.trackier:android-sdk:1.6.3'
+  implementation 'com.trackier:android-sdk:1.6.5'
   implementation 'com.android.installreferrer:installreferrer:2.2'
 }
 ```
@@ -125,6 +125,22 @@ Kotlin:-
     AttributionParams attributionParams = new AttributionParams("parterId","siteId","subSiteID","channel","ad","adId");
     sdkConfig.setAttributionParams(apkAttributes)
     TrackierSDK.initialize(sdkConfig);
+    
+    
+### Assosiate User Info during initialization of sdk
+
+To assosiate Customer Id , Customer Email and Customer additional params during initializing sdk:-
+
+    TrackierSDK.setUserId("XXXXXXXX")
+    TrackierSDK.setUserEmail("abc@gmail.com")
+    TrackierSDK.setUserAdditionalDetails(userAdditionalDetails)
+    TrackierSDK.initialize(sdkConfig)
+
+Note :- For assosiate additional user details , make a mutable map and pass it in setUserAdditionalDetails function. Eg:
+
+    val userAdditionalDetails: MutableMap<String,Any> = mutableMapOf()
+    userAdditionalDetails.put("userMobile",99XXXXXXXX)
+    TrackierSDK.setUserAdditionalDetails(userAdditionalDetails)    
     
 ### Tracking Via APK :-
 
