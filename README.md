@@ -133,7 +133,6 @@ To assosiate Customer Id , Customer Email and Customer additional params during 
 
     TrackierSDK.setUserId("XXXXXXXX")
     TrackierSDK.setUserEmail("abc@gmail.com")
-    TrackierSDK.setUserAdditionalDetails(userAdditionalDetails)
     TrackierSDK.initialize(sdkConfig)
 
 Note :- For additional user details , make a mutable map and pass it in setUserAdditionalDetails function. Eg:
