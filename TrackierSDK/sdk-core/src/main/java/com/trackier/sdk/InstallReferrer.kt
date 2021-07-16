@@ -6,6 +6,7 @@ import com.android.installreferrer.api.InstallReferrerStateListener
 import com.android.installreferrer.api.ReferrerDetails
 import kotlinx.coroutines.delay
 import java.util.*
+import kotlin.Exception
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -60,6 +61,8 @@ class InstallReferrer(context: Context) {
             try {
                 return getInfo()
             } catch (ex: InstallReferrerException) {
+                delay(1000 * i.toLong())
+            } catch (ex: Exception) {
                 delay(1000 * i.toLong())
             }
         }
