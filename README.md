@@ -215,6 +215,20 @@ JAVA :-
        event.currency = "USD";
        TrackierSDK.trackEvent(event);
 ```
+
+ ### Add custom  params with event :-
+
+ KOTLIN :-
+
+	 val eventCustomParams: MutableMap<String,Any> = mutableMapOf()
+	 eventCustomParams.put("customParam1",XXXXX)
+	 eventCustomParams.put("customParam2",XXXXX)
+
+	 event.ev = eventCustomParams  
+
+	 TrackierSDK.trackEvent(event)
+	 
+	 
 ### Proguard Settings
 
 If your app is using proguard then add these lines to the proguard config file
