@@ -2,7 +2,7 @@
 
 ## Table of Content
 
-### [Integration]()
+### Integration
 
 * [Add Trackier SDK to your app]()
     * [Add the SDK to your project]()
