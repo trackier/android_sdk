@@ -246,7 +246,7 @@ ___
   TrackierSDK.fireInstall()
 ```
 
-## <a id="qs-retrieve-event-id"></a>Track Events
+## <a id="qs-track-event"></a>Track Events
 
 Retrieve Event Id from dashboard
 <br></br>
