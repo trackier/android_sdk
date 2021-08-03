@@ -2,30 +2,29 @@
 
 ## Table of Content
 
-### Integration
+### [Integration]()
 
-* [Add Trackier SDK to your app]()
-    * [Add the SDK to your project]()
-    * [Add the latest version of Trackier SDK as a dependency]()
-    * [Add required permissions]()
-    * [Adding Android install referrer to your app]()
-    * [Sync the project to retrieve the dependencies]()
-* [Implement and initialize the SDK]()
-    * [Retrieve your dev key]()
-    * [Initialize the SDK]()
-    * [Attribution Params]()
-    * [Associate User Info during initialization of sdk]()
-* [Defer Start Sdk]()
-* [Track Events]()
-    * [Retrieve Event Id from dashboard]()
-    * [Track Event]()
-    * [Track with Currency & Revenue Event]()
-    * [Add custom params with event]()
-* [Proguard Settings]()
+* [Add Trackier SDK to your app](#qs-add-trackier-sdk)
+    * [Add the SDK using gradle](#qs-add-sdk-gradle)
+    * [Add the latest version of Trackier SDK as a dependency](#qs-add-latest-version-sdk)
+    * [Adding Android install referrer to your app](#qs-add-install-referre)
+    * [Add required permissions](#qs-add-request-permissions)
+    * [Sync the project to retrieve the dependencies](#qs-sync-gradle)
+* [Implement and initialize the SDK](#qs-implement-trackier-sdk)
+    * [Retrieve your dev key](#qs-retrieve-dev-key)
+    * [Initialize the SDK](#qs-initialize-trackier-sdk)
+    * [Associate User Info during initialization of sdk](#qs-assosoiate-user-info)
+* [Defer Start Sdk](#qs-defer-start-sdk)
+* [Track Events](#qs-track-event)
+    * [Retrieve Event Id from dashboard](#qs-retrieve-event-id)
+    * [Track Simple Event](#qs-track-simple-event)
+    * [Track with Currency & Revenue Event](#qs-track-event-with-currencey)
+    * [Add custom params with event](#qs-add-custom-parms-event)
+* [Proguard Settings](#qs-progaurd-trackier-sdk)
 
-## Add Trackier SDK to your app
+## <a id="qs-add-trackier-sdk"></a>Add Trackier SDK to your app
 
-### Add the SDK using Gradle
+### <a id="qs-add-sdk-gradle"></a>Add the SDK using Gradle
 <p>Add the code below to Module level app build.gradle before dependencies</p>
 
 ```gradle
@@ -34,7 +33,7 @@
   }
 ```
 
-## Add the latest version of Trackier SDK as a dependency
+## <a id="qs-add-latest-version-sdk"></a>Add the latest version of Trackier SDK as a dependency
 
 You can find the latest version [here]()
 
@@ -42,7 +41,7 @@ You can find the latest version [here]()
   implementation 'com.trackier:android-sdk:1.6.6'
 ```
 
-## Adding Android install referrer to your app
+## <a id="qs-add-install-referre">Adding Android install referrer to your app
 
 Add the Android Install Referrer as a dependency. You can find the latest version [here]()
 
@@ -61,7 +60,7 @@ Sync the project to retrieve the dependencies – see the following screenshot
 <img width="1740" alt="Screenshot 2021-07-29 at 6 28 33 PM" src="https://user-images.githubusercontent.com/34488320/127852271-76cc284b-a257-44a2-ac3a-ad7d3cbe384f.png">
 <br></br>
 
-## Add required permissions
+## <a id="qs-add-request-permissions">Add required permissions
 
 ```java 
   <uses-permission android:name="android.permission.INTERNET" />
@@ -74,11 +73,11 @@ Sync the project to retrieve the dependencies – see the following screenshot
 
 ![pasted image 0](https://user-images.githubusercontent.com/34488320/127852970-62b516d8-9aa1-498a-809c-abb2c4650d2c.png)
 
-## Implement and initialize the SDK
+## <a id="qs-implement-trackier-sdk">Implement and initialize the SDK
 
-### Retrieve your dev key
+### <a id="qs-retrieve-dev-key">Retrieve your dev key
 
-### Initialize the SDK
+### <a id="qs-initialize-trackier-sdk">Initialize the SDK
 
 <p>We recommend initializing the SDK inside the app’s global application class. This allows the SDK to
 initialize in all scenarios, including deep linking.
@@ -144,7 +143,7 @@ ___
   TrackierSDK.initialize(sdkConfig)
 ```
 * The first argument is your Trackier Sdk api key.
-* The second argument is environment which can be either        “development” and “production” 
+* The second argument is environment which can be either “development” and “production” 
 * After that pass the sdkConfig reference to TrackierSDK.initialize method.
 
 <img width="1745" alt="Screenshot 2021-07-29 at 6 30 20 PM" src="https://user-images.githubusercontent.com/34488320/127853995-b6daf9b4-2785-4b0e-890a-55c6492d9182.png">
@@ -155,7 +154,7 @@ ___
 ```java 
   android:name = "APP_PACKAGE_NAME.TrackierApplication"
 ```
-## Assosiate User Info during initialization of sdk
+## <a id="qs-assosoiate-user-info">Assosiate User Info during initialization of sdk
 
 To assosiate Customer Id , Customer Email and Customer additional params during initializing sdk 
 
@@ -204,7 +203,7 @@ ___
 
 You can also associate additional details by making a mutable map where . and the pass reference in  TrackierSDK’s setUserAdditionalDetails method.
 
-## Defer SDK start
+## <a id="qs-defer-start-sdk">Defer SDK start
 
 To defer sdk start,
 ---
@@ -246,13 +245,13 @@ ___
   TrackierSDK.fireInstall()
 ```
 
-## Track Events
+## <a id="qs-retrieve-event-id">Track Events
 
 Retrieve Event Id from dashboard
 <br></br>
 [SCREENSHOT]()
 
-### Track Event
+### <a id="qs-track-simple-event">Track Simple Event
 
 ---
   #### Java
@@ -275,7 +274,7 @@ ___
 * Argument in Trackier event class is event Id which you want to call event for.
 * You can associate inbuilt params with the event , in-built param list are below:-  orderId, currency, currency, param1, param2, param3 ,param4, param5, param6, param7, param8, param9, param10
 
-### Track with Currency & Revenue Event
+### <a id="qs-track-event-with-currencey">Track with Currency & Revenue Event
 ---
   #### Java
 ___
@@ -299,7 +298,7 @@ ___
   TrackierSDK.trackEvent(event)
 ```
 
-### Add custom params with event
+### <a id="qs-add-custom-parms-event">Add custom params with event
 
 
 ---
@@ -317,7 +316,7 @@ ___
 * Pass its reference to event.ev param of event
 * Pass event reference to trackEvent method of TrackerSDK
 
-## Proguard Settings 
+## <a id="qs-progaurd-trackier-sdk">Proguard Settings 
 
 If your app is using proguard then add these lines to the proguard config file 
 
@@ -335,16 +334,5 @@ If your app is using proguard then add these lines to the proguard config file
   }
   -keep public class com.android.installreferrer.** { *; }
 ```
-
-
-
-
-
-
-
-
-
-
-
 
 
