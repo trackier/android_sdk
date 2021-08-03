@@ -2,7 +2,7 @@
 
 ## Table of Content
 
-### [Integration]()
+### Integration
 
 * [Add Trackier SDK to your app](#qs-add-trackier-sdk)
     * [Add the SDK using gradle](#qs-add-sdk-gradle)
