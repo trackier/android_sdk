@@ -156,7 +156,7 @@ ___
 ```java 
   android:name = "APP_PACKAGE_NAME.TrackierApplication"
 ```
-## <a id="qs-assosoiate-user-info"></>Assosiate User Info during initialization of sdk
+## <a id="qs-assosoiate-user-info"></a>Assosiate User Info during initialization of sdk
 
 To assosiate Customer Id , Customer Email and Customer additional params during initializing sdk 
 
