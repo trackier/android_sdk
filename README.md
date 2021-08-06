@@ -228,7 +228,7 @@ ___
 * Set manual mode to true by passing true boolean value to setManualMode.
 * The second method  is to associate user email in which .
 
-Note:- Make sure to take EXTERNAL_STORAGE_READ permission before enabling this feature. For reference you can see [example directory]()
+Note:- Make sure to take EXTERNAL_STORAGE_READ permission before enabling this feature. For reference you can see [example directory](https://github.com/trackier/android_sdk/tree/master/TrackierSDK/example-app-kotlin)
 
 Now you can explicitly fire Install whenever desired,
 
