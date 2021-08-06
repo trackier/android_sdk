@@ -206,7 +206,7 @@ ___
 You can also associate additional details by making a mutable map where . and the pass reference in  TrackierSDK’s setUserAdditionalDetails method.
 
 ## <a id="qs-defer-start-sdk"></a>Defer SDK start
-To defer sdk start
+### To defer sdk start
 ---
   #### Java
 ___
