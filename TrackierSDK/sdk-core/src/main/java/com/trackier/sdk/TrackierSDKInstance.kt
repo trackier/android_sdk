@@ -176,11 +176,6 @@ class TrackierSDKInstance {
     }
 
     private fun _trackEvent(event: TrackierEvent) {
-        var url = Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_INSTALL_URL)
-        if((!setOrganicTrack) || (url.isBlank())){
-            return
-        }
-
         val wrkRequest = makeWorkRequest(TrackierWorkRequest.KIND_EVENT)
         wrkRequest.event = event
         TrackierWorkRequest.enqueue(wrkRequest)
@@ -190,6 +185,12 @@ class TrackierSDKInstance {
         if (!isEnabled || !configLoaded) {
             return
         }
+
+        var url = Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_INSTALL_URL)
+        if((!setOrganicTrack) || (url.isBlank())){
+            return
+        }
+
         if (!isInitialized) {
             Factory.logger.warning("Event Tracking request sent before SDK data was initialized")
         }
