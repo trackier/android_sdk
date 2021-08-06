@@ -11,7 +11,7 @@ class TrackierSDKConfig(var context: Context, val appToken: String, val env: Str
     private var sdtk: String = "android"
     private var minSessionTime: Int = 10
     private var manualTracking = false
-    private var setOrganicTrack = false
+    private var setOrganicTrack = true
 
     init {
         context = context.applicationContext
