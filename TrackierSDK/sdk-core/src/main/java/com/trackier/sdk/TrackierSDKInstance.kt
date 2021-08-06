@@ -22,10 +22,12 @@ class TrackierSDKInstance {
     var isLocalRefEnabled = false
     var localRefDelimeter = ""
     var isManualInstall = false
+    var setOrganicTrack = true
 
     var customerId = ""
     var customerEmail = ""
     var customerOptionals: MutableMap<String, Any>? = null
+
 
     /**
      * Initialize method should be called to initialize the sdk
@@ -39,6 +41,7 @@ class TrackierSDKInstance {
         this.appToken = this.config.appToken
         this.installId = getInstallID()
         this.isManualInstall = config.getManualMode()
+        this.setOrganicTrack = config.getOrganicTracking()
         DeviceInfo.init(device, this.config.context)
         CoroutineScope(Dispatchers.IO).launch {
             initGaid()
@@ -162,12 +165,22 @@ class TrackierSDKInstance {
                 this.setReferrerDetails(refDetails)
             }
         }
+
+        var url = Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_INSTALL_URL)
+        if((!setOrganicTrack) || (url.isBlank())){
+            return
+        }
         val wrkRequest = makeWorkRequest(TrackierWorkRequest.KIND_INSTALL)
         TrackierWorkRequest.enqueue(wrkRequest)
         setInstallTracked()
     }
 
     private fun _trackEvent(event: TrackierEvent) {
+        var url = Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_INSTALL_URL)
+        if((!setOrganicTrack) || (url.isBlank())){
+            return
+        }
+
         val wrkRequest = makeWorkRequest(TrackierWorkRequest.KIND_EVENT)
         wrkRequest.event = event
         TrackierWorkRequest.enqueue(wrkRequest)
@@ -223,6 +236,10 @@ class TrackierSDKInstance {
             }
             val sessionDiff = (currentTs - lastSessTs).toInt()
             if (sessionDiff > this.config.getMinSessionDuration()) {
+                var url = Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_INSTALL_URL)
+                if((!setOrganicTrack) || (url.isBlank())){
+                    return
+                }
                 val wrkRequest = makeWorkRequest(TrackierWorkRequest.KIND_SESSION_TRACK)
                 wrkRequest.sessionTime = lastSessionTime
                 APIRepository.doWork(wrkRequest)   
