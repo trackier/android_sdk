@@ -9,7 +9,6 @@
     * [Add the latest version of Trackier SDK as a dependency](#qs-add-latest-version-sdk)
     * [Adding Android install referrer to your app](#qs-add-install-referre)
     * [Add required permissions](#qs-add-request-permissions)
-    * [Sync the project to retrieve the dependencies](#qs-sync-gradle)
 * [Implement and initialize the SDK](#qs-implement-trackier-sdk)
     * [Retrieve your dev key](#qs-retrieve-dev-key)
     * [Initialize the SDK](#qs-initialize-trackier-sdk)
