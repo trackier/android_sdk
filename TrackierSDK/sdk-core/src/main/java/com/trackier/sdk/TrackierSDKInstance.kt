@@ -22,6 +22,7 @@ class TrackierSDKInstance {
     var isLocalRefEnabled = false
     var localRefDelimeter = ""
     var isManualInstall = false
+    var disableOrganicTrack = false
 
     var customerId = ""
     var customerEmail = ""
@@ -39,6 +40,7 @@ class TrackierSDKInstance {
         this.appToken = this.config.appToken
         this.installId = getInstallID()
         this.isManualInstall = config.getManualMode()
+        this.disableOrganicTrack = config.getOrganicTracking()
         DeviceInfo.init(device, this.config.context)
         CoroutineScope(Dispatchers.IO).launch {
             initGaid()
@@ -129,6 +131,7 @@ class TrackierSDKInstance {
         trackierWorkRequest.customerOptionals = this.customerOptionals
         trackierWorkRequest.attributionParams = this.config.getAttributionParams()
         trackierWorkRequest.sdtk = this.config.getSDKType()
+        trackierWorkRequest.disableOrganicTrack = disableOrganicTrack
 
         return trackierWorkRequest
     }
@@ -162,6 +165,7 @@ class TrackierSDKInstance {
                 this.setReferrerDetails(refDetails)
             }
         }
+
         val wrkRequest = makeWorkRequest(TrackierWorkRequest.KIND_INSTALL)
         TrackierWorkRequest.enqueue(wrkRequest)
         setInstallTracked()

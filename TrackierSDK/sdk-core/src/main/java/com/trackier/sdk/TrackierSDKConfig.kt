@@ -11,6 +11,7 @@ class TrackierSDKConfig(var context: Context, val appToken: String, val env: Str
     private var sdtk: String = "android"
     private var minSessionTime: Int = 10
     private var manualTracking = false
+    private var disableOrganicTrack = false
 
     init {
         context = context.applicationContext
@@ -18,7 +19,6 @@ class TrackierSDKConfig(var context: Context, val appToken: String, val env: Str
         Factory.setLogLevel(level)
         logger = Factory.logger
     }
-
 
     fun setLogLevel(value: Level) {
         Factory.setLogLevel(value)
@@ -64,5 +64,12 @@ class TrackierSDKConfig(var context: Context, val appToken: String, val env: Str
 
     fun getManualMode(): Boolean {
         return this.manualTracking
+    }
+
+    fun disableOrganicTracking(value: Boolean) {
+        this.disableOrganicTrack = value
+    }
+    fun getOrganicTracking(): Boolean {
+        return this.disableOrganicTrack
     }
 }
