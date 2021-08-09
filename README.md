@@ -14,6 +14,7 @@
     * [Initialize the SDK](#qs-initialize-trackier-sdk)
     * [Associate User Info during initialization of sdk](#qs-assosoiate-user-info)
 * [Defer Start Sdk](#qs-defer-start-sdk)
+* [Disable Organic Tracking](#qs-disable-orgainic-tracking)
 * [Track Events](#qs-track-event)
     * [Retrieve Event Id from dashboard](#qs-retrieve-event-id)
     * [Track Simple Event](#qs-track-simple-event)
@@ -37,7 +38,7 @@
 You can find the latest version [here]()
 
 ```gradle 
-  implementation 'com.trackier:android-sdk:1.6.6'
+  implementation 'com.trackier:android-sdk:1.6.7'
 ```
 
 ## <a id="qs-add-install-referre"></a>Adding Android install referrer to your app
@@ -49,7 +50,7 @@ Add the Android Install Referrer as a dependency. You can find the latest versio
     // make sure to use the latest SDK version:
     // https://mvnrepository.com/artifact/com.trackier/android-sdk   
   
-    implementation 'com.trackier:android-sdk:1.6.6'
+    implementation 'com.trackier:android-sdk:1.6.7'
     implementation 'com.android.installreferrer:installreferrer:2.2'
   }
 ```
@@ -244,10 +245,30 @@ ___
 ```kotlin 
   TrackierSDK.fireInstall()
 ```
+## <a id="qs-disable-orgainic-tracking"></a>Disable Organic Track 
+### To disable organic track pass true boolean to disableOrganicTracking method of sdk config 
+
+---
+  #### Java
+___
+```java 
+   TrackierSDKConfig sdkConfig = TrackierSDKConfig(this, TR_DEV_KEY, "production");
+   sdkConfig.disableOrganicTracking(true);
+   TrackierSDK.initialize(sdkConfig);
+```
+
+---
+  #### Kotlin
+___
+```kotlin 
+   val sdkConfig = TrackierSDKConfig(this, TR_DEV_KEY, "production")
+   sdkConfig.disableOrganicTracking(true)
+   TrackierSDK.initialize(sdkConfig)
+```
 
 ## <a id="qs-track-event"></a>Track Events
 
-Retrieve Event Id from dashboard
+<a id="qs-retrieve-event-id"></a>Retrieve Event Id from dashboard
 <br></br>
 <img width="1725" alt="Screenshot 2021-08-03 at 3 25 55 PM" src="https://user-images.githubusercontent.com/34488320/127996772-5e760e26-addc-499b-a7c6-de3ef2d0288c.png">
 
