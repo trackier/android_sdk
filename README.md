@@ -246,7 +246,7 @@ ___
   TrackierSDK.fireInstall()
 ```
 ## <a id="qs-disable-orgainic-tracking"></a>Disable Organic Track 
-### To disable organic track pass true boolean to disableOrganicTracking method of sdk config 
+#### To disable organic track pass true boolean to disableOrganicTracking method of sdk config 
 
 ---
   #### Java
