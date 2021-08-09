@@ -21,6 +21,7 @@ class TrackierWorkRequest(val kind: String, private val appToken: String, privat
     var customerId = ""
     var customerEmail = ""
     var customerOptionals: MutableMap<String, Any>? = null
+    var disableOrganicTrack = false
 
     private fun setDefaults(): MutableMap<String, Any> {
         val body = mutableMapOf<String, Any>()
@@ -81,6 +82,9 @@ class TrackierWorkRequest(val kind: String, private val appToken: String, privat
         }
 
         fun enqueue(wrk: TrackierWorkRequest) {
+            if((wrk.disableOrganicTrack) && (wrk.refDetails.clickId.isBlank())){
+                return
+            }
             val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
             val adapter: JsonAdapter<TrackierWorkRequest> = moshi.adapter(TrackierWorkRequest::class.java)
             val json = adapter.toJson(wrk)
@@ -95,7 +99,6 @@ class TrackierWorkRequest(val kind: String, private val appToken: String, privat
                 .addTag(Constants.LOG_WORK_TAG)
                 .setInputData(workDataOf(Constants.LOG_WORK_INPUT_KEY to json))
                 .build()
-
             WorkManager.getInstance().enqueue(myWorkRequest)
         }
     }

@@ -22,12 +22,11 @@ class TrackierSDKInstance {
     var isLocalRefEnabled = false
     var localRefDelimeter = ""
     var isManualInstall = false
-    var setOrganicTrack = true
+    var disableOrganicTrack = false
 
     var customerId = ""
     var customerEmail = ""
     var customerOptionals: MutableMap<String, Any>? = null
-
 
     /**
      * Initialize method should be called to initialize the sdk
@@ -41,7 +40,7 @@ class TrackierSDKInstance {
         this.appToken = this.config.appToken
         this.installId = getInstallID()
         this.isManualInstall = config.getManualMode()
-        this.setOrganicTrack = config.getOrganicTracking()
+        this.disableOrganicTrack = config.getOrganicTracking()
         DeviceInfo.init(device, this.config.context)
         CoroutineScope(Dispatchers.IO).launch {
             initGaid()
@@ -132,6 +131,7 @@ class TrackierSDKInstance {
         trackierWorkRequest.customerOptionals = this.customerOptionals
         trackierWorkRequest.attributionParams = this.config.getAttributionParams()
         trackierWorkRequest.sdtk = this.config.getSDKType()
+        trackierWorkRequest.disableOrganicTrack = disableOrganicTrack
 
         return trackierWorkRequest
     }
@@ -166,10 +166,6 @@ class TrackierSDKInstance {
             }
         }
 
-        var url = Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_INSTALL_URL)
-        if((!setOrganicTrack) || (url.isBlank())){
-            return
-        }
         val wrkRequest = makeWorkRequest(TrackierWorkRequest.KIND_INSTALL)
         TrackierWorkRequest.enqueue(wrkRequest)
         setInstallTracked()
@@ -185,13 +181,7 @@ class TrackierSDKInstance {
         if (!isEnabled || !configLoaded) {
             return
         }
-
-        var url = Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_INSTALL_URL)
-        if((!setOrganicTrack) || (url.isBlank())){
-            return
-        }
-
-        if (!isInitialized) {
+        if (!isInitialized && !disableOrganicTrack) {
             Factory.logger.warning("Event Tracking request sent before SDK data was initialized")
         }
         if (!isInstallTracked()) {
@@ -237,10 +227,6 @@ class TrackierSDKInstance {
             }
             val sessionDiff = (currentTs - lastSessTs).toInt()
             if (sessionDiff > this.config.getMinSessionDuration()) {
-                var url = Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_INSTALL_URL)
-                if((!setOrganicTrack) || (url.isBlank())){
-                    return
-                }
                 val wrkRequest = makeWorkRequest(TrackierWorkRequest.KIND_SESSION_TRACK)
                 wrkRequest.sessionTime = lastSessionTime
                 APIRepository.doWork(wrkRequest)   
