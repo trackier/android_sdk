@@ -82,7 +82,7 @@ class TrackierWorkRequest(val kind: String, private val appToken: String, privat
         }
 
         fun enqueue(wrk: TrackierWorkRequest) {
-            if ((wrk.disableOrganicTrack) && (wrk.refDetails.clickId.isBlank())) {
+            if (wrk.disableOrganicTrack && wrk.refDetails.clickId.isBlank()) {
                 return
             }
             val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()

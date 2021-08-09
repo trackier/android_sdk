@@ -181,7 +181,7 @@ class TrackierSDKInstance {
         if (!isEnabled || !configLoaded) {
             return
         }
-        if (!isInitialized && !disableOrganicTrack) {
+        if (!isInitialized) {
             Factory.logger.warning("Event Tracking request sent before SDK data was initialized")
         }
         if (!isInstallTracked()) {
