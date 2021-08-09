@@ -66,8 +66,8 @@ class TrackierSDKConfig(var context: Context, val appToken: String, val env: Str
         return this.manualTracking
     }
 
-    fun setOrganicTracking(value: Boolean) {
-        this.disableOrganicTrack = !value
+    fun disableOrganicTracking(value: Boolean) {
+        this.disableOrganicTrack = value
     }
     fun getOrganicTracking(): Boolean {
         return this.disableOrganicTrack

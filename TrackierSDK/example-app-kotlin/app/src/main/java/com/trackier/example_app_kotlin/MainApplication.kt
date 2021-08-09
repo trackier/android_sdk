@@ -40,6 +40,9 @@ class MainApplication : Application() {
         sdkConfig.setAttributionParams(apkAttributes)
 //        sdkConfig.setManualMode(true)
 //        TrackierSDK.setLocalRefTrack(true,"_")
+
+        /* pass true argument to disable orgainic track from sdk. */
+//        sdkConfig.disableOrganicTracking(true)
         TrackierSDK.setUserId("pppppp")
         TrackierSDK.setUserEmail("abc@gmail.com")
         val userAdditionalDetails: MutableMap<String,Any> = mutableMapOf()
