@@ -70,7 +70,6 @@ data class DeviceInfo(
             deviceInfo.appVersion = appVersion(context)
             deviceInfo.appInstallTime = appInstallTime(context)
             deviceInfo.appUpdateTime = getAppUpdateTime(context)
-
             val config = context.resources.configuration
             var locale = Util.getLocale(config)
             deviceInfo.language = locale?.language

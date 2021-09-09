@@ -17,8 +17,6 @@ import androidx.core.app.ActivityCompat
 import androidx.multidex.BuildConfig
 import com.trackier.sdk.TrackierEvent
 import com.trackier.sdk.TrackierSDK
-import java.math.BigDecimal
-import java.util.*
 import kotlin.collections.HashMap
 
 class MainActivity : AppCompatActivity(){
