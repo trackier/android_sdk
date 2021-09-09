@@ -17,6 +17,9 @@ import androidx.core.app.ActivityCompat
 import androidx.multidex.BuildConfig
 import com.trackier.sdk.TrackierEvent
 import com.trackier.sdk.TrackierSDK
+import java.math.BigDecimal
+import java.util.*
+import kotlin.collections.HashMap
 
 class MainActivity : AppCompatActivity(){
 
@@ -24,6 +27,7 @@ class MainActivity : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
 
         val btn_event_track = findViewById(R.id.event_track) as Button
         val btn_event_curr_track = findViewById(R.id.event_curr_track) as Button

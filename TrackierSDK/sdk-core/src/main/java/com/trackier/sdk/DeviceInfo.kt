@@ -60,6 +60,7 @@ data class DeviceInfo(
     var macMd5: String? = null
     var androidId: String? = null
     var isEmulator = false
+    var locale: String? = ""
 
     var fbAttributionId: String? = null
 
@@ -71,7 +72,7 @@ data class DeviceInfo(
             deviceInfo.appUpdateTime = getAppUpdateTime(context)
 
             val config = context.resources.configuration
-            val locale = Util.getLocale(config)
+            var locale = Util.getLocale(config)
             deviceInfo.language = locale?.language
             deviceInfo.country = locale?.country
 
@@ -91,6 +92,8 @@ data class DeviceInfo(
             deviceInfo.androidId = getAndroidID(context)
 
             deviceInfo.fbAttributionId = getFBAttributionId(context.contentResolver)
+
+            deviceInfo.locale = Locale.getDefault().toString()
         }
 
         private fun appVersion(context: Context): String? {

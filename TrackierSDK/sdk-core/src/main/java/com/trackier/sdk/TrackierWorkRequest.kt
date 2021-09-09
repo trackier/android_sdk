@@ -1,9 +1,13 @@
 package com.trackier.sdk
 
+import android.util.Log
 import androidx.work.*
+import com.squareup.moshi.FromJson
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
+import com.squareup.moshi.ToJson
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import java.math.BigDecimal
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -40,6 +44,7 @@ class TrackierWorkRequest(val kind: String, private val appToken: String, privat
         body["sdkt"] = sdtk
         body["cuid"] = customerId
         body["cmail"] = customerEmail
+        body["installTimeMicro"] = getTimeInUnix()
         if (customerOptionals != null) {
             body["opts"] = customerOptionals!!
         }
@@ -55,6 +60,12 @@ class TrackierWorkRequest(val kind: String, private val appToken: String, privat
 
     fun getData(): MutableMap<String, Any> {
         return setDefaults()
+    }
+
+    fun getTimeInUnix(): String {
+        var time = Calendar.getInstance().timeInMillis.toDouble()
+        var inUnix:Double = (time / 1000)
+        return  String.format("%.6f",BigDecimal(inUnix))
     }
 
     fun getEventData(): MutableMap<String, Any> {
@@ -85,7 +96,9 @@ class TrackierWorkRequest(val kind: String, private val appToken: String, privat
             if (wrk.disableOrganicTrack && wrk.refDetails.clickId.isBlank()) {
                 return
             }
-            val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+            val moshi = Moshi.Builder()
+                    .add(KotlinJsonAdapterFactory())
+                    .build()
             val adapter: JsonAdapter<TrackierWorkRequest> = moshi.adapter(TrackierWorkRequest::class.java)
             val json = adapter.toJson(wrk)
             val constraints = getConstraints()
