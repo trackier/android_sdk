@@ -1,7 +1,7 @@
 package com.trackier.sdk
 
 object Constants {
-    const val SDK_VERSION = "1.6.8"
+    const val SDK_VERSION = "1.6.9"
     const val USER_AGENT = "com.cloudstuff.trackiersdk:trackier-android:" + SDK_VERSION
     const val API_VERSION = "v1"
     const val BASE_URL = "https://events.trackier.io/" + API_VERSION + "/"
