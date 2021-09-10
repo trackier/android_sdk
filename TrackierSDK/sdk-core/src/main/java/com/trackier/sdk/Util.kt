@@ -26,7 +26,7 @@ object Util {
         }
     }
 
-    fun getTimeInUnix( date: String ): String {
+    fun getTimeInUnix(date: String): String {
         try {
             val sdf = SimpleDateFormat(Constants.DATE_TIME_FORMAT, Locale.US)
             val date: Date = sdf.parse(date)
@@ -35,7 +35,7 @@ object Util {
 
             return  String.format("%.6f", BigDecimal(inUnix))
         }
-        catch (e: java.lang.Exception){
+        catch (e: Exception){
             return  ""
         }
     }

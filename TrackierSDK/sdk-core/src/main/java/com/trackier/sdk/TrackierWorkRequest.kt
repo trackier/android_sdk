@@ -1,13 +1,9 @@
 package com.trackier.sdk
 
-import android.util.Log
 import androidx.work.*
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import java.lang.Exception
-import java.math.BigDecimal
-import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
