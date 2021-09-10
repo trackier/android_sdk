@@ -1,10 +1,13 @@
 package com.trackier.sdk
 
+import android.util.Log
 import androidx.work.*
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import java.lang.Exception
 import java.math.BigDecimal
+import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -41,7 +44,7 @@ class TrackierWorkRequest(val kind: String, private val appToken: String, privat
         body["sdkt"] = sdtk
         body["cuid"] = customerId
         body["cmail"] = customerEmail
-        body["installTimeMicro"] = getTimeInUnix()
+        body["installTimeMicro"] = Util.getTimeInUnix(refDetails.installTime)
         if (customerOptionals != null) {
             body["opts"] = customerOptionals!!
         }
@@ -57,12 +60,6 @@ class TrackierWorkRequest(val kind: String, private val appToken: String, privat
 
     fun getData(): MutableMap<String, Any> {
         return setDefaults()
-    }
-
-    fun getTimeInUnix(): String {
-        var time = Calendar.getInstance().timeInMillis.toDouble()
-        var inUnix:Double = (time / 1000)
-        return  String.format("%.6f",BigDecimal(inUnix))
     }
 
     fun getEventData(): MutableMap<String, Any> {
