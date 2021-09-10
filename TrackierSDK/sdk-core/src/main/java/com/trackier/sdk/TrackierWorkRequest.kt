@@ -40,6 +40,7 @@ class TrackierWorkRequest(val kind: String, private val appToken: String, privat
         body["sdkt"] = sdtk
         body["cuid"] = customerId
         body["cmail"] = customerEmail
+        body["installTimeMicro"] = Util.getTimeInUnix(refDetails.installTime)
         if (customerOptionals != null) {
             body["opts"] = customerOptionals!!
         }

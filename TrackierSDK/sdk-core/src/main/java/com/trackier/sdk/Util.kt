@@ -6,6 +6,7 @@ import android.content.res.Configuration
 import android.os.Build
 import java.io.BufferedReader
 import java.io.FileReader
+import java.math.BigDecimal
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
 import java.util.*
@@ -22,6 +23,19 @@ object Util {
             data[key].toString()
         } else {
             ""
+        }
+    }
+
+    fun getTimeInUnix(date: String): String {
+        try {
+            val sdf = SimpleDateFormat(Constants.DATE_TIME_FORMAT, Locale.US)
+            val date: Date = sdf.parse(date)
+            var time = date.time.toDouble()
+            var inUnix: Double = (time / 1000)
+
+            return String.format("%.6f", BigDecimal(inUnix))
+        } catch (e: Exception) {
+            return  ""
         }
     }
 
