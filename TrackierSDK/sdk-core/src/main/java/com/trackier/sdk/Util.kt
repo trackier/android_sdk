@@ -33,9 +33,8 @@ object Util {
             var time = date.time.toDouble()
             var inUnix: Double = (time / 1000)
 
-            return  String.format("%.6f", BigDecimal(inUnix))
-        }
-        catch (e: Exception){
+            return String.format("%.6f", BigDecimal(inUnix))
+        } catch (e: Exception) {
             return  ""
         }
     }
