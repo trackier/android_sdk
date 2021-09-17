@@ -86,4 +86,9 @@ object TrackierSDK {
     fun setUserAdditionalDetails(userAdditionalDetails: MutableMap<String, Any>) {
         instance.customerOptionals = userAdditionalDetails
     }
+
+    @JvmStatic
+    fun getTrackierId(): String {
+        return Util.getSharedPrefString(instance.config.context, Constants.SHARED_PREF_INSTALL_ID)
+    }
 }
