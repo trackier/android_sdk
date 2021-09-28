@@ -130,12 +130,12 @@ class TrackierSDKInstance {
     }
 
     private fun getFirstInstall(): String {
-        var firstInstall = Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_FIRST_INSTALL)
-        if(firstInstall.isBlank()){
-            firstInstall = Util.dateFormatter.format(Date())
-            setFirstInstall(firstInstall)
+        var firstInstallTime = Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_FIRST_INSTALL)
+        if(firstInstallTime.isBlank()){
+            firstInstallTime = Util.dateFormatter.format(Date())
+            setFirstInstall(firstInstallTime)
         }
-        return firstInstall
+        return firstInstallTime
     }
 
 
@@ -151,7 +151,7 @@ class TrackierSDKInstance {
         trackierWorkRequest.attributionParams = this.config.getAttributionParams()
         trackierWorkRequest.sdtk = this.config.getSDKType()
         trackierWorkRequest.disableOrganicTrack = disableOrganicTrack
-        trackierWorkRequest.firstInstall = firstInstallTime
+        trackierWorkRequest.firstInstallTime = firstInstallTime
 
         return trackierWorkRequest
     }

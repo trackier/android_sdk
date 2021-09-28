@@ -40,7 +40,7 @@ object Util {
     }
 
     fun getYear(date: String): Int {
-        try{
+        try {
             val dateProvided = dateFormatter.parse(date)
             val cal = Calendar.getInstance()
             cal.setTime(dateProvided)
@@ -51,7 +51,7 @@ object Util {
     }
 
     fun getCurrentYear(): Int {
-        try{
+        try {
             val cal = Calendar.getInstance()
             return cal[Calendar.YEAR]
         } catch (e: Exception) {
