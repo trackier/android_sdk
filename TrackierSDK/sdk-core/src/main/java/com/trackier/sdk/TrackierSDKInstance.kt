@@ -41,7 +41,7 @@ class TrackierSDKInstance {
         this.configLoaded = true
         this.appToken = this.config.appToken
         this.installId = getInstallID()
-        this.firstInstallTime = getFirstInstall()
+        this.firstInstallTime = firstInstallTS()
         this.isManualInstall = config.getManualMode()
         this.disableOrganicTrack = config.getOrganicTracking()
         DeviceInfo.init(device, this.config.context)
@@ -123,17 +123,17 @@ class TrackierSDKInstance {
         return installId
     }
 
-    private fun setFirstInstall(firstInstall: String) {
+    private fun setFirstInstallTS(firstInstall: String) {
         val prefs = Util.getSharedPref(this.config.context)
         prefs.edit().putString(Constants.SHARED_PREF_FIRST_INSTALL, firstInstall)
                 .apply()
     }
 
-    private fun getFirstInstall(): String {
+    private fun firstInstallTS(): String {
         var firstInstallTime = Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_FIRST_INSTALL)
         if(firstInstallTime.isBlank()){
             firstInstallTime = Util.dateFormatter.format(Date())
-            setFirstInstall(firstInstallTime)
+            setFirstInstallTS(firstInstallTime)
         }
         return firstInstallTime
     }
