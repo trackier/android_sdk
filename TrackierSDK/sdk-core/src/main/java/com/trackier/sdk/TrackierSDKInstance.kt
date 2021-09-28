@@ -41,7 +41,7 @@ class TrackierSDKInstance {
         this.configLoaded = true
         this.appToken = this.config.appToken
         this.installId = getInstallID()
-        this.firstInstallTime = firstInstallTS()
+        this.firstInstallTime = getFirstInstallTS()
         this.isManualInstall = config.getManualMode()
         this.disableOrganicTrack = config.getOrganicTracking()
         DeviceInfo.init(device, this.config.context)
