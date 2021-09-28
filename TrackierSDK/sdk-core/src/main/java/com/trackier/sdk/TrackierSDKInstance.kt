@@ -28,6 +28,8 @@ class TrackierSDKInstance {
     var customerEmail = ""
     var customerOptionals: MutableMap<String, Any>? = null
 
+    var firstInstallTime = ""
+
     /**
      * Initialize method should be called to initialize the sdk
      */
@@ -39,6 +41,7 @@ class TrackierSDKInstance {
         this.configLoaded = true
         this.appToken = this.config.appToken
         this.installId = getInstallID()
+        this.firstInstallTime = getFirstInstallTS()
         this.isManualInstall = config.getManualMode()
         this.disableOrganicTrack = config.getOrganicTracking()
         DeviceInfo.init(device, this.config.context)
@@ -120,6 +123,22 @@ class TrackierSDKInstance {
         return installId
     }
 
+    private fun setFirstInstallTS(firstInstall: String) {
+        val prefs = Util.getSharedPref(this.config.context)
+        prefs.edit().putString(Constants.SHARED_PREF_FIRST_INSTALL, firstInstall)
+                .apply()
+    }
+
+    private fun getFirstInstallTS(): String {
+        var firstInstallTime = Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_FIRST_INSTALL)
+        if (firstInstallTime.isBlank()) {
+            firstInstallTime = Util.dateFormatter.format(Date())
+            setFirstInstallTS(firstInstallTime)
+        }
+        return firstInstallTime
+    }
+
+
     private fun makeWorkRequest(kind: String): TrackierWorkRequest {
         val trackierWorkRequest = TrackierWorkRequest(kind, appToken, this.config.env)
         trackierWorkRequest.device = device
@@ -132,6 +151,7 @@ class TrackierSDKInstance {
         trackierWorkRequest.attributionParams = this.config.getAttributionParams()
         trackierWorkRequest.sdtk = this.config.getSDKType()
         trackierWorkRequest.disableOrganicTrack = disableOrganicTrack
+        trackierWorkRequest.firstInstallTime = firstInstallTime
 
         return trackierWorkRequest
     }

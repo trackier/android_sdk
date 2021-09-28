@@ -22,6 +22,7 @@ class TrackierWorkRequest(val kind: String, private val appToken: String, privat
     var customerEmail = ""
     var customerOptionals: MutableMap<String, Any>? = null
     var disableOrganicTrack = false
+    var firstInstallTime = ""
 
     private fun setDefaults(): MutableMap<String, Any> {
         val body = mutableMapOf<String, Any>()
@@ -33,14 +34,19 @@ class TrackierWorkRequest(val kind: String, private val appToken: String, privat
         body["isLAT"] = isLAT
         body["clickId"] = refDetails.clickId
         body["clickTime"] = refDetails.clickTime
-        body["installTime"] = refDetails.installTime
+        if (Util.getYear(refDetails.installTime) < Util.getYear(firstInstallTime)) {
+            body["installTime"] = firstInstallTime
+            body["installTimeMicro"] = Util.getTimeInUnix(firstInstallTime)
+        } else {
+            body["installTime"] = refDetails.installTime
+            body["installTimeMicro"] = Util.getTimeInUnix(refDetails.installTime)
+        }
         body["installId"] = installID
         body["appKey"] = appToken
         body["mode"] = mode
         body["sdkt"] = sdtk
         body["cuid"] = customerId
         body["cmail"] = customerEmail
-        body["installTimeMicro"] = Util.getTimeInUnix(refDetails.installTime)
         if (customerOptionals != null) {
             body["opts"] = customerOptionals!!
         }
