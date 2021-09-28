@@ -129,7 +129,7 @@ class TrackierSDKInstance {
                 .apply()
     }
 
-    private fun firstInstallTS(): String {
+    private fun getFirstInstallTS(): String {
         var firstInstallTime = Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_FIRST_INSTALL)
         if(firstInstallTime.isBlank()){
             firstInstallTime = Util.dateFormatter.format(Date())
