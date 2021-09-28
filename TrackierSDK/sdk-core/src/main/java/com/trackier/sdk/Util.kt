@@ -39,6 +39,26 @@ object Util {
         }
     }
 
+    fun getYear(date: String): Int {
+        try{
+            val dateProvided = dateFormatter.parse(date)
+            val cal = Calendar.getInstance()
+            cal.setTime(dateProvided)
+            return cal[Calendar.YEAR]
+        } catch (e: Exception) {
+            return 0
+        }
+    }
+
+    fun getCurrentYear(): Int {
+        try{
+            val cal = Calendar.getInstance()
+            return cal[Calendar.YEAR]
+        } catch (e: Exception) {
+            return 0
+        }
+    }
+
     fun getQueryParams(query: String): Map<String, String> {
         val params = query.split("&")
         val map = mutableMapOf<String, String>()
@@ -66,8 +86,8 @@ object Util {
 
     fun getSharedPref(context: Context): SharedPreferences {
         return context.applicationContext.getSharedPreferences(
-            Constants.SHARED_PREF_NAME,
-            Context.MODE_PRIVATE
+                Constants.SHARED_PREF_NAME,
+                Context.MODE_PRIVATE
         )
     }
 
