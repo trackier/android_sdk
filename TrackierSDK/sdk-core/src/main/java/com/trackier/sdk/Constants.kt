@@ -30,4 +30,6 @@ object Constants {
 
     const val UUID_EMPTY = "00000000-0000-0000-0000-000000000000"
     const val UNKNOWN_EVENT = "unknown"
+
+    const val EPOCH_YEAR = 1970
 }
