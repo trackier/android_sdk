@@ -34,7 +34,7 @@ class TrackierWorkRequest(val kind: String, private val appToken: String, privat
         body["isLAT"] = isLAT
         body["clickId"] = refDetails.clickId
         body["clickTime"] = refDetails.clickTime
-        if (Util.getYear(refDetails.installTime) < Util.getYear(firstInstallTime)) {
+        if (Util.getYear(refDetails.installTime) == Constants.EPOC_YEAR) {
             body["installTime"] = firstInstallTime
             body["installTimeMicro"] = Util.getTimeInUnix(firstInstallTime)
         } else {

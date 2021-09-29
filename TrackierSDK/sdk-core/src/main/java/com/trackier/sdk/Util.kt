@@ -50,15 +50,6 @@ object Util {
         }
     }
 
-    fun getCurrentYear(): Int {
-        try {
-            val cal = Calendar.getInstance()
-            return cal[Calendar.YEAR]
-        } catch (e: Exception) {
-            return 0
-        }
-    }
-
     fun getQueryParams(query: String): Map<String, String> {
         val params = query.split("&")
         val map = mutableMapOf<String, String>()

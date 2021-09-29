@@ -46,7 +46,13 @@ class TrackierSDKInstance {
         this.disableOrganicTrack = config.getOrganicTracking()
         DeviceInfo.init(device, this.config.context)
         CoroutineScope(Dispatchers.IO).launch {
-            initGaid()
+            for (i in 1..5) {
+               val gadid =  initGaid()
+                if(!"".equals(gadid)){
+                    break
+                }
+                delay(1000 * i.toLong())
+            }
             if (!isManualInstall) {
                 initAttributionInfo()
                 trackInstall()
@@ -56,7 +62,7 @@ class TrackierSDKInstance {
         }
     }
 
-    private suspend fun initGaid() {
+    private suspend fun initGaid(): String {
         for (i in 1..5) {
             val (gaid, isLat) = DeviceInfo.getGAID(this.config.context)
             this.gaid = gaid
@@ -66,6 +72,7 @@ class TrackierSDKInstance {
             }
             delay(1000 * i.toLong())
         }
+        return this.gaid.toString()
     }
 
     private suspend fun initAttributionInfo() {
