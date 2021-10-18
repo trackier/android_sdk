@@ -50,7 +50,7 @@ Add the Android Install Referrer as a dependency. You can find the latest versio
     // make sure to use the latest SDK version:
     // https://mvnrepository.com/artifact/com.trackier/android-sdk   
   
-    implementation 'com.trackier:android-sdk:1.6.10'
+    implementation 'com.trackier:android-sdk:1.6.12'
     implementation 'com.android.installreferrer:installreferrer:2.2'
   }
 ```
