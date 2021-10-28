@@ -23,6 +23,7 @@ class TrackierWorkRequest(val kind: String, private val appToken: String, privat
     var customerOptionals: MutableMap<String, Any>? = null
     var disableOrganicTrack = false
     var firstInstallTime = ""
+    var organic = false
 
     private fun setDefaults(): MutableMap<String, Any> {
         val body = mutableMapOf<String, Any>()
@@ -57,6 +58,7 @@ class TrackierWorkRequest(val kind: String, private val appToken: String, privat
                 body[k] = v
             }
         }
+        body["organic"] = organic
         return body
     }
 

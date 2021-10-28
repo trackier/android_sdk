@@ -91,4 +91,9 @@ object TrackierSDK {
     fun getTrackierId(): String {
         return Util.getSharedPrefString(instance.config.context, Constants.SHARED_PREF_INSTALL_ID)
     }
+
+    @JvmStatic
+    fun trackAsOrganic(organic: Boolean) {
+        instance.organic = organic
+    }
 }

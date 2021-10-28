@@ -29,6 +29,7 @@ class TrackierSDKInstance {
     var customerOptionals: MutableMap<String, Any>? = null
 
     var firstInstallTime = ""
+    var organic = false
 
     /**
      * Initialize method should be called to initialize the sdk
@@ -159,6 +160,7 @@ class TrackierSDKInstance {
         trackierWorkRequest.sdtk = this.config.getSDKType()
         trackierWorkRequest.disableOrganicTrack = disableOrganicTrack
         trackierWorkRequest.firstInstallTime = firstInstallTime
+        trackierWorkRequest.organic = organic
 
         return trackierWorkRequest
     }
