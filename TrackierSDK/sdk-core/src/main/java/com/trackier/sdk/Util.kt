@@ -51,16 +51,18 @@ object Util {
     }
 
     fun getQueryParams(query: String): Map<String, String> {
-        val params = query.split("&")
         val map = mutableMapOf<String, String>()
-        for (param in params) {
-            val parts = param.split("=")
-            if (parts.size == 2) {
-                val name = parts[0]
-                val value = parts[1]
-                map[name] = value
+        try {
+            val params = query.split("&")
+            for (param in params) {
+                val parts = param.split("=")
+                if (parts.size == 2) {
+                    val name = parts[0]
+                    val value = parts[1]
+                    map[name] = value
+                }
             }
-        }
+        } catch (e: Exception) {}
         return map
     }
 

@@ -100,4 +100,32 @@ afterEvaluate { project ->
     artifacts {
         archives androidSourcesJar
     }
+
+    publishToMavenLocal {
+        def groupId = "com.trackier.dev" 
+        def artifactId = "android-sdk" 
+
+        publishing { 
+            publications { 
+                release(MavenPublication) { 
+                    from components.release 
+
+                    setGroupId groupId 
+                    setArtifactId artifactId 
+                    version VERSION_NAME  
+                } 
+            } 
+            publications.all { 
+                pom.withXml { 
+                    asNode().dependencies.'*'
+                    .findAll() { 
+                        it.scope.text() == 'runtime' &&
+                        project.configurations.implementation.allDependencies.find {
+                            dep -> dep.name == it.artifactId.text() 
+                        }
+                    }.each { it.scope*.value = 'compile'} 
+                } 
+            } 
+        } 
+    }
 }
