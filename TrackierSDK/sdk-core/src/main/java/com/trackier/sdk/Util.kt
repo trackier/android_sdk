@@ -29,8 +29,8 @@ object Util {
     fun getTimeInUnix(date: String): String {
         try {
             val sdf = SimpleDateFormat(Constants.DATE_TIME_FORMAT, Locale.US)
-            val date: Date = sdf.parse(date)
-            var time = date.time.toDouble()
+            val dateObj: Date = sdf.parse(date)
+            var time = dateObj.time.toDouble()
             var inUnix: Double = (time / 1000)
 
             return String.format("%.6f", BigDecimal(inUnix))
