@@ -5,13 +5,18 @@ plugins {
     id 'kotlin-android-extensions'
 }
 
-apply from: 'maven-push.gradle'
+//apply from: 'maven-push.gradle'
 
 repositories {
     mavenCentral()
     google()
     jcenter()
+    maven {
+        url "https://plugins.gradle.org/m2/"
+    }
 }
+
+apply from: 'publish-module.gradle'
 
 android {
     compileSdkVersion 30
