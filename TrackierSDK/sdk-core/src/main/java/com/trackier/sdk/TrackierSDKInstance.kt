@@ -180,6 +180,9 @@ class TrackierSDKInstance {
     }
 
     private suspend fun trackInstall() {
+        if (!isEnabled || !configLoaded) {
+            return
+        }
         if (isInstallTracked()) {
             return
         }
@@ -240,6 +243,9 @@ class TrackierSDKInstance {
     }
 
     suspend fun trackSession() {
+        if (!isEnabled || !configLoaded) {
+            return
+        }
         if (!isInstallTracked()) {
             return
         }

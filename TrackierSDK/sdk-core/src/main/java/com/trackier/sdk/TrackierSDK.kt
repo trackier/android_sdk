@@ -21,10 +21,12 @@ object TrackierSDK {
         instance.initialize(config)
     }
 
+    @JvmStatic
     fun isEnabled(): Boolean {
         return instance.isEnabled
     }
 
+    @JvmStatic
     fun setEnabled(value: Boolean) {
         instance.isEnabled = value
     }
