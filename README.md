@@ -20,6 +20,7 @@
     * [Track Simple Event](#qs-track-simple-event)
     * [Track with Currency & Revenue Event](#qs-track-event-with-currencey)
     * [Add custom params with event](#qs-add-custom-parms-event)
+* [Track Uninstall](#qs-track-uninstall)
 * [Proguard Settings](#qs-progaurd-trackier-sdk)
 
 ## <a id="qs-add-trackier-sdk"></a>Add Trackier SDK to your app
@@ -337,6 +338,23 @@ ___
 * First create a mutable map
 * Pass its reference to event.ev param of event
 * Pass event reference to trackEvent method of TrackerSDK
+
+
+## <a id="qs-track-uninstall"></a>Track Uninstall 
+
+--- 
+  #### Java 
+---
+```java 
+  private FirebaseAnalytics mFirebaseAnalytics; 
+  FirebaseAnalytics mFirebaseAnalytics = FirebaseAnalytics.getInstance(this); 
+  mFirebaseAnalytics.setUserProperty("ct_objectId", Objects.requireNonNull(TrackierSDK.getTrackierId())); 
+``` 
+ 
+* Add the above code to your app to set up a common identifier. 
+* Set the `app_remove` event as a conversion event in Firebase. 
+* Use the Firebase cloud function to send uninstall information to Trackier MMP. 
+
 
 ## <a id="qs-progaurd-trackier-sdk"></a>Proguard Settings 
 
