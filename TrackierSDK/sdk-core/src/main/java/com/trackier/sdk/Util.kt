@@ -30,8 +30,8 @@ object Util {
         try {
             val sdf = SimpleDateFormat(Constants.DATE_TIME_FORMAT, Locale.US)
             val dateObj: Date = sdf.parse(date)
-            var time = dateObj.time.toDouble()
-            var inUnix: Double = (time / 1000)
+            val time = dateObj.time.toDouble()
+            val inUnix: Double = (time / 1000)
 
             return String.format("%.6f", BigDecimal(inUnix))
         } catch (e: Exception) {
@@ -43,7 +43,7 @@ object Util {
         try {
             val dateProvided = dateFormatter.parse(date)
             val cal = Calendar.getInstance()
-            cal.setTime(dateProvided)
+            cal.time = dateProvided
             return cal[Calendar.YEAR]
         } catch (e: Exception) {
             return 0
@@ -96,13 +96,17 @@ object Util {
     }
 
     fun setSharedPrefString(context: Context, key: String, value: String) {
-        val prefs = getSharedPref(context)
-        prefs.edit().putString(key, value).apply()
+        try {
+            val prefs = getSharedPref(context)
+            prefs.edit().putString(key, value).apply()
+        } catch (ex: Exception) {}
     }
 
     fun delSharedPrefKey(context: Context, key: String) {
-        val prefs = getSharedPref(context)
-        prefs.edit().remove(key).apply()
+        try {
+            val prefs = getSharedPref(context)
+            prefs.edit().remove(key).apply()
+        } catch (ex: Exception) {}
     }
 
     fun sha1(input: String) = hashString("SHA-1", input)
@@ -126,7 +130,7 @@ object Util {
     fun loadAddress(interfaceName: String): String? {
         try {
             val filePath = "/sys/class/net/$interfaceName/address"
-            val fileData = StringBuilder(1000);
+            val fileData = StringBuilder(1000)
             val reader = BufferedReader(FileReader(filePath), 1024)
             val buf = CharArray(1024)
             var numRead: Int

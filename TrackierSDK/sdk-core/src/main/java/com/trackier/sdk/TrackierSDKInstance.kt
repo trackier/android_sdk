@@ -109,17 +109,17 @@ class TrackierSDKInstance {
 
     private fun setReferrerDetails(refererDetails: RefererDetails) {
         refDetails = refererDetails
-        val prefs = Util.getSharedPref(this.config.context)
-        prefs.edit().putString(Constants.SHARED_PREF_INSTALL_URL, refererDetails.url)
-            .putString(Constants.SHARED_PREF_CLICK_TIME, refererDetails.clickTime)
-            .putString(Constants.SHARED_PREF_INSTALL_TIME, refererDetails.installTime)
-            .apply()
+        try {
+            val prefs = Util.getSharedPref(this.config.context)
+            prefs.edit().putString(Constants.SHARED_PREF_INSTALL_URL, refererDetails.url)
+                    .putString(Constants.SHARED_PREF_CLICK_TIME, refererDetails.clickTime)
+                    .putString(Constants.SHARED_PREF_INSTALL_TIME, refererDetails.installTime)
+                    .apply()
+        } catch (ex: Exception) {}
     }
 
     private fun setInstallID(installID: String) {
-            val prefs = Util.getSharedPref(this.config.context)
-            prefs.edit().putString(Constants.SHARED_PREF_INSTALL_ID, installID)
-                    .apply()
+        Util.setSharedPrefString(this.config.context, Constants.SHARED_PREF_INSTALL_ID, installID)
     }
 
     private fun getInstallID(): String {
@@ -132,9 +132,7 @@ class TrackierSDKInstance {
     }
 
     private fun setFirstInstallTS(firstInstall: String) {
-        val prefs = Util.getSharedPref(this.config.context)
-        prefs.edit().putString(Constants.SHARED_PREF_FIRST_INSTALL, firstInstall)
-                .apply()
+        Util.setSharedPrefString(this.config.context, Constants.SHARED_PREF_FIRST_INSTALL, firstInstall)
     }
 
     private fun getFirstInstallTS(): String {
@@ -175,8 +173,10 @@ class TrackierSDKInstance {
     }
 
     private fun setInstallTracked() {
-        val prefs = Util.getSharedPref(this.config.context)
-        prefs.edit().putBoolean(Constants.SHARED_PREF_IS_INSTALL_TRACKED, true).apply()
+        try {
+            val prefs = Util.getSharedPref(this.config.context)
+            prefs.edit().putBoolean(Constants.SHARED_PREF_IS_INSTALL_TRACKED, true).apply()
+        } catch (ex: Exception) {}
     }
 
     private suspend fun trackInstall() {
@@ -186,27 +186,42 @@ class TrackierSDKInstance {
         if (isInstallTracked()) {
             return
         }
-        if (!isReferrerStored()) {
-            if (isLocalRefEnabled) {
-                val installRef = LocalInstallReferrer(this.config.context, this.localRefDelimeter)
-                val refDetails = installRef.getRefDetails()
-                this.setReferrerDetails(refDetails)
-            } else {
-                val installRef = InstallReferrer(this.config.context)
-                val refDetails = installRef.getRefDetails()
-                this.setReferrerDetails(refDetails)
+        try {
+            if (!isReferrerStored()) {
+                if (isLocalRefEnabled) {
+                    val installRef = LocalInstallReferrer(this.config.context, this.localRefDelimeter)
+                    val refDetails = installRef.getRefDetails()
+                    this.setReferrerDetails(refDetails)
+                } else {
+                    val installRef = InstallReferrer(this.config.context)
+                    val refDetails = installRef.getRefDetails()
+                    this.setReferrerDetails(refDetails)
+                }
             }
+        } catch (ex: Exception) {
+            Factory.logger.warning("Unable to get referrer data on install")
         }
 
+
         val wrkRequest = makeWorkRequest(TrackierWorkRequest.KIND_INSTALL)
-        TrackierWorkRequest.enqueue(wrkRequest)
+        try {
+            TrackierWorkRequest.enqueue(wrkRequest)
+        } catch (ex: Exception) {
+            APIRepository.processWork(wrkRequest)
+        }
+
         setInstallTracked()
     }
 
-    private fun _trackEvent(event: TrackierEvent) {
+    private suspend fun _trackEvent(event: TrackierEvent) {
         val wrkRequest = makeWorkRequest(TrackierWorkRequest.KIND_EVENT)
         wrkRequest.event = event
-        TrackierWorkRequest.enqueue(wrkRequest)
+
+        try {
+            TrackierWorkRequest.enqueue(wrkRequest)
+        } catch (ex: Exception) {
+            APIRepository.processWork(wrkRequest)
+        }
     }
 
     fun trackEvent(event: TrackierEvent) {
@@ -227,9 +242,10 @@ class TrackierSDKInstance {
                 }
             }
         } else {
-            _trackEvent(event)
+            CoroutineScope(Dispatchers.IO).launch {
+                _trackEvent(event)
+            }
         }
-
     }
 
     private fun getLastSessionTime(): String {
@@ -264,7 +280,7 @@ class TrackierSDKInstance {
             if (sessionDiff > this.config.getMinSessionDuration()) {
                 val wrkRequest = makeWorkRequest(TrackierWorkRequest.KIND_SESSION_TRACK)
                 wrkRequest.sessionTime = lastSessionTime
-                APIRepository.doWork(wrkRequest)   
+                APIRepository.processWork(wrkRequest)
             }
         } catch (e: Exception) {}
         setLastSessionTime(currentTime)
@@ -275,7 +291,6 @@ class TrackierSDKInstance {
         val isDeeplinkCalled = Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_DEEP_LINK_CALLED)
         if (isDeeplinkCalled == "true") return
 
-        val prefs = Util.getSharedPref(this.config.context)
         val dlstr = Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_DEEP_LINK)
         val dlResult: DeepLink
         if (dlstr.isBlank()) {
@@ -284,12 +299,11 @@ class TrackierSDKInstance {
                 return
             }
             dlResult = DeepLink(ref.url, true)
-            prefs.edit().putString(Constants.SHARED_PREF_DEEP_LINK_CALLED, "true").apply()
         } else {
+            Util.delSharedPrefKey(this.config.context, Constants.SHARED_PREF_DEEP_LINK)
             dlResult = DeepLink(dlstr, false)
-            prefs.edit().putString(Constants.SHARED_PREF_DEEP_LINK_CALLED, "true")
-                .remove(Constants.SHARED_PREF_DEEP_LINK).apply()
         }
+        Util.setSharedPrefString(this.config.context, Constants.SHARED_PREF_DEEP_LINK_CALLED, "true")
         dlt.onDeepLinking(dlResult)
     }
 }

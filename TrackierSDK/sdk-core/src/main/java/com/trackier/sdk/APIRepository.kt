@@ -26,20 +26,19 @@ object APIRepository {
 
     private suspend fun sendInstall(body: MutableMap<String, Any>): ResponseData {
         val logger = Factory.logger
-        logger.info("Install body is: ${body}")
-        val response = trackierApi.sendInstallData(body)
-        return response
+        logger.info("Install body is: $body")
+        return trackierApi.sendInstallData(body)
     }
 
     private suspend fun sendEvent(body: MutableMap<String, Any>): ResponseData {
         val logger = Factory.logger
-        logger.info("Event body is: ${body}")
+        logger.info("Event body is: $body")
         return trackierApi.sendEventData(body)
     }
 
     private suspend fun sendSession(body: MutableMap<String, Any>): ResponseData {
         val logger = Factory.logger
-        logger.info("Session body is: ${body}")
+        logger.info("Session body is: $body")
         return trackierApi.sendSessionData(body)
     }
 
@@ -50,6 +49,20 @@ object APIRepository {
             TrackierWorkRequest.KIND_UNKNOWN -> null
             TrackierWorkRequest.KIND_SESSION_TRACK -> sendSession(workRequest.getSessionData())
             else -> null
+        }
+    }
+
+    suspend fun processWork(workRequest: TrackierWorkRequest): ResponseData? {
+        return try {
+            when(workRequest.kind) {
+                TrackierWorkRequest.KIND_INSTALL -> sendInstall(workRequest.getData())
+                TrackierWorkRequest.KIND_EVENT -> sendEvent(workRequest.getEventData())
+                TrackierWorkRequest.KIND_UNKNOWN -> null
+                TrackierWorkRequest.KIND_SESSION_TRACK -> sendSession(workRequest.getSessionData())
+                else -> null
+            }
+        } catch (ex: Exception) {
+            null
         }
     }
 
