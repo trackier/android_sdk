@@ -36,7 +36,7 @@
 
 ## <a id="qs-add-latest-version-sdk"></a>Add the latest version of Trackier SDK as a dependency
 
-You can find the latest version [here]()
+You can find the latest version [here](https://search.maven.org/artifact/com.trackier/android-sdk)
 
 ```gradle 
   implementation 'com.trackier:android-sdk:1.6.16'
@@ -44,7 +44,7 @@ You can find the latest version [here]()
 
 ## <a id="qs-add-install-referre"></a>Adding Android install referrer to your app
 
-Add the Android Install Referrer as a dependency. You can find the latest version [here]()
+Add the Android Install Referrer as a dependency. You can find the latest version [here](https://search.maven.org/artifact/com.trackier/android-sdk)
 
 ```gradle 
   dependencies {
