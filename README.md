@@ -354,6 +354,7 @@ ___
 * Add the above code to your app to set up a common identifier. 
 * Set the `app_remove` event as a conversion event in Firebase. 
 * Use the Firebase cloud function to send uninstall information to Trackier MMP. 
+* You can find the support article [here](https://help.trackier.com/support/solutions/articles/31000162841-android-uninstall-tracking). 
 
 
 ## <a id="qs-progaurd-trackier-sdk"></a>Proguard Settings 
