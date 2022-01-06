@@ -146,7 +146,7 @@ ___
   TrackierSDK.initialize(sdkConfig)
 ```
 * The first argument is your Trackier Sdk api key.
-* The second argument is environment which can be either “development”, “production” or “test”.
+* The second argument is environment which can be either "development", "production" or "testing".
 * After that pass the sdkConfig reference to TrackierSDK.initialize method.
 
 <img width="1745" alt="Screenshot 2021-07-29 at 6 30 20 PM" src="https://user-images.githubusercontent.com/34488320/127853995-b6daf9b4-2785-4b0e-890a-55c6492d9182.png">

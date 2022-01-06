@@ -25,6 +25,7 @@ object Constants {
 
     const val ENV_PRODUCTION = "production"
     const val ENV_SANDBOX = "sandbox"
+    const val ENV_TESTING = "testing"
 
     const val DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
 
