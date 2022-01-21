@@ -1,6 +1,5 @@
 package com.trackier.sdk
 
-import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.content.Context
 import android.content.pm.PackageManager
@@ -57,8 +56,8 @@ data class DeviceInfo(
     var connectionType: String? = null
     var countryCode: String? = null
     var carrier: String? = null
-    var macMd5: String? = null
-    var androidId: String? = null
+    var macMd5: String? = null  // removed
+    var androidId: String? = null   // removed
     var isEmulator = false
     var locale: String? = ""
 
@@ -86,9 +85,7 @@ data class DeviceInfo(
 
             deviceInfo.connectionType = getConnectionType(context)
             setCarrierInfo(deviceInfo, context)
-            deviceInfo.macMd5 = getMacAddress(context)
             deviceInfo.isEmulator = checkIsEmulator()
-            deviceInfo.androidId = getAndroidID(context)
 
             deviceInfo.fbAttributionId = getFBAttributionId(context.contentResolver)
 
@@ -196,30 +193,6 @@ data class DeviceInfo(
             } catch (ex: Exception) {
                 null
             }
-        }
-
-        @SuppressLint("HardwareIds")
-        private fun getMacAddress(context: Context): String? {
-            return try {
-                // for devices above android v6
-                val wlanAddress = Util.loadAddress("wlan0")
-                if (wlanAddress?.isBlank() == false) {
-                    return Util.md5(wlanAddress.trim().toUpperCase(Locale.US))
-                }
-                // this works below android v6
-                val manager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager?
-                val info = manager?.connectionInfo
-                val mac = info?.macAddress?.trim()?.toUpperCase(Locale.US)
-                if (mac == "02:00:00:00:00:00" || mac?.length == 0) null else Util.md5(mac!!)
-            } catch (ex: Exception) {
-                null
-            }
-        }
-
-        @SuppressLint("HardwareIds")
-        private fun getAndroidID(context: Context): String {
-            return Settings.Secure.getString(context.contentResolver,
-                Settings.Secure.ANDROID_ID)
         }
 
         private fun setCarrierInfo(deviceInfo: DeviceInfo, context: Context) {
