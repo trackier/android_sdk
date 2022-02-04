@@ -295,7 +295,7 @@ ___
 ```
 
 * Argument in Trackier event class is event Id which you want to call event for.
-* You can associate inbuilt params with the event , in-built param list are below:-  orderId, currency, currency, param1, param2, param3 ,param4, param5, param6, param7, param8, param9, param10
+* You can associate inbuilt params with the event , in-built param list are below:-  orderId, revenue, currency, param1, param2, param3 ,param4, param5, param6, param7, param8, param9, param10
 
 ### <a id="qs-track-event-with-currencey"></a>Track with Currency & Revenue Event
 ---
