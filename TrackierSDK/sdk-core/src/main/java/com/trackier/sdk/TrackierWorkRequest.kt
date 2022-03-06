@@ -33,6 +33,7 @@ class TrackierWorkRequest(val kind: String, private val appToken: String, privat
             body["gaid"] = gaid!!
         }
         body["isLAT"] = isLAT
+        body["referrer"] = refDetails.url
         body["clickId"] = refDetails.clickId
         body["clickTime"] = refDetails.clickTime
         if (Util.getYear(refDetails.installTime) == Constants.EPOCH_YEAR) {
