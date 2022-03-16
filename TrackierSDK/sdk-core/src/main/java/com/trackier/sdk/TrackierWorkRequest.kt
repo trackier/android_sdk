@@ -16,13 +16,15 @@ class TrackierWorkRequest(val kind: String, private val appToken: String, privat
     private val createdAt = Util.dateFormatter.format(Date())
     var installID = ""
     var sessionTime = ""
-    var sdtk = ""
+    var sdkt = ""
     var attributionParams: AttributionParams? = null
     var customerId = ""
     var customerEmail = ""
     var customerOptionals: MutableMap<String, Any>? = null
     var disableOrganicTrack = false
     var firstInstallTime = ""
+    var secretId: String = ""
+    var secretKey: String = ""
     var organic = false
 
     private fun setDefaults(): MutableMap<String, Any> {
@@ -46,11 +48,16 @@ class TrackierWorkRequest(val kind: String, private val appToken: String, privat
         body["installId"] = installID
         body["appKey"] = appToken
         body["mode"] = mode
-        body["sdkt"] = sdtk
+        body["sdkt"] = sdkt
         body["cuid"] = customerId
         body["cmail"] = customerEmail
         if (customerOptionals != null) {
             body["opts"] = customerOptionals!!
+        }
+        if (secretKey.length > 10) {
+            body["secretId"] = secretId
+            body["sigv"] = "v1.0.0"
+            body["signature"] = Util.createSignature(installID+":"+createdAt+":"+secretId+":"+gaid, secretKey)
         }
 
         val adnAttributes = this.attributionParams?.getData()

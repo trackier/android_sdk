@@ -12,12 +12,27 @@ class TrackierSDKConfig(var context: Context, val appToken: String, val env: Str
     private var minSessionTime: Int = 10
     private var manualTracking = false
     private var disableOrganicTrack = false
+    private var secretId: String = ""
+    private var secretKey: String = ""
 
     init {
         context = context.applicationContext
         val level = if (env == Constants.ENV_PRODUCTION) Level.SEVERE else Level.FINEST
         Factory.setLogLevel(level)
         logger = Factory.logger
+    }
+
+    fun setAppSecret(secretId: String, secretKey: String) {
+        this.secretId = secretId
+        this.secretKey = secretKey
+    }
+
+    fun getAppSecretId(): String {
+        return this.secretId
+    }
+
+    fun getAppSecretKey(): String {
+        return this.secretKey
     }
 
     fun setLogLevel(value: Level) {

@@ -155,10 +155,12 @@ class TrackierSDKInstance {
         trackierWorkRequest.customerEmail = this.customerEmail
         trackierWorkRequest.customerOptionals = this.customerOptionals
         trackierWorkRequest.attributionParams = this.config.getAttributionParams()
-        trackierWorkRequest.sdtk = this.config.getSDKType()
+        trackierWorkRequest.sdkt = this.config.getSDKType()
         trackierWorkRequest.disableOrganicTrack = disableOrganicTrack
         trackierWorkRequest.firstInstallTime = firstInstallTime
         trackierWorkRequest.organic = organic
+        trackierWorkRequest.secretId = this.config.getAppSecretId()
+        trackierWorkRequest.secretKey = this.config.getAppSecretKey()
 
         return trackierWorkRequest
     }

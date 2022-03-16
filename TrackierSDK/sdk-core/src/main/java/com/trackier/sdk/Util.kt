@@ -9,6 +9,8 @@ import java.io.FileReader
 import java.math.BigDecimal
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
+import javax.crypto.Mac
+import javax.crypto.spec.SecretKeySpec
 import java.util.*
 
 object Util {
@@ -37,6 +39,14 @@ object Util {
         } catch (e: Exception) {
             return  ""
         }
+    }
+
+    fun createSignature(data: String, key: String): String {
+        val sha256Hmac = Mac.getInstance("HmacSHA256")
+        val secretKey = SecretKeySpec(key.toByteArray(), "HmacSHA256")
+        sha256Hmac.init(secretKey)
+
+        return printHexBinary(sha256Hmac.doFinal(data.toByteArray()))
     }
 
     fun getYear(date: String): Int {
