@@ -73,6 +73,9 @@ Sync the project to retrieve the dependencies – see the following screenshot
   <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 ```
 
+![pasted image 0](https://user-images.githubusercontent.com/34488320/127852970-62b516d8-9aa1-498a-809c-abb2c4650d2c.png)
+
+
 ## <a id="qs-getting-gaid"></a> Getting Google Advertising ID
 
 - Add the google advertising id dependency in your **android/app/build.gradle**
@@ -95,8 +98,6 @@ dependencies {
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 ```
-
-![pasted image 0](https://user-images.githubusercontent.com/34488320/127852970-62b516d8-9aa1-498a-809c-abb2c4650d2c.png)
 
 ## <a id="qs-implement-trackier-sdk"></a>Implement and initialize the SDK
 
