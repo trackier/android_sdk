@@ -9,7 +9,6 @@
     * [Add the latest version of Trackier SDK as a dependency](#qs-add-latest-version-sdk)
     * [Adding Android install referrer to your app](#qs-add-install-referre)
     * [Add required permissions](#qs-add-request-permissions)
-    * [Getting Google Advertising ID](#qs-getting-gaid)
 * [Implement and initialize the SDK](#qs-implement-trackier-sdk)
     * [Retrieve your dev key](#qs-retrieve-dev-key)
     * [Initialize the SDK](#qs-initialize-trackier-sdk)
@@ -74,30 +73,6 @@ Sync the project to retrieve the dependencies – see the following screenshot
 ```
 
 ![pasted image 0](https://user-images.githubusercontent.com/34488320/127852970-62b516d8-9aa1-498a-809c-abb2c4650d2c.png)
-
-
-## <a id="qs-getting-gaid"></a> Getting Google Advertising ID
-
-- Add the google advertising id dependency in your **android/app/build.gradle**
-
-```gradle
-dependencies {
-  // This can be added where the SDK dependency has been added
-  implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
-}
-```
-- Update your Android Manifest file located in **android/app/src/main/AndroidManifest.xml**. This is required if your app is targeting devices with android version 12+
-
-```xml
-<uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
-```
-
-- Add meta data inside the application tag
-```xml
-<meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-```
 
 ## <a id="qs-implement-trackier-sdk"></a>Implement and initialize the SDK
 
