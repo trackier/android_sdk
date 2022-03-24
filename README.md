@@ -78,7 +78,7 @@ Sync the project to retrieve the dependencies – see the following screenshot
 
 ## <a id="qs-getting-gaid"></a> Getting Google Advertising ID
 
-- Add the google advertising id dependency in your **android/app/build.gradle**
+- Add the google advertising id dependency in your app **build.gradle**
 
 ```gradle
 dependencies {
@@ -86,13 +86,13 @@ dependencies {
   implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
 }
 ```
-- Update your Android Manifest file located in **android/app/src/main/AndroidManifest.xml**. This is required if your app is targeting devices with android version 12+
+- Update your Android Manifest file by adding the following permission. This is required if your app is targeting devices with android version 12+
 
 ```xml
 <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
 ```
 
-- Add meta data inside the application tag
+- Add meta data inside the application tag (If not already added)
 ```xml
 <meta-data
             android:name="com.google.android.gms.version"
