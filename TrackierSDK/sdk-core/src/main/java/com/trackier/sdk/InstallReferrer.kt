@@ -8,6 +8,7 @@ import kotlinx.coroutines.delay
 import java.util.*
 import kotlin.Exception
 import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class InstallReferrer(context: Context) {
@@ -41,16 +42,20 @@ class InstallReferrer(context: Context) {
         return suspendCoroutine {
             referrerClient.startConnection(object : InstallReferrerStateListener {
                 override fun onInstallReferrerSetupFinished(responseCode: Int) {
-                    val rd = setupFinished(responseCode)
-                    referrerClient.endConnection()
-                    it.resume(rd)
+                    try {
+                        val rd = setupFinished(responseCode)
+                        referrerClient.endConnection()
+                        it.resume(rd)
+                    } catch (ex: Exception) {
+                        it.resumeWithException(ex)
+                    }
                 }
 
                 // Try to restart the connection on the next request to
                 // Google Play by calling the startConnection() method.
                 override fun onInstallReferrerServiceDisconnected() {
                     referrerClient.endConnection()
-                    throw InstallReferrerException("SERVICE_DISCONNECTED")
+                    it.resumeWithException(InstallReferrerException("SERVICE_DISCONNECTED"))
                 }
             })
         }
