@@ -2,21 +2,35 @@ package com.trackier.sdk
 
 import android.content.ContentResolver
 import android.content.Context
+import android.content.Context.AUDIO_SERVICE
+import android.content.Context.BATTERY_SERVICE
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.database.Cursor
+import android.media.AudioManager
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.Uri
 import android.net.wifi.WifiManager
+import android.os.BatteryManager
 import android.os.Build
 import android.os.Build.VERSION
+import android.os.Environment
+import android.os.StatFs
 import android.provider.Settings
 import android.telephony.TelephonyManager
 import android.util.DisplayMetrics
 import androidx.annotation.Keep
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat.getSystemService
+import java.io.File
+import java.io.IOException
+import java.io.InputStream
 import java.lang.ref.WeakReference
+import java.text.SimpleDateFormat
 import java.util.*
 
 @Keep
@@ -63,6 +77,14 @@ data class DeviceInfo(
 
     var fbAttributionId: String? = null
 
+    var batteryLevel: String? = null
+    var systemVolume: String? = null
+    var deviceOrientation: String? = null
+    var deviceBootTime: String? = null
+    var availableInternalStorage: String? = null
+    var cpuDetail: String? = null
+    var deviceChargingStatus: String? = null
+
     companion object {
         fun init(deviceInfo: DeviceInfo, context: Context) {
             deviceInfo.packageName = context.packageName
@@ -80,6 +102,7 @@ data class DeviceInfo(
             deviceInfo.screenSize = screenSize(screenLayout)
             deviceInfo.screenFormat = screenFormat(screenLayout)
             deviceInfo.screenDensity = screenDensity(displayMetrics.densityDpi)
+            // deviceInfo.screenDensityNumber = displayMetrics.densityDpi
             deviceInfo.displayWidth = "${displayMetrics.widthPixels}"
             deviceInfo.displayHeight = "${displayMetrics.heightPixels}"
 
@@ -88,8 +111,104 @@ data class DeviceInfo(
             deviceInfo.isEmulator = checkIsEmulator()
 
             deviceInfo.fbAttributionId = getFBAttributionId(context.contentResolver)
-
             deviceInfo.locale = Locale.getDefault().toString()
+
+
+            if (VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                deviceInfo.batteryLevel = getBatteryLevel(context)
+            }
+            deviceInfo.systemVolume = getSystemVolume(context)
+            deviceInfo.deviceOrientation = getDeviceOrientation(context)
+            deviceInfo.deviceBootTime = getDeviceBootTime();
+            if (VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                deviceInfo.availableInternalStorage = getAvailableInternalStorage()
+            }
+            deviceInfo.cpuDetail = getCPUDetails()
+            deviceInfo.deviceChargingStatus = getDeviceChargingStatus(context)
+        }
+
+        fun getDeviceBootTime(): String {
+            var bootTime =
+                java.lang.System.currentTimeMillis() - android.os.SystemClock.elapsedRealtime();
+            //   val sdf = SimpleDateFormat("MMM dd,yyyy HH:mm")
+            val resultDate = Date(bootTime)
+            return Util.dateFormatter.format(resultDate)
+            //return sdf.format(resultDate)
+        }
+
+        var strOrientation: String? = null
+        fun getDeviceOrientation(context: Context): String {
+            var orientation = context.resources.configuration.orientation
+            if (orientation == Configuration.ORIENTATION_PORTRAIT)
+                strOrientation = "portrait"
+            else strOrientation = "landscape"
+            return "$strOrientation"
+        }
+
+        fun getDeviceChargingStatus(context: Context): String {
+            val batteryStatus: Intent? =
+                IntentFilter(Intent.ACTION_BATTERY_CHANGED).let { ifilter ->
+                    context.registerReceiver(null, ifilter)
+                }
+            // isCharging if true indicates charging is ongoing and vice-versa
+            val status: Int = batteryStatus?.getIntExtra(BatteryManager.EXTRA_STATUS, -1) ?: -1
+            val isCharging: Boolean = status == BatteryManager.BATTERY_STATUS_CHARGING
+                    || status == BatteryManager.BATTERY_STATUS_FULL
+            var chargingStatus: String? = null
+            chargingStatus = if (isCharging)
+                "Device is charging"
+            else
+                "Device is not charging"
+            return chargingStatus
+        }
+
+
+        @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
+        fun getAvailableInternalStorage(): String? {
+            val iPath: File = Environment.getDataDirectory()
+            val iStat = StatFs(iPath.path)
+            val iBlockSize = iStat.blockSizeLong
+            val iAvailableBlocks = iStat.availableBlocksLong
+            val iTotalBlocks = iStat.blockCountLong
+            val iAvailableSpace = formatSize(iAvailableBlocks * iBlockSize)
+            return iAvailableSpace
+
+        }
+
+        private fun formatSize(size: Long): String? {
+            var size = size
+            var suffix: String? = null
+            if (size >= 1024) {
+                suffix = "KB"
+                size /= 1024
+                if (size >= 1024) {
+                    suffix = "MB"
+                    size /= 1024
+                }
+            }
+            val resultBuffer = StringBuilder(java.lang.Long.toString(size))
+            var commaOffset = resultBuffer.length - 3
+            while (commaOffset > 0) {
+                resultBuffer.insert(commaOffset, ',')
+                commaOffset -= 3
+            }
+            if (suffix != null) resultBuffer.append(suffix)
+            return "$resultBuffer"
+        }
+
+        @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+        fun getBatteryLevel(context: Context): String {
+            val bm = context.getSystemService(BATTERY_SERVICE) as BatteryManager
+            val batLevel: Int = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
+            return "$batLevel"
+            //  return batLevel as String
+
+        }
+
+        fun getSystemVolume(context: Context): String {
+            val am = context.getSystemService(AUDIO_SERVICE) as AudioManager
+            val volume_level = am.getStreamVolume(AudioManager.STREAM_MUSIC)
+            return "$volume_level"
         }
 
         private fun appVersion(context: Context): String? {
@@ -139,6 +258,39 @@ data class DeviceInfo(
             }
         }
 
+        fun getCPUDetails(): String? {
+            val processBuilder: ProcessBuilder
+            var cpuDetails = ""
+            val DATA = arrayOf("/system/bin/cat", "/proc/cpuinfo")
+            val `is`: InputStream
+            val process: Process
+            val bArray: ByteArray
+            bArray = ByteArray(1024)
+            try {
+                processBuilder = ProcessBuilder(*DATA)
+                process = processBuilder.start()
+                `is` = process.inputStream
+                while (`is`.read(bArray) !== -1) {
+                    cpuDetails = cpuDetails + String(bArray) //Stroing all the details in cpuDetails
+                }
+                `is`.close()
+            } catch (ex: IOException) {
+                ex.printStackTrace()
+            }
+            return cpuDetails
+        }
+
+        private fun screenDensityNumer(density: Int): String? {
+            val low = (DisplayMetrics.DENSITY_MEDIUM + DisplayMetrics.DENSITY_LOW) / 2;
+            val high = (DisplayMetrics.DENSITY_MEDIUM + DisplayMetrics.DENSITY_HIGH) / 2;
+            return when {
+                density < low -> "low"
+                density > high -> "high"
+                density == 0 -> null
+                else -> "medium"
+            }
+        }
+
         private fun appInstallTime(context: Context): String? {
             return try {
                 val pm = context.packageManager
@@ -167,7 +319,8 @@ data class DeviceInfo(
 
         private fun getConnectionType(context: Context): String? {
             return try {
-                val conn = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+                val conn =
+                    context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
                 if (VERSION.SDK_INT < Build.VERSION_CODES.M) {
                     val mwifi = conn?.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
                     return if (mwifi?.isConnected == true) "wifi" else "mobile"
@@ -200,7 +353,8 @@ data class DeviceInfo(
                 val tm = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager?
                 deviceInfo.countryCode = tm?.networkCountryIso?.toUpperCase()
                 deviceInfo.carrier = tm?.networkOperatorName
-            } catch (ex: Exception) {}
+            } catch (ex: Exception) {
+            }
         }
 
         private fun checkIsEmulator(): Boolean {
@@ -259,10 +413,11 @@ data class DeviceInfo(
                 c.close()
 
                 return attributionId
-            }
-            catch (e: Exception) {
+            } catch (e: Exception) {
                 return ""
             }
         }
     }
 }
+
+

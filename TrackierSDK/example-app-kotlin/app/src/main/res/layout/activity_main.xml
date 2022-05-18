@@ -21,10 +21,10 @@
         android:id="@+id/event_track"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_below="@+id/heading"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
-        android:text="Event Track"/>
+        android:text="Event Track" />
 
     <Button
         android:id="@+id/event_curr_track"
@@ -34,5 +34,13 @@
         android:layout_below="@+id/event_track"
         android:layout_marginTop="50dp"
         android:text="Event Currency Track"/>
+    <Button
+        android:id="@+id/event_cpu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/event_curr_track"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:text="Event CPU" />
 
 </RelativeLayout>
