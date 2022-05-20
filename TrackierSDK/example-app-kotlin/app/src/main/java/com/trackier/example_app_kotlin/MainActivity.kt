@@ -47,7 +47,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val btn_event_track = findViewById(R.id.event_track) as Button
         val btn_event_curr_track = findViewById<Button>(R.id.event_curr_track)
-        val btn_event_cpu = findViewById<Button>(R.id.event_cpu)
 
 
         btn_event_track.setOnClickListener {
