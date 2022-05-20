@@ -4,13 +4,12 @@ import android.Manifest
 import android.accounts.Account
 import android.accounts.AccountManager
 import android.annotation.SuppressLint
+import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.location.Address
-import android.location.Geocoder
 import android.media.AudioDeviceInfo
 import android.media.AudioManager
 import android.net.Uri
@@ -51,7 +50,6 @@ class MainActivity : AppCompatActivity() {
         val btn_event_cpu = findViewById<Button>(R.id.event_cpu)
 
 
-
         btn_event_track.setOnClickListener {
             val event = TrackierEvent(TrackierEvent.UPDATE)
             event.param1 = "Param_Name"
@@ -68,32 +66,6 @@ class MainActivity : AppCompatActivity() {
             Log.d("TAG", "onClick: event_curr_track ")
 
         }
-        btn_event_cpu.setOnClickListener(View.OnClickListener {
-
-          //  val geocoder = Geocoder(this, Locale.getDefault())
-          //  val addresses: List<Address> = geocoder.getFromLocation(lat, lng, 1)
-
-
-            //   var detail = getDeviceOrientation(this@MainActivity)
-            // var volume = getSystemVolume()
-            //  var barLevel = getBatteryLevel()
-            // var availableStorage = getAvailableInternalStorage();
-            // var bootTime = getDeviceBootTime();
-            //   var detail= getCPUDetails()
-            //   var accountName = getEmail(this)
-            //   var totalInternalStorage = getTotalInternalStorage()
-            // var deviceChargeStatus = getDeviceChargingStatus()
-//            var headPhoneBoolean = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//                getHeadphonesPlugged()
-//            } else {
-//                TODO("VERSION.SDK_INT < M")
-//            }
-//            var ipAddress = getIpv4HostAddress()
-
-            var installApplications = getDeviceInstallApplication();
-            Log.d("TAG", "Device_orientation: " + installApplications)
-
-        })
 
         val action: String? = intent?.action
         if (Intent.ACTION_MAIN == action) run {
@@ -120,6 +92,27 @@ class MainActivity : AppCompatActivity() {
         return apps.joinToString()
     }
 
+    private fun checkIsEmulator(): Boolean {
+        return (Build.BRAND.startsWith("generic") && Build.DEVICE.startsWith("generic")
+                || Build.FINGERPRINT.startsWith("generic")
+                || Build.FINGERPRINT.startsWith("unknown")
+                || Build.HARDWARE.contains("goldfish")
+                || Build.HARDWARE.contains("ranchu")
+                || Build.MODEL.contains("google_sdk")
+                || Build.MODEL.contains("Emulator")
+                || Build.MODEL.contains("Android SDK built for x86")
+                || Build.MANUFACTURER.contains("Genymotion")
+                || Build.PRODUCT.contains("sdk_google")
+                || Build.PRODUCT.contains("google_sdk")
+                || Build.PRODUCT.contains("sdk")
+                || Build.PRODUCT.contains("sdk_x86")
+                || Build.PRODUCT.contains("sdk_gphone64_arm64")
+                || Build.PRODUCT.contains("vbox86p")
+                || Build.PRODUCT.contains("emulator")
+                || Build.PRODUCT.contains("simulator"))
+    }
+
+
     fun getIpv4HostAddress(): String {
         NetworkInterface.getNetworkInterfaces()?.toList()?.map { networkInterface ->
             networkInterface.inetAddresses?.toList()?.find {
@@ -127,6 +120,21 @@ class MainActivity : AppCompatActivity() {
             }?.let { return it.hostAddress }
         }
         return ""
+    }
+
+    fun getTotalMemory(context: Context): String {
+        val actManager = context.getSystemService(ACTIVITY_SERVICE) as ActivityManager
+        val memInfo = ActivityManager.MemoryInfo()
+        actManager.getMemoryInfo(memInfo)
+        val totalMemory = memInfo.totalMem.toDouble() / (1024 * 1024 * 1024)
+        return "$totalMemory"
+    }
+    fun getAvailableMemory(context: Context): String {
+        val actManager = context.getSystemService(ACTIVITY_SERVICE) as ActivityManager
+        val memInfo = ActivityManager.MemoryInfo()
+        actManager.getMemoryInfo(memInfo)
+        val availMemory = memInfo.availMem.toDouble() / (1024 * 1024 * 1024)
+        return "$availMemory"
     }
 
     fun getDeviceChargingStatus(): String {
@@ -245,10 +253,33 @@ class MainActivity : AppCompatActivity() {
         return cpuDetails
     }
 
+    fun cpuD(): String {
+        var output = ""
+        try {
+            val DATA = arrayOf("/system/bin/cat", "/proc/cpuinfo")
+            val processBuilder = ProcessBuilder(*DATA)
+            val process = processBuilder.start()
+            val inputStream = process.inputStream
+            val byteArry = ByteArray(1024)
+            while (inputStream.read(byteArry) != -1) {
+                output = output + String(byteArry)
+            }
+            inputStream.close()
+            Log.d("CPU_INFO", output)
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
+        return "$output"
+    }
+
     @RequiresApi(Build.VERSION_CODES.M)
     private fun getHeadphonesPlugged(): String {
         val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
-        val audioDevices = audioManager.getDevices(AudioManager.GET_DEVICES_INPUTS)
+        val audioDevices = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            audioManager.getDevices(AudioManager.GET_DEVICES_INPUTS)
+        } else {
+            TODO("VERSION.SDK_INT < M")
+        }
         var headPhonePlugged: String? = null
         for (deviceInfo in audioDevices) {
             if (deviceInfo.type == AudioDeviceInfo.TYPE_WIRED_HEADPHONES
@@ -263,6 +294,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun getEmail(context: Context?): String? {
+
         val accountManager = AccountManager.get(context)
         val account = getAccount(accountManager)
         return account?.name

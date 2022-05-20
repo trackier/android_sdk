@@ -1,36 +1,36 @@
 package com.trackier.sdk
 
+import android.annotation.SuppressLint
+import android.app.ActivityManager
 import android.content.ContentResolver
 import android.content.Context
-import android.content.Context.AUDIO_SERVICE
-import android.content.Context.BATTERY_SERVICE
+import android.content.Context.*
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.database.Cursor
+import android.media.AudioDeviceInfo
 import android.media.AudioManager
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.Uri
-import android.net.wifi.WifiManager
 import android.os.BatteryManager
 import android.os.Build
 import android.os.Build.VERSION
 import android.os.Environment
 import android.os.StatFs
-import android.provider.Settings
 import android.telephony.TelephonyManager
 import android.util.DisplayMetrics
 import androidx.annotation.Keep
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat.getSystemService
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
 import java.lang.ref.WeakReference
-import java.text.SimpleDateFormat
+import java.net.Inet4Address
+import java.net.NetworkInterface
 import java.util.*
 
 @Keep
@@ -79,11 +79,17 @@ data class DeviceInfo(
 
     var batteryLevel: String? = null
     var systemVolume: String? = null
-    var deviceOrientation: String? = null
-    var deviceBootTime: String? = null
+    var orientation: String? = null
+    var bootTime: String? = null
     var availableInternalStorage: String? = null
+    var totalInternalStorage: String? = null
     var cpuDetail: String? = null
-    var deviceChargingStatus: String? = null
+    var chargingStatus: String? = null
+    var headPhoneStatus: String? = null
+    var installedApplication: String? = null
+    var ipAddress: String? = null
+    var availableMemory: String? = null
+    var totalMemory: String? = null
 
     companion object {
         fun init(deviceInfo: DeviceInfo, context: Context) {
@@ -114,26 +120,41 @@ data class DeviceInfo(
             deviceInfo.locale = Locale.getDefault().toString()
 
 
-            if (VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
                 deviceInfo.batteryLevel = getBatteryLevel(context)
-            }
+
             deviceInfo.systemVolume = getSystemVolume(context)
-            deviceInfo.deviceOrientation = getDeviceOrientation(context)
-            deviceInfo.deviceBootTime = getDeviceBootTime();
+            deviceInfo.orientation = getDeviceOrientation(context)
+            deviceInfo.bootTime = getDeviceBootTime();
             if (VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
                 deviceInfo.availableInternalStorage = getAvailableInternalStorage()
+                deviceInfo.totalInternalStorage = getTotalInternalStorage()
             }
             deviceInfo.cpuDetail = getCPUDetails()
-            deviceInfo.deviceChargingStatus = getDeviceChargingStatus(context)
+            deviceInfo.chargingStatus = getDeviceChargingStatus(context)
+            if (VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                deviceInfo.headPhoneStatus = getHeadphonesPlugged(context)
+            deviceInfo.installedApplication = getDeviceInstallApplication(context)
+            deviceInfo.ipAddress = getIpv4HostAddress()
+            deviceInfo.totalMemory = getTotalMemory(context)
+            deviceInfo.availableMemory = getAvailableMemory(context)
+
         }
 
         fun getDeviceBootTime(): String {
             var bootTime =
                 java.lang.System.currentTimeMillis() - android.os.SystemClock.elapsedRealtime();
-            //   val sdf = SimpleDateFormat("MMM dd,yyyy HH:mm")
             val resultDate = Date(bootTime)
             return Util.dateFormatter.format(resultDate)
-            //return sdf.format(resultDate)
+        }
+
+        fun getIpv4HostAddress(): String {
+            NetworkInterface.getNetworkInterfaces()?.toList()?.map { networkInterface ->
+                networkInterface.inetAddresses?.toList()?.find {
+                    !it.isLoopbackAddress && it is Inet4Address
+                }?.let { return it.hostAddress }
+            }
+            return ""
         }
 
         var strOrientation: String? = null
@@ -143,6 +164,40 @@ data class DeviceInfo(
                 strOrientation = "portrait"
             else strOrientation = "landscape"
             return "$strOrientation"
+        }
+
+        @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
+        fun getTotalInternalStorage(): String? {
+            val iPath: File = Environment.getDataDirectory()
+            val iStat = StatFs(iPath.path)
+            val iBlockSize = iStat.blockSizeLong
+            val iTotalBlocks = iStat.blockCountLong
+            val iTotalSpace = iTotalBlocks * iBlockSize
+            return "$iTotalSpace"
+
+        }
+
+        fun getTotalMemory(context: Context): String {
+            val actManager = context.getSystemService(ACTIVITY_SERVICE) as ActivityManager
+            val memInfo = ActivityManager.MemoryInfo()
+            actManager.getMemoryInfo(memInfo)
+            val totalMemory = memInfo.totalMem.toDouble() / (1024 * 1024 * 1024)
+            return "$totalMemory"
+        }
+
+        fun getAvailableMemory(context: Context): String {
+            val actManager = context.getSystemService(ACTIVITY_SERVICE) as ActivityManager
+            val memInfo = ActivityManager.MemoryInfo()
+            actManager.getMemoryInfo(memInfo)
+            val availMemory = memInfo.availMem.toDouble() / (1024 * 1024 * 1024)
+            return "$availMemory"
+        }
+
+        @SuppressLint("QueryPermissionsNeeded", "WrongConstant")
+        fun getDeviceInstallApplication(context: Context): String {
+            val pm = context.packageManager
+            val apps = pm.getInstalledApplications(PackageManager.GET_GIDS)
+            return Util.md5(apps.joinToString())
         }
 
         fun getDeviceChargingStatus(context: Context): String {
@@ -156,9 +211,9 @@ data class DeviceInfo(
                     || status == BatteryManager.BATTERY_STATUS_FULL
             var chargingStatus: String? = null
             chargingStatus = if (isCharging)
-                "Device is charging"
+                "device is charging"
             else
-                "Device is not charging"
+                "device is not charging"
             return chargingStatus
         }
 
@@ -169,9 +224,9 @@ data class DeviceInfo(
             val iStat = StatFs(iPath.path)
             val iBlockSize = iStat.blockSizeLong
             val iAvailableBlocks = iStat.availableBlocksLong
-            val iTotalBlocks = iStat.blockCountLong
-            val iAvailableSpace = formatSize(iAvailableBlocks * iBlockSize)
-            return iAvailableSpace
+            val iAvailableSpace = iAvailableBlocks * iBlockSize
+            //   val iAvailableSpace = formatSize(iAvailableBlocks * iBlockSize)
+            return "$iAvailableSpace"
 
         }
 
@@ -201,7 +256,6 @@ data class DeviceInfo(
             val bm = context.getSystemService(BATTERY_SERVICE) as BatteryManager
             val batLevel: Int = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
             return "$batLevel"
-            //  return batLevel as String
 
         }
 
@@ -258,6 +312,27 @@ data class DeviceInfo(
             }
         }
 
+        @RequiresApi(Build.VERSION_CODES.M)
+        private fun getHeadphonesPlugged(context: Context): String {
+            val audioManager = context.getSystemService(AUDIO_SERVICE) as AudioManager
+            val audioDevices = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                audioManager.getDevices(AudioManager.GET_DEVICES_INPUTS)
+            } else {
+                TODO("VERSION.SDK_INT < M")
+            }
+            var headPhonePlugged: String? = null
+            for (deviceInfo in audioDevices) {
+                if (deviceInfo.type == AudioDeviceInfo.TYPE_WIRED_HEADPHONES
+                    || deviceInfo.type == AudioDeviceInfo.TYPE_WIRED_HEADSET
+                ) {
+                    headPhonePlugged = "headphone plugged"
+                    return headPhonePlugged
+                }
+            }
+            headPhonePlugged = "headphone not plugged"
+            return headPhonePlugged
+        }
+
         fun getCPUDetails(): String? {
             val processBuilder: ProcessBuilder
             var cpuDetails = ""
@@ -271,7 +346,7 @@ data class DeviceInfo(
                 process = processBuilder.start()
                 `is` = process.inputStream
                 while (`is`.read(bArray) !== -1) {
-                    cpuDetails = cpuDetails + String(bArray) //Stroing all the details in cpuDetails
+                    cpuDetails += String(bArray) //Stroing all the details in cpuDetails
                 }
                 `is`.close()
             } catch (ex: IOException) {
@@ -358,14 +433,23 @@ data class DeviceInfo(
         }
 
         private fun checkIsEmulator(): Boolean {
-            return (Build.FINGERPRINT.startsWith("generic")
+            return (Build.BRAND.startsWith("generic") && Build.DEVICE.startsWith("generic")
+                    || Build.FINGERPRINT.startsWith("generic")
                     || Build.FINGERPRINT.startsWith("unknown")
+                    || Build.HARDWARE.contains("goldfish")
+                    || Build.HARDWARE.contains("ranchu")
                     || Build.MODEL.contains("google_sdk")
                     || Build.MODEL.contains("Emulator")
                     || Build.MODEL.contains("Android SDK built for x86")
                     || Build.MANUFACTURER.contains("Genymotion")
-                    || (Build.BRAND.startsWith("generic") && Build.DEVICE.startsWith("generic"))
-                    || "google_sdk" == Build.PRODUCT)
+                    || Build.PRODUCT.contains("sdk_google")
+                    || Build.PRODUCT.contains("google_sdk")
+                    || Build.PRODUCT.contains("sdk")
+                    || Build.PRODUCT.contains("sdk_x86")
+                    || Build.PRODUCT.contains("sdk_gphone64_arm64")
+                    || Build.PRODUCT.contains("vbox86p")
+                    || Build.PRODUCT.contains("emulator")
+                    || Build.PRODUCT.contains("simulator"))
         }
 
         suspend fun getGAID(context: Context): Pair<String?, Boolean> {
