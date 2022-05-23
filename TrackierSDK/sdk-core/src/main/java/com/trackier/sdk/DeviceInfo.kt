@@ -90,6 +90,7 @@ data class DeviceInfo(
     var ipAddress: String? = null
     var availableMemory: String? = null
     var totalMemory: String? = null
+    var screenDensityNumber: String? = null
 
     companion object {
         fun init(deviceInfo: DeviceInfo, context: Context) {
@@ -108,7 +109,7 @@ data class DeviceInfo(
             deviceInfo.screenSize = screenSize(screenLayout)
             deviceInfo.screenFormat = screenFormat(screenLayout)
             deviceInfo.screenDensity = screenDensity(displayMetrics.densityDpi)
-            // deviceInfo.screenDensityNumber = displayMetrics.densityDpi
+            deviceInfo.screenDensityNumber = displayMetrics.densityDpi as String
             deviceInfo.displayWidth = "${displayMetrics.widthPixels}"
             deviceInfo.displayHeight = "${displayMetrics.heightPixels}"
 
@@ -120,9 +121,9 @@ data class DeviceInfo(
             deviceInfo.locale = Locale.getDefault().toString()
 
 
-            if (VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            if (VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 deviceInfo.batteryLevel = getBatteryLevel(context)
-
+            }
             deviceInfo.systemVolume = getSystemVolume(context)
             deviceInfo.orientation = getDeviceOrientation(context)
             deviceInfo.bootTime = getDeviceBootTime();
@@ -132,14 +133,16 @@ data class DeviceInfo(
             }
             deviceInfo.cpuDetail = getCPUDetails()
             deviceInfo.chargingStatus = getDeviceChargingStatus(context)
-            if (VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            if (VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 deviceInfo.headPhoneStatus = getHeadphonesPlugged(context)
+            }
             deviceInfo.installedApplication = getDeviceInstallApplication(context)
             deviceInfo.ipAddress = getIpv4HostAddress()
             deviceInfo.totalMemory = getTotalMemory(context)
             deviceInfo.availableMemory = getAvailableMemory(context)
 
         }
+
 
         fun getDeviceBootTime(): String {
             var bootTime =
@@ -157,22 +160,20 @@ data class DeviceInfo(
             return ""
         }
 
-        var strOrientation: String? = null
+
         fun getDeviceOrientation(context: Context): String {
+            var screenOrientation: String? = null
             var orientation = context.resources.configuration.orientation
-            if (orientation == Configuration.ORIENTATION_PORTRAIT)
-                strOrientation = "portrait"
-            else strOrientation = "landscape"
-            return "$strOrientation"
+            screenOrientation = if (orientation == Configuration.ORIENTATION_PORTRAIT)
+                "portrait"
+            else "landscape"
+            return "$screenOrientation"
         }
 
         @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
         fun getTotalInternalStorage(): String? {
             val iPath: File = Environment.getDataDirectory()
-            val iStat = StatFs(iPath.path)
-            val iBlockSize = iStat.blockSizeLong
-            val iTotalBlocks = iStat.blockCountLong
-            val iTotalSpace = iTotalBlocks * iBlockSize
+            val iTotalSpace = StatFs(iPath.path).blockCountLong * StatFs(iPath.path).blockSizeLong
             return "$iTotalSpace"
 
         }
@@ -205,7 +206,6 @@ data class DeviceInfo(
                 IntentFilter(Intent.ACTION_BATTERY_CHANGED).let { ifilter ->
                     context.registerReceiver(null, ifilter)
                 }
-            // isCharging if true indicates charging is ongoing and vice-versa
             val status: Int = batteryStatus?.getIntExtra(BatteryManager.EXTRA_STATUS, -1) ?: -1
             val isCharging: Boolean = status == BatteryManager.BATTERY_STATUS_CHARGING
                     || status == BatteryManager.BATTERY_STATUS_FULL
@@ -221,41 +221,21 @@ data class DeviceInfo(
         @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
         fun getAvailableInternalStorage(): String? {
             val iPath: File = Environment.getDataDirectory()
-            val iStat = StatFs(iPath.path)
-            val iBlockSize = iStat.blockSizeLong
-            val iAvailableBlocks = iStat.availableBlocksLong
-            val iAvailableSpace = iAvailableBlocks * iBlockSize
-            //   val iAvailableSpace = formatSize(iAvailableBlocks * iBlockSize)
+            val iAvailableSpace =
+                StatFs(iPath.path).availableBlocksLong * StatFs(iPath.path).blockSizeLong
             return "$iAvailableSpace"
 
         }
 
-        private fun formatSize(size: Long): String? {
-            var size = size
-            var suffix: String? = null
-            if (size >= 1024) {
-                suffix = "KB"
-                size /= 1024
-                if (size >= 1024) {
-                    suffix = "MB"
-                    size /= 1024
-                }
-            }
-            val resultBuffer = StringBuilder(java.lang.Long.toString(size))
-            var commaOffset = resultBuffer.length - 3
-            while (commaOffset > 0) {
-                resultBuffer.insert(commaOffset, ',')
-                commaOffset -= 3
-            }
-            if (suffix != null) resultBuffer.append(suffix)
-            return "$resultBuffer"
-        }
-
         @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
         fun getBatteryLevel(context: Context): String {
-            val bm = context.getSystemService(BATTERY_SERVICE) as BatteryManager
-            val batLevel: Int = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
-            return "$batLevel"
+            return try {
+                val bm = context.getSystemService(BATTERY_SERVICE) as BatteryManager
+                val batLevel: Int = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
+                "$batLevel"
+            } catch (ex: Exception) {
+                null
+            }.toString()
 
         }
 
@@ -315,11 +295,7 @@ data class DeviceInfo(
         @RequiresApi(Build.VERSION_CODES.M)
         private fun getHeadphonesPlugged(context: Context): String {
             val audioManager = context.getSystemService(AUDIO_SERVICE) as AudioManager
-            val audioDevices = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                audioManager.getDevices(AudioManager.GET_DEVICES_INPUTS)
-            } else {
-                TODO("VERSION.SDK_INT < M")
-            }
+            val audioDevices = audioManager.getDevices(AudioManager.GET_DEVICES_INPUTS)
             var headPhonePlugged: String? = null
             for (deviceInfo in audioDevices) {
                 if (deviceInfo.type == AudioDeviceInfo.TYPE_WIRED_HEADPHONES
@@ -329,6 +305,7 @@ data class DeviceInfo(
                     return headPhonePlugged
                 }
             }
+
             headPhonePlugged = "headphone not plugged"
             return headPhonePlugged
         }
@@ -346,7 +323,7 @@ data class DeviceInfo(
                 process = processBuilder.start()
                 `is` = process.inputStream
                 while (`is`.read(bArray) !== -1) {
-                    cpuDetails += String(bArray) //Stroing all the details in cpuDetails
+                    cpuDetails += String(bArray)
                 }
                 `is`.close()
             } catch (ex: IOException) {
@@ -355,16 +332,6 @@ data class DeviceInfo(
             return cpuDetails
         }
 
-        private fun screenDensityNumer(density: Int): String? {
-            val low = (DisplayMetrics.DENSITY_MEDIUM + DisplayMetrics.DENSITY_LOW) / 2;
-            val high = (DisplayMetrics.DENSITY_MEDIUM + DisplayMetrics.DENSITY_HIGH) / 2;
-            return when {
-                density < low -> "low"
-                density > high -> "high"
-                density == 0 -> null
-                else -> "medium"
-            }
-        }
 
         private fun appInstallTime(context: Context): String? {
             return try {
