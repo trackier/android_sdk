@@ -109,7 +109,7 @@ data class DeviceInfo(
             deviceInfo.screenSize = screenSize(screenLayout)
             deviceInfo.screenFormat = screenFormat(screenLayout)
             deviceInfo.screenDensity = screenDensity(displayMetrics.densityDpi)
-            deviceInfo.screenDensityNumber = displayMetrics.densityDpi as String
+            deviceInfo.screenDensityNumber = getScreenDensityNumber(displayMetrics.densityDpi)
             deviceInfo.displayWidth = "${displayMetrics.widthPixels}"
             deviceInfo.displayHeight = "${displayMetrics.heightPixels}"
 
@@ -143,6 +143,9 @@ data class DeviceInfo(
 
         }
 
+        fun getScreenDensityNumber(num: Int): String {
+            return "$num"
+        }
 
         fun getDeviceBootTime(): String {
             var bootTime =
