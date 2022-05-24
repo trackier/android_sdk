@@ -128,8 +128,9 @@ data class DeviceInfo(
             deviceInfo.orientation = getDeviceOrientation(context)
             deviceInfo.bootTime = getDeviceBootTime();
             if (VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                deviceInfo.availableInternalStorage = getAvailableInternalStorage()
-                deviceInfo.totalInternalStorage = getTotalInternalStorage()
+                val (totalStorage, availableStorage) = getTotalAvailableStorage(context)
+                deviceInfo.availableInternalStorage = availableStorage
+                deviceInfo.totalInternalStorage = totalStorage
             }
             deviceInfo.cpuDetail = getCPUDetails()
             deviceInfo.chargingStatus = getDeviceChargingStatus(context)
@@ -138,8 +139,9 @@ data class DeviceInfo(
             }
             deviceInfo.installedApplication = getDeviceInstallApplication(context)
             deviceInfo.ipAddress = getIpv4HostAddress()
-            deviceInfo.totalMemory = getTotalMemory(context)
-            deviceInfo.availableMemory = getAvailableMemory(context)
+            val (totalMemory, availableMemory) = getTotalAvailableMemory(context)
+            deviceInfo.totalMemory = totalMemory
+            deviceInfo.availableMemory = availableMemory
 
         }
 
@@ -147,11 +149,15 @@ data class DeviceInfo(
             return "$num"
         }
 
-        fun getDeviceBootTime(): String {
-            var bootTime =
-                java.lang.System.currentTimeMillis() - android.os.SystemClock.elapsedRealtime();
-            val resultDate = Date(bootTime)
-            return Util.dateFormatter.format(resultDate)
+        fun getDeviceBootTime(): String? {
+            return try {
+                val bootTime =
+                    java.lang.System.currentTimeMillis() - android.os.SystemClock.elapsedRealtime();
+                val resultDate = Date(bootTime)
+                Util.dateFormatter.format(resultDate)
+            } catch (ex: Exception) {
+                null
+            }
         }
 
         fun getIpv4HostAddress(): String {
@@ -165,87 +171,84 @@ data class DeviceInfo(
 
 
         fun getDeviceOrientation(context: Context): String {
-            var screenOrientation: String? = null
-            var orientation = context.resources.configuration.orientation
+            var screenOrientation: String?
+            val orientation = context.resources.configuration.orientation
             screenOrientation = if (orientation == Configuration.ORIENTATION_PORTRAIT)
                 "portrait"
             else "landscape"
             return "$screenOrientation"
         }
 
-        @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-        fun getTotalInternalStorage(): String? {
-            val iPath: File = Environment.getDataDirectory()
-            val iTotalSpace = StatFs(iPath.path).blockCountLong * StatFs(iPath.path).blockSizeLong
-            return "$iTotalSpace"
 
-        }
-
-        fun getTotalMemory(context: Context): String {
+        fun getTotalAvailableMemory(context: Context): Pair<String?, String?> {
             val actManager = context.getSystemService(ACTIVITY_SERVICE) as ActivityManager
             val memInfo = ActivityManager.MemoryInfo()
             actManager.getMemoryInfo(memInfo)
             val totalMemory = memInfo.totalMem.toDouble() / (1024 * 1024 * 1024)
-            return "$totalMemory"
-        }
-
-        fun getAvailableMemory(context: Context): String {
-            val actManager = context.getSystemService(ACTIVITY_SERVICE) as ActivityManager
-            val memInfo = ActivityManager.MemoryInfo()
-            actManager.getMemoryInfo(memInfo)
             val availMemory = memInfo.availMem.toDouble() / (1024 * 1024 * 1024)
-            return "$availMemory"
+            return Pair("$totalMemory", "$availMemory")
         }
-
-        @SuppressLint("QueryPermissionsNeeded", "WrongConstant")
-        fun getDeviceInstallApplication(context: Context): String {
-            val pm = context.packageManager
-            val apps = pm.getInstalledApplications(PackageManager.GET_GIDS)
-            return Util.md5(apps.joinToString())
-        }
-
-        fun getDeviceChargingStatus(context: Context): String {
-            val batteryStatus: Intent? =
-                IntentFilter(Intent.ACTION_BATTERY_CHANGED).let { ifilter ->
-                    context.registerReceiver(null, ifilter)
-                }
-            val status: Int = batteryStatus?.getIntExtra(BatteryManager.EXTRA_STATUS, -1) ?: -1
-            val isCharging: Boolean = status == BatteryManager.BATTERY_STATUS_CHARGING
-                    || status == BatteryManager.BATTERY_STATUS_FULL
-            var chargingStatus: String? = null
-            chargingStatus = if (isCharging)
-                "device is charging"
-            else
-                "device is not charging"
-            return chargingStatus
-        }
-
 
         @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-        fun getAvailableInternalStorage(): String? {
+        fun getTotalAvailableStorage(context: Context): Pair<String?, String?> {
             val iPath: File = Environment.getDataDirectory()
             val iAvailableSpace =
                 StatFs(iPath.path).availableBlocksLong * StatFs(iPath.path).blockSizeLong
-            return "$iAvailableSpace"
+            val iTotalSpace = StatFs(iPath.path).blockCountLong * StatFs(iPath.path).blockSizeLong
+            return Pair("$iAvailableSpace", "$iTotalSpace")
+        }
 
+
+        @SuppressLint("QueryPermissionsNeeded", "WrongConstant")
+        fun getDeviceInstallApplication(context: Context): String? {
+            return try {
+                val pm = context.packageManager
+                val apps = pm.getInstalledApplications(PackageManager.GET_GIDS)
+                Util.md5(apps.joinToString())
+            } catch (ex: Exception) {
+                null
+            }
+        }
+
+        fun getDeviceChargingStatus(context: Context): String? {
+            return try {
+                val batteryStatus: Intent? =
+                    IntentFilter(Intent.ACTION_BATTERY_CHANGED).let { ifilter ->
+                        context.registerReceiver(null, ifilter)
+                    }
+                val status: Int = batteryStatus?.getIntExtra(BatteryManager.EXTRA_STATUS, -1) ?: -1
+                val isCharging: Boolean = status == BatteryManager.BATTERY_STATUS_CHARGING
+                        || status == BatteryManager.BATTERY_STATUS_FULL
+                var chargingStatus: String? = if (isCharging)
+                    "yes"
+                else
+                    "no"
+                chargingStatus
+            } catch (ex: Exception) {
+                null
+            }
         }
 
         @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-        fun getBatteryLevel(context: Context): String {
+        fun getBatteryLevel(context: Context): String? {
             return try {
                 val bm = context.getSystemService(BATTERY_SERVICE) as BatteryManager
                 val batLevel: Int = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
                 "$batLevel"
             } catch (ex: Exception) {
                 null
-            }.toString()
+            }
 
         }
 
-        fun getSystemVolume(context: Context): String {
-            val am = context.getSystemService(AUDIO_SERVICE) as AudioManager
-            val volume_level = am.getStreamVolume(AudioManager.STREAM_MUSIC)
-            return "$volume_level"
+        fun getSystemVolume(context: Context): String? {
+            return try {
+                val am = context.getSystemService(AUDIO_SERVICE) as AudioManager
+                val volume_level = am.getStreamVolume(AudioManager.STREAM_MUSIC)
+                "$volume_level"
+            } catch (ex: Exception) {
+                null
+            }
         }
 
         private fun appVersion(context: Context): String? {
@@ -296,21 +299,22 @@ data class DeviceInfo(
         }
 
         @RequiresApi(Build.VERSION_CODES.M)
-        private fun getHeadphonesPlugged(context: Context): String {
-            val audioManager = context.getSystemService(AUDIO_SERVICE) as AudioManager
-            val audioDevices = audioManager.getDevices(AudioManager.GET_DEVICES_INPUTS)
-            var headPhonePlugged: String? = null
-            for (deviceInfo in audioDevices) {
-                if (deviceInfo.type == AudioDeviceInfo.TYPE_WIRED_HEADPHONES
-                    || deviceInfo.type == AudioDeviceInfo.TYPE_WIRED_HEADSET
-                ) {
-                    headPhonePlugged = "headphone plugged"
-                    return headPhonePlugged
+        private fun getHeadphonesPlugged(context: Context): String? {
+            return try {
+                val audioManager = context.getSystemService(AUDIO_SERVICE) as AudioManager
+                val audioDevices = audioManager.getDevices(AudioManager.GET_DEVICES_INPUTS)
+                var headPhonePlugged: String
+                for (deviceInfo in audioDevices) {
+                    if (deviceInfo.type == AudioDeviceInfo.TYPE_WIRED_HEADPHONES || deviceInfo.type == AudioDeviceInfo.TYPE_WIRED_HEADSET) {
+                        headPhonePlugged = "headphone plugged"
+                        return headPhonePlugged
+                    }
                 }
+                headPhonePlugged = "headphone not plugged"
+                headPhonePlugged
+            } catch (ex: Exception) {
+                null
             }
-
-            headPhonePlugged = "headphone not plugged"
-            return headPhonePlugged
         }
 
         fun getCPUDetails(): String? {
