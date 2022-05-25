@@ -85,7 +85,7 @@ data class DeviceInfo(
     var totalInternalStorage: String? = null
     var cpuDetail: String? = null
     var chargingStatus: String? = null
-    var headPhoneStatus: String? = null
+    var headPhoneStatus: Boolean? = null
     var installedApplication: String? = null
     var ipAddress: String? = null
     var availableMemory: String? = null
@@ -184,8 +184,8 @@ data class DeviceInfo(
             val actManager = context.getSystemService(ACTIVITY_SERVICE) as ActivityManager
             val memInfo = ActivityManager.MemoryInfo()
             actManager.getMemoryInfo(memInfo)
-            val totalMemory = memInfo.totalMem.toDouble() / (1024 * 1024 * 1024)
-            val availMemory = memInfo.availMem.toDouble() / (1024 * 1024 * 1024)
+            val totalMemory = memInfo.totalMem
+            val availMemory = memInfo.availMem
             return Pair("$totalMemory", "$availMemory")
         }
 
@@ -299,21 +299,21 @@ data class DeviceInfo(
         }
 
         @RequiresApi(Build.VERSION_CODES.M)
-        private fun getHeadphonesPlugged(context: Context): String? {
+        private fun getHeadphonesPlugged(context: Context): Boolean? {
             return try {
                 val audioManager = context.getSystemService(AUDIO_SERVICE) as AudioManager
                 val audioDevices = audioManager.getDevices(AudioManager.GET_DEVICES_INPUTS)
-                var headPhonePlugged: String
+                var headPhonePlugged: Boolean
                 for (deviceInfo in audioDevices) {
                     if (deviceInfo.type == AudioDeviceInfo.TYPE_WIRED_HEADPHONES || deviceInfo.type == AudioDeviceInfo.TYPE_WIRED_HEADSET) {
-                        headPhonePlugged = "headphone plugged"
+                        headPhonePlugged = true
                         return headPhonePlugged
                     }
                 }
-                headPhonePlugged = "headphone not plugged"
+                headPhonePlugged = false
                 headPhonePlugged
             } catch (ex: Exception) {
-                null
+                false
             }
         }
 
