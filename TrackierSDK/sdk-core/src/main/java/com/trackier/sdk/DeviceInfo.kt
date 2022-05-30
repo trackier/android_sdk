@@ -83,7 +83,7 @@ data class DeviceInfo(
     var bootTime: String? = null
     var availableInternalStorage: String? = null
     var totalInternalStorage: String? = null
-    var cpuDetail: String? = null
+    var cpuDetails: String = ""
     var chargingStatus: String? = null
     var headPhoneStatus: Boolean? = null
     var installedApplication: String? = null
@@ -125,13 +125,13 @@ data class DeviceInfo(
             }
             deviceInfo.systemVolume = getSystemVolume(context)
             deviceInfo.orientation = getDeviceOrientation(context)
-            deviceInfo.bootTime = getDeviceBootTime();
+            deviceInfo.bootTime = getDeviceBootTime()
             if (VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                val (totalStorage, availableStorage) = getTotalAvailableStorage(context)
+                val (totalStorage, availableStorage) = getTotalAvailableStorage()
                 deviceInfo.availableInternalStorage = availableStorage
                 deviceInfo.totalInternalStorage = totalStorage
             }
-            deviceInfo.cpuDetail = getCPUDetails()
+            deviceInfo.cpuDetails = getCPUDetails()
             deviceInfo.chargingStatus = getDeviceChargingStatus(context)
             if (VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 deviceInfo.headPhoneStatus = getHeadphonesPlugged(context)
@@ -147,7 +147,7 @@ data class DeviceInfo(
         private fun getDeviceBootTime(): String? {
             return try {
                 val bootTime =
-                    java.lang.System.currentTimeMillis() - android.os.SystemClock.elapsedRealtime();
+                    System.currentTimeMillis() - android.os.SystemClock.elapsedRealtime()
                 val resultDate = Date(bootTime)
                 Util.dateFormatter.format(resultDate)
             } catch (ex: Exception) {
@@ -183,7 +183,7 @@ data class DeviceInfo(
         }
 
         @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-        fun getTotalAvailableStorage(context: Context): Pair<String?, String?> {
+        fun getTotalAvailableStorage(): Pair<String?, String?> {
             val iPath: File = Environment.getDataDirectory()
             val iAvailableSpace =
                 StatFs(iPath.path).availableBlocksLong * StatFs(iPath.path).blockSizeLong
@@ -212,10 +212,7 @@ data class DeviceInfo(
                 val status: Int = batteryStatus?.getIntExtra(BatteryManager.EXTRA_STATUS, -1) ?: -1
                 val isCharging: Boolean = status == BatteryManager.BATTERY_STATUS_CHARGING
                         || status == BatteryManager.BATTERY_STATUS_FULL
-                var chargingStatus: String? = if (isCharging)
-                    "yes"
-                else
-                    "no"
+                val chargingStatus: String = if (isCharging) "yes" else "no"
                 chargingStatus
             } catch (ex: Exception) {
                 null
@@ -237,8 +234,8 @@ data class DeviceInfo(
         private fun getSystemVolume(context: Context): String? {
             return try {
                 val am = context.getSystemService(AUDIO_SERVICE) as AudioManager
-                val volume_level = am.getStreamVolume(AudioManager.STREAM_MUSIC)
-                "$volume_level"
+                val volumeLevel = am.getStreamVolume(AudioManager.STREAM_MUSIC)
+                "$volumeLevel"
             } catch (ex: Exception) {
                 null
             }
@@ -281,8 +278,8 @@ data class DeviceInfo(
         }
 
         private fun screenDensity(density: Int): String? {
-            val low = (DisplayMetrics.DENSITY_MEDIUM + DisplayMetrics.DENSITY_LOW) / 2;
-            val high = (DisplayMetrics.DENSITY_MEDIUM + DisplayMetrics.DENSITY_HIGH) / 2;
+            val low = (DisplayMetrics.DENSITY_MEDIUM + DisplayMetrics.DENSITY_LOW) / 2
+            val high = (DisplayMetrics.DENSITY_MEDIUM + DisplayMetrics.DENSITY_HIGH) / 2
             return when {
                 density < low -> "low"
                 density > high -> "high"
@@ -296,7 +293,7 @@ data class DeviceInfo(
             return try {
                 val audioManager = context.getSystemService(AUDIO_SERVICE) as AudioManager
                 val audioDevices = audioManager.getDevices(AudioManager.GET_DEVICES_INPUTS)
-                var headPhonePlugged: Boolean
+                val headPhonePlugged: Boolean
                 for (deviceInfo in audioDevices) {
                     if (deviceInfo.type == AudioDeviceInfo.TYPE_WIRED_HEADPHONES || deviceInfo.type == AudioDeviceInfo.TYPE_WIRED_HEADSET) {
                         headPhonePlugged = true
@@ -310,7 +307,7 @@ data class DeviceInfo(
             }
         }
 
-        fun getCPUDetails(): String? {
+        private fun getCPUDetails(): String {
             val processBuilder: ProcessBuilder
             var cpuDetails = ""
             val DATA = arrayOf("/system/bin/cat", "/proc/cpuinfo")
