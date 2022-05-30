@@ -109,7 +109,7 @@ data class DeviceInfo(
             deviceInfo.screenSize = screenSize(screenLayout)
             deviceInfo.screenFormat = screenFormat(screenLayout)
             deviceInfo.screenDensity = screenDensity(displayMetrics.densityDpi)
-            deviceInfo.screenDensityNumber = getScreenDensityNumber(displayMetrics.densityDpi)
+            deviceInfo.screenDensityNumber = "${displayMetrics.densityDpi}"
             deviceInfo.displayWidth = "${displayMetrics.widthPixels}"
             deviceInfo.displayHeight = "${displayMetrics.heightPixels}"
 
@@ -119,7 +119,6 @@ data class DeviceInfo(
 
             deviceInfo.fbAttributionId = getFBAttributionId(context.contentResolver)
             deviceInfo.locale = Locale.getDefault().toString()
-
 
             if (VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 deviceInfo.batteryLevel = getBatteryLevel(context)
@@ -145,11 +144,7 @@ data class DeviceInfo(
 
         }
 
-        fun getScreenDensityNumber(num: Int): String {
-            return "$num"
-        }
-
-        fun getDeviceBootTime(): String? {
+        private fun getDeviceBootTime(): String? {
             return try {
                 val bootTime =
                     java.lang.System.currentTimeMillis() - android.os.SystemClock.elapsedRealtime();
@@ -160,7 +155,7 @@ data class DeviceInfo(
             }
         }
 
-        fun getIpv4HostAddress(): String {
+        private fun getIpv4HostAddress(): String {
             NetworkInterface.getNetworkInterfaces()?.toList()?.map { networkInterface ->
                 networkInterface.inetAddresses?.toList()?.find {
                     !it.isLoopbackAddress && it is Inet4Address
@@ -170,17 +165,15 @@ data class DeviceInfo(
         }
 
 
-        fun getDeviceOrientation(context: Context): String {
-            var screenOrientation: String?
+        private fun getDeviceOrientation(context: Context): String {
             val orientation = context.resources.configuration.orientation
-            screenOrientation = if (orientation == Configuration.ORIENTATION_PORTRAIT)
+            val screenOrientation = if (orientation == Configuration.ORIENTATION_PORTRAIT)
                 "portrait"
             else "landscape"
-            return "$screenOrientation"
+            return screenOrientation
         }
 
-
-        fun getTotalAvailableMemory(context: Context): Pair<String?, String?> {
+        private fun getTotalAvailableMemory(context: Context): Pair<String?, String?> {
             val actManager = context.getSystemService(ACTIVITY_SERVICE) as ActivityManager
             val memInfo = ActivityManager.MemoryInfo()
             actManager.getMemoryInfo(memInfo)
@@ -210,7 +203,7 @@ data class DeviceInfo(
             }
         }
 
-        fun getDeviceChargingStatus(context: Context): String? {
+        private fun getDeviceChargingStatus(context: Context): String? {
             return try {
                 val batteryStatus: Intent? =
                     IntentFilter(Intent.ACTION_BATTERY_CHANGED).let { ifilter ->
@@ -241,7 +234,7 @@ data class DeviceInfo(
 
         }
 
-        fun getSystemVolume(context: Context): String? {
+        private fun getSystemVolume(context: Context): String? {
             return try {
                 val am = context.getSystemService(AUDIO_SERVICE) as AudioManager
                 val volume_level = am.getStreamVolume(AudioManager.STREAM_MUSIC)
