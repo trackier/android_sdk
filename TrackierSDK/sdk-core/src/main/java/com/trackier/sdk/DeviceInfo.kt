@@ -54,6 +54,11 @@ data class DeviceInfo(
     var language: String? = null
     var country: String? = null
     val timezone = TimeZone.getDefault().id
+    val fingerprint = Build.FINGERPRINT
+    val buildProduct = Build.PRODUCT
+    val buildHost = Build.HOST
+    val buildTime = Build.TIME
+    val buildHardware = Build.HARDWARE
 
     val board = Build.BOARD
     val bootloader = Build.BOOTLOADER
@@ -141,7 +146,6 @@ data class DeviceInfo(
             val (totalMemory, availableMemory) = getTotalAvailableMemory(context)
             deviceInfo.totalMemory = totalMemory
             deviceInfo.availableMemory = availableMemory
-
         }
 
         private fun getDeviceBootTime(): String? {
@@ -156,21 +160,21 @@ data class DeviceInfo(
         }
 
         private fun getIpv4HostAddress(): String {
+            var ipaddr: String = ""
             NetworkInterface.getNetworkInterfaces()?.toList()?.map { networkInterface ->
                 networkInterface.inetAddresses?.toList()?.find {
                     !it.isLoopbackAddress && it is Inet4Address
-                }?.let { return it.hostAddress }
+                }?.let { ipaddr = it.hostAddress }
             }
-            return ""
+            return ipaddr
         }
 
 
         private fun getDeviceOrientation(context: Context): String {
             val orientation = context.resources.configuration.orientation
-            val screenOrientation = if (orientation == Configuration.ORIENTATION_PORTRAIT)
+            return if (orientation == Configuration.ORIENTATION_PORTRAIT)
                 "portrait"
             else "landscape"
-            return screenOrientation
         }
 
         private fun getTotalAvailableMemory(context: Context): Pair<String?, String?> {
@@ -311,12 +315,12 @@ data class DeviceInfo(
         private fun getCPUDetails(): String {
             val processBuilder: ProcessBuilder
             var cpuDetails = ""
-            val DATA = arrayOf("/system/bin/cat", "/proc/cpuinfo")
+            val data = arrayOf("/system/bin/cat", "/proc/cpuinfo")
             val `is`: InputStream
             val process: Process
             val bArray = ByteArray(1024)
             try {
-                processBuilder = ProcessBuilder(*DATA)
+                processBuilder = ProcessBuilder(*data)
                 process = processBuilder.start()
                 `is` = process.inputStream
                 while (`is`.read(bArray) !== -1) {
@@ -324,7 +328,7 @@ data class DeviceInfo(
                 }
                 `is`.close()
             } catch (ex: IOException) {
-                ex.printStackTrace()
+                // ex.printStackTrace()
             }
             return cpuDetails
         }
