@@ -174,12 +174,16 @@ data class DeviceInfo(
         }
 
         private fun getTotalAvailableMemory(context: Context): Pair<String?, String?> {
-            val actManager = context.getSystemService(ACTIVITY_SERVICE) as ActivityManager
-            val memInfo = ActivityManager.MemoryInfo()
-            actManager.getMemoryInfo(memInfo)
-            val totalMemory = memInfo.totalMem
-            val availMemory = memInfo.availMem
-            return Pair("$totalMemory", "$availMemory")
+            return try {
+                val actManager = context.getSystemService(ACTIVITY_SERVICE) as ActivityManager
+                val memInfo = ActivityManager.MemoryInfo()
+                actManager.getMemoryInfo(memInfo)
+                val totalMemory = memInfo.totalMem
+                val availMemory = memInfo.availMem
+                Pair("$totalMemory", "$availMemory")
+            } catch (ex: Exception) {
+                Pair(null, null)
+            }
         }
 
         @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
@@ -190,7 +194,6 @@ data class DeviceInfo(
             val iTotalSpace = StatFs(iPath.path).blockCountLong * StatFs(iPath.path).blockSizeLong
             return Pair("$iAvailableSpace", "$iTotalSpace")
         }
-
 
         @SuppressLint("QueryPermissionsNeeded", "WrongConstant")
         fun getDeviceInstallApplication(context: Context): String? {
@@ -313,8 +316,7 @@ data class DeviceInfo(
             val DATA = arrayOf("/system/bin/cat", "/proc/cpuinfo")
             val `is`: InputStream
             val process: Process
-            val bArray: ByteArray
-            bArray = ByteArray(1024)
+            val bArray = ByteArray(1024)
             try {
                 processBuilder = ProcessBuilder(*DATA)
                 process = processBuilder.start()
