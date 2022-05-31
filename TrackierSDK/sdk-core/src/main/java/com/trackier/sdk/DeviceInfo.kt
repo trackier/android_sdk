@@ -1,22 +1,36 @@
 package com.trackier.sdk
 
+import android.annotation.SuppressLint
+import android.app.ActivityManager
 import android.content.ContentResolver
 import android.content.Context
+import android.content.Context.*
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.database.Cursor
+import android.media.AudioDeviceInfo
+import android.media.AudioManager
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.Uri
-import android.net.wifi.WifiManager
+import android.os.BatteryManager
 import android.os.Build
 import android.os.Build.VERSION
-import android.provider.Settings
+import android.os.Environment
+import android.os.StatFs
 import android.telephony.TelephonyManager
 import android.util.DisplayMetrics
 import androidx.annotation.Keep
+import androidx.annotation.RequiresApi
+import java.io.File
+import java.io.IOException
+import java.io.InputStream
 import java.lang.ref.WeakReference
+import java.net.Inet4Address
+import java.net.NetworkInterface
 import java.util.*
 
 @Keep
@@ -40,6 +54,11 @@ data class DeviceInfo(
     var language: String? = null
     var country: String? = null
     val timezone = TimeZone.getDefault().id
+    val fingerprint = Build.FINGERPRINT
+    val buildProduct = Build.PRODUCT
+    val buildHost = Build.HOST
+    val buildTime = Build.TIME
+    val buildHardware = Build.HARDWARE
 
     val board = Build.BOARD
     val bootloader = Build.BOOTLOADER
@@ -63,6 +82,21 @@ data class DeviceInfo(
 
     var fbAttributionId: String? = null
 
+    var batteryLevel: String? = null
+    var systemVolume: String? = null
+    var orientation: String? = null
+    var bootTime: String? = null
+    var availableInternalStorage: String? = null
+    var totalInternalStorage: String? = null
+    var cpuDetails: String = ""
+    var isOnCharging: String? = null
+    var headPhonesPlugged = false
+    var installedApplication: String? = null
+    var ipAddress: String? = null
+    var availableMemory: String? = null
+    var totalMemory: String? = null
+    var screenDensityNumber: Int = 0
+
     companion object {
         fun init(deviceInfo: DeviceInfo, context: Context) {
             deviceInfo.packageName = context.packageName
@@ -80,6 +114,7 @@ data class DeviceInfo(
             deviceInfo.screenSize = screenSize(screenLayout)
             deviceInfo.screenFormat = screenFormat(screenLayout)
             deviceInfo.screenDensity = screenDensity(displayMetrics.densityDpi)
+            deviceInfo.screenDensityNumber = displayMetrics.densityDpi
             deviceInfo.displayWidth = "${displayMetrics.widthPixels}"
             deviceInfo.displayHeight = "${displayMetrics.heightPixels}"
 
@@ -88,8 +123,128 @@ data class DeviceInfo(
             deviceInfo.isEmulator = checkIsEmulator()
 
             deviceInfo.fbAttributionId = getFBAttributionId(context.contentResolver)
-
             deviceInfo.locale = Locale.getDefault().toString()
+
+            if (VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                deviceInfo.batteryLevel = getBatteryLevel(context)
+            }
+            deviceInfo.systemVolume = getSystemVolume(context)
+            deviceInfo.orientation = getDeviceOrientation(context)
+            deviceInfo.bootTime = getDeviceBootTime()
+            if (VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                val (totalStorage, availableStorage) = getTotalAvailableStorage()
+                deviceInfo.availableInternalStorage = availableStorage
+                deviceInfo.totalInternalStorage = totalStorage
+            }
+            deviceInfo.cpuDetails = getCPUDetails()
+            deviceInfo.isOnCharging = getDeviceChargingStatus(context)
+            if (VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                deviceInfo.headPhonesPlugged = getHeadphonesPlugged(context)
+            }
+            deviceInfo.installedApplication = getDeviceInstallApplication(context)
+            deviceInfo.ipAddress = getIpv4HostAddress()
+            val (totalMemory, availableMemory) = getTotalAvailableMemory(context)
+            deviceInfo.totalMemory = totalMemory
+            deviceInfo.availableMemory = availableMemory
+        }
+
+        private fun getDeviceBootTime(): String? {
+            return try {
+                val bootTime =
+                    System.currentTimeMillis() - android.os.SystemClock.elapsedRealtime()
+                val resultDate = Date(bootTime)
+                Util.dateFormatter.format(resultDate)
+            } catch (ex: Exception) {
+                null
+            }
+        }
+
+        private fun getIpv4HostAddress(): String {
+            var ipaddr: String = ""
+            NetworkInterface.getNetworkInterfaces()?.toList()?.map { networkInterface ->
+                networkInterface.inetAddresses?.toList()?.find {
+                    !it.isLoopbackAddress && it is Inet4Address
+                }?.let { ipaddr = it.hostAddress }
+            }
+            return ipaddr
+        }
+
+
+        private fun getDeviceOrientation(context: Context): String {
+            val orientation = context.resources.configuration.orientation
+            return if (orientation == Configuration.ORIENTATION_PORTRAIT)
+                "portrait"
+            else "landscape"
+        }
+
+        private fun getTotalAvailableMemory(context: Context): Pair<String?, String?> {
+            return try {
+                val actManager = context.getSystemService(ACTIVITY_SERVICE) as ActivityManager
+                val memInfo = ActivityManager.MemoryInfo()
+                actManager.getMemoryInfo(memInfo)
+                val totalMemory = memInfo.totalMem
+                val availMemory = memInfo.availMem
+                Pair("$totalMemory", "$availMemory")
+            } catch (ex: Exception) {
+                Pair(null, null)
+            }
+        }
+
+        @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
+        fun getTotalAvailableStorage(): Pair<String?, String?> {
+            val iPath: File = Environment.getDataDirectory()
+            val iAvailableSpace =
+                StatFs(iPath.path).availableBlocksLong * StatFs(iPath.path).blockSizeLong
+            val iTotalSpace = StatFs(iPath.path).blockCountLong * StatFs(iPath.path).blockSizeLong
+            return Pair("$iAvailableSpace", "$iTotalSpace")
+        }
+
+        @SuppressLint("QueryPermissionsNeeded", "WrongConstant")
+        fun getDeviceInstallApplication(context: Context): String? {
+            return try {
+                val pm = context.packageManager
+                val apps = pm.getInstalledApplications(PackageManager.GET_GIDS)
+                Util.md5(apps.joinToString())
+            } catch (ex: Exception) {
+                null
+            }
+        }
+
+        private fun getDeviceChargingStatus(context: Context): String? {
+            return try {
+                val batteryStatus: Intent? =
+                    IntentFilter(Intent.ACTION_BATTERY_CHANGED).let { ifilter ->
+                        context.registerReceiver(null, ifilter)
+                    }
+                val status: Int = batteryStatus?.getIntExtra(BatteryManager.EXTRA_STATUS, -1) ?: -1
+                val isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING
+                        || status == BatteryManager.BATTERY_STATUS_FULL
+                val chargingStatus: String = if (isCharging) "yes" else "no"
+                chargingStatus
+            } catch (ex: Exception) {
+                null
+            }
+        }
+
+        @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+        fun getBatteryLevel(context: Context): String? {
+            return try {
+                val bm = context.getSystemService(BATTERY_SERVICE) as BatteryManager
+                val batLevel: Int = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
+                "$batLevel"
+            } catch (ex: Exception) {
+                null
+            }
+        }
+
+        private fun getSystemVolume(context: Context): String? {
+            return try {
+                val am = context.getSystemService(AUDIO_SERVICE) as AudioManager
+                val volumeLevel = am.getStreamVolume(AudioManager.STREAM_MUSIC)
+                "$volumeLevel"
+            } catch (ex: Exception) {
+                null
+            }
         }
 
         private fun appVersion(context: Context): String? {
@@ -129,8 +284,8 @@ data class DeviceInfo(
         }
 
         private fun screenDensity(density: Int): String? {
-            val low = (DisplayMetrics.DENSITY_MEDIUM + DisplayMetrics.DENSITY_LOW) / 2;
-            val high = (DisplayMetrics.DENSITY_MEDIUM + DisplayMetrics.DENSITY_HIGH) / 2;
+            val low = (DisplayMetrics.DENSITY_MEDIUM + DisplayMetrics.DENSITY_LOW) / 2
+            val high = (DisplayMetrics.DENSITY_MEDIUM + DisplayMetrics.DENSITY_HIGH) / 2
             return when {
                 density < low -> "low"
                 density > high -> "high"
@@ -138,6 +293,46 @@ data class DeviceInfo(
                 else -> "medium"
             }
         }
+
+        @RequiresApi(Build.VERSION_CODES.M)
+        private fun getHeadphonesPlugged(context: Context): Boolean {
+            return try {
+                val audioManager = context.getSystemService(AUDIO_SERVICE) as AudioManager
+                val audioDevices = audioManager.getDevices(AudioManager.GET_DEVICES_INPUTS)
+                var headPhonesPlugged = false
+                for (deviceInfo in audioDevices) {
+                    if (deviceInfo.type == AudioDeviceInfo.TYPE_WIRED_HEADPHONES || deviceInfo.type == AudioDeviceInfo.TYPE_WIRED_HEADSET) {
+                        headPhonesPlugged = true
+                        break
+                    }
+                }
+                headPhonesPlugged
+            } catch (ex: Exception) {
+                false
+            }
+        }
+
+        private fun getCPUDetails(): String {
+            val processBuilder: ProcessBuilder
+            var cpuDetails = ""
+            val data = arrayOf("/system/bin/cat", "/proc/cpuinfo")
+            val `is`: InputStream
+            val process: Process
+            val bArray = ByteArray(1024)
+            try {
+                processBuilder = ProcessBuilder(*data)
+                process = processBuilder.start()
+                `is` = process.inputStream
+                while (`is`.read(bArray) !== -1) {
+                    cpuDetails += String(bArray)
+                }
+                `is`.close()
+            } catch (ex: IOException) {
+                // ex.printStackTrace()
+            }
+            return cpuDetails
+        }
+
 
         private fun appInstallTime(context: Context): String? {
             return try {
@@ -167,7 +362,8 @@ data class DeviceInfo(
 
         private fun getConnectionType(context: Context): String? {
             return try {
-                val conn = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+                val conn =
+                    context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
                 if (VERSION.SDK_INT < Build.VERSION_CODES.M) {
                     val mwifi = conn?.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
                     return if (mwifi?.isConnected == true) "wifi" else "mobile"
@@ -200,18 +396,28 @@ data class DeviceInfo(
                 val tm = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager?
                 deviceInfo.countryCode = tm?.networkCountryIso?.toUpperCase()
                 deviceInfo.carrier = tm?.networkOperatorName
-            } catch (ex: Exception) {}
+            } catch (ex: Exception) {
+            }
         }
 
         private fun checkIsEmulator(): Boolean {
-            return (Build.FINGERPRINT.startsWith("generic")
+            return (Build.BRAND.startsWith("generic") && Build.DEVICE.startsWith("generic")
+                    || Build.FINGERPRINT.startsWith("generic")
                     || Build.FINGERPRINT.startsWith("unknown")
+                    || Build.HARDWARE.contains("goldfish")
+                    || Build.HARDWARE.contains("ranchu")
                     || Build.MODEL.contains("google_sdk")
                     || Build.MODEL.contains("Emulator")
                     || Build.MODEL.contains("Android SDK built for x86")
                     || Build.MANUFACTURER.contains("Genymotion")
-                    || (Build.BRAND.startsWith("generic") && Build.DEVICE.startsWith("generic"))
-                    || "google_sdk" == Build.PRODUCT)
+                    || Build.PRODUCT.contains("sdk_google")
+                    || Build.PRODUCT.contains("google_sdk")
+                    || Build.PRODUCT.contains("sdk")
+                    || Build.PRODUCT.contains("sdk_x86")
+                    || Build.PRODUCT.contains("sdk_gphone64_arm64")
+                    || Build.PRODUCT.contains("vbox86p")
+                    || Build.PRODUCT.contains("emulator")
+                    || Build.PRODUCT.contains("simulator"))
         }
 
         suspend fun getGAID(context: Context): Pair<String?, Boolean> {
@@ -259,10 +465,11 @@ data class DeviceInfo(
                 c.close()
 
                 return attributionId
-            }
-            catch (e: Exception) {
+            } catch (e: Exception) {
                 return ""
             }
         }
     }
 }
+
+

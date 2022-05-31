@@ -1,35 +1,33 @@
 package com.trackier.example_app_kotlin
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
-import android.os.Bundle
-import android.os.Environment
-import android.provider.Settings
+import android.os.*
 import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.multidex.BuildConfig
 import com.trackier.sdk.TrackierEvent
 import com.trackier.sdk.TrackierSDK
-import kotlin.collections.HashMap
+import java.util.*
 
-class MainActivity : AppCompatActivity(){
 
-    private  val PERMS_STORAGE = 1337
+class MainActivity : AppCompatActivity() {
+
+    private val PERMS_STORAGE = 1337
+
+    @SuppressLint("WrongConstant", "QueryPermissionsNeeded")
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-
         val btn_event_track = findViewById(R.id.event_track) as Button
-        val btn_event_curr_track = findViewById(R.id.event_curr_track) as Button
-
+        val btn_event_curr_track = findViewById<Button>(R.id.event_curr_track)
         btn_event_track.setOnClickListener {
             val event = TrackierEvent(TrackierEvent.UPDATE)
             event.param1 = "Param_Name"
@@ -57,13 +55,13 @@ class MainActivity : AppCompatActivity(){
             // customise the color of gif
             val uri = getUri()
             if (uri != null) run {
-                Log.d("TAG", "onCreate: "+getDeepLinkParams(uri).toString())
+                Log.d("TAG", "onCreate: " + getDeepLinkParams(uri).toString())
             }
         }
 
-        //requestPermission()
 
     }
+
     private fun getUri(): Uri? {
         val uri = intent.data
         return uri ?: if (intent.hasExtra("deferred_deeplink"))
@@ -95,27 +93,7 @@ class MainActivity : AppCompatActivity(){
         }
     }
 
-    private fun requestPermission(): Boolean{
-        if (Build.VERSION.SDK_INT >= 30) {
-            if (hasAllFilesPermission()) {
-                Toast.makeText(this, "You have required permission", Toast.LENGTH_LONG).show()
-                TrackierSDK.fireInstall()
-            }
-            else{
-                val uri = Uri.parse("package:${BuildConfig.APPLICATION_ID}")
-                startActivity(
-                    Intent(
-                        Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,
-                        uri
-                    )
-                )
-            }
-        } else {
-            Toast.makeText(this, "Opps ! Permission Not Granted", Toast.LENGTH_LONG).show()
-        }
 
-        return true
-    }
 
     private fun loadRoot() {
         if (hasStoragePermission()) {
@@ -124,7 +102,10 @@ class MainActivity : AppCompatActivity(){
         } else {
             ActivityCompat.requestPermissions(
                 this,
-                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                arrayOf(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.GET_ACCOUNTS
+                ),
                 PERMS_STORAGE
             )
         }
@@ -144,6 +125,5 @@ class MainActivity : AppCompatActivity(){
     } else {
         TODO("VERSION.SDK_INT < R")
     }
-
 
 }
