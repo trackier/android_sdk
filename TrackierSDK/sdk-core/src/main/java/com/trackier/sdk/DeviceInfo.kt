@@ -85,7 +85,7 @@ data class DeviceInfo(
     var totalInternalStorage: String? = null
     var cpuDetails: String = ""
     var chargingStatus: String? = null
-    var headPhoneStatus: Boolean? = null
+    var headPhonesPlugged = false
     var installedApplication: String? = null
     var ipAddress: String? = null
     var availableMemory: String? = null
@@ -134,7 +134,7 @@ data class DeviceInfo(
             deviceInfo.cpuDetails = getCPUDetails()
             deviceInfo.chargingStatus = getDeviceChargingStatus(context)
             if (VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                deviceInfo.headPhoneStatus = getHeadphonesPlugged(context)
+                deviceInfo.headPhonesPlugged = getHeadphonesPlugged(context)
             }
             deviceInfo.installedApplication = getDeviceInstallApplication(context)
             deviceInfo.ipAddress = getIpv4HostAddress()
@@ -213,7 +213,7 @@ data class DeviceInfo(
                         context.registerReceiver(null, ifilter)
                     }
                 val status: Int = batteryStatus?.getIntExtra(BatteryManager.EXTRA_STATUS, -1) ?: -1
-                val isCharging: Boolean = status == BatteryManager.BATTERY_STATUS_CHARGING
+                val isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING
                         || status == BatteryManager.BATTERY_STATUS_FULL
                 val chargingStatus: String = if (isCharging) "yes" else "no"
                 chargingStatus
@@ -231,7 +231,6 @@ data class DeviceInfo(
             } catch (ex: Exception) {
                 null
             }
-
         }
 
         private fun getSystemVolume(context: Context): String? {
@@ -292,19 +291,18 @@ data class DeviceInfo(
         }
 
         @RequiresApi(Build.VERSION_CODES.M)
-        private fun getHeadphonesPlugged(context: Context): Boolean? {
+        private fun getHeadphonesPlugged(context: Context): Boolean {
             return try {
                 val audioManager = context.getSystemService(AUDIO_SERVICE) as AudioManager
                 val audioDevices = audioManager.getDevices(AudioManager.GET_DEVICES_INPUTS)
-                val headPhonePlugged: Boolean
+                var headPhonesPlugged = false
                 for (deviceInfo in audioDevices) {
                     if (deviceInfo.type == AudioDeviceInfo.TYPE_WIRED_HEADPHONES || deviceInfo.type == AudioDeviceInfo.TYPE_WIRED_HEADSET) {
-                        headPhonePlugged = true
-                        return headPhonePlugged
+                        headPhonesPlugged = true
+                        break
                     }
                 }
-                headPhonePlugged = false
-                headPhonePlugged
+                headPhonesPlugged
             } catch (ex: Exception) {
                 false
             }
