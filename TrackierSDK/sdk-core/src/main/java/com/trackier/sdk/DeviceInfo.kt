@@ -95,7 +95,7 @@ data class DeviceInfo(
     var ipAddress: String? = null
     var availableMemory: String? = null
     var totalMemory: String? = null
-    var screenDensityNumber: String? = null
+    var screenDensityNumber: Int = 0
 
     companion object {
         fun init(deviceInfo: DeviceInfo, context: Context) {
@@ -114,7 +114,7 @@ data class DeviceInfo(
             deviceInfo.screenSize = screenSize(screenLayout)
             deviceInfo.screenFormat = screenFormat(screenLayout)
             deviceInfo.screenDensity = screenDensity(displayMetrics.densityDpi)
-            deviceInfo.screenDensityNumber = "${displayMetrics.densityDpi}"
+            deviceInfo.screenDensityNumber = displayMetrics.densityDpi
             deviceInfo.displayWidth = "${displayMetrics.widthPixels}"
             deviceInfo.displayHeight = "${displayMetrics.heightPixels}"
 
