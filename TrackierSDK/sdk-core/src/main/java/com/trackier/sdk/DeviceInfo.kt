@@ -89,7 +89,7 @@ data class DeviceInfo(
     var availableInternalStorage: String? = null
     var totalInternalStorage: String? = null
     var cpuDetails: String = ""
-    var chargingStatus: String? = null
+    var isOnCharging: String? = null
     var headPhonesPlugged = false
     var installedApplication: String? = null
     var ipAddress: String? = null
@@ -137,7 +137,7 @@ data class DeviceInfo(
                 deviceInfo.totalInternalStorage = totalStorage
             }
             deviceInfo.cpuDetails = getCPUDetails()
-            deviceInfo.chargingStatus = getDeviceChargingStatus(context)
+            deviceInfo.isOnCharging = getDeviceChargingStatus(context)
             if (VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 deviceInfo.headPhonesPlugged = getHeadphonesPlugged(context)
             }
