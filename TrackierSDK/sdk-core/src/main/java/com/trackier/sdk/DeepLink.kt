@@ -1,10 +1,18 @@
 package com.trackier.sdk
 
-class DeepLink(val uri: String, val deferred: Boolean) {
+class DeepLink(private val uri: String, val deferred: Boolean) {
     private var data: Map<String, String> = Util.getQueryParams(uri)
 
     fun isDeferred(): Boolean {
         return deferred
+    }
+
+    fun getUrl(): String {
+        return uri
+    }
+
+    fun getData(): Map<String, String> {
+        return data
     }
 
     fun getDeepLinkValue(): String {
@@ -27,24 +35,24 @@ class DeepLink(val uri: String, val deferred: Boolean) {
         return Util.getMapStringVal(data, "camp")
     }
 
-    fun getSub1(): String {
-        return Util.getMapStringVal(data, "sub1")
+    fun getP1(): String {
+        return Util.getMapStringVal(data, "p1")
     }
 
-    fun getSub2(): String {
-        return Util.getMapStringVal(data, "sub2")
+    fun getP2(): String {
+        return Util.getMapStringVal(data, "p2")
     }
 
-    fun getSub3(): String {
-        return Util.getMapStringVal(data, "sub3")
+    fun getP3(): String {
+        return Util.getMapStringVal(data, "p3")
     }
 
-    fun getSub4(): String {
-        return Util.getMapStringVal(data, "sub4")
+    fun getP4(): String {
+        return Util.getMapStringVal(data, "p4")
     }
 
-    fun getSub5(): String {
-        return Util.getMapStringVal(data, "sub5")
+    fun getP5(): String {
+        return Util.getMapStringVal(data, "p5")
     }
 
     fun getStringValue(key: String): String {

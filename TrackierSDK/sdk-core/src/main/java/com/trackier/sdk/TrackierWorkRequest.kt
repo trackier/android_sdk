@@ -7,10 +7,15 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class TrackierWorkRequest(val kind: String, private val appToken: String, private val mode: String) {
+class TrackierWorkRequest(
+    val kind: String,
+    private val appToken: String,
+    private val mode: String
+) {
     var gaid: String? = null
     var isLAT = false
     lateinit var device: DeviceInfo
+
     var event = TrackierEvent(Constants.UNKNOWN_EVENT)
     var refDetails = RefererDetails.default()
     private val createdAt = Util.dateFormatter.format(Date())
@@ -36,6 +41,10 @@ class TrackierWorkRequest(val kind: String, private val appToken: String, privat
         }
         body["isLAT"] = isLAT
         body["referrer"] = refDetails.url
+        if (refDetails.isDeepLink) {
+            val deeplink = DeepLink(refDetails.url, true)
+            body["deeplinkParams"] = deeplink
+        }
         body["clickId"] = refDetails.clickId
         body["clickTime"] = refDetails.clickTime
         if (Util.getYear(refDetails.installTime) == Constants.EPOCH_YEAR) {
@@ -57,7 +66,10 @@ class TrackierWorkRequest(val kind: String, private val appToken: String, privat
         if (secretKey.length > 10) {
             body["secretId"] = secretId
             body["sigv"] = "v1.0.0"
-            body["signature"] = Util.createSignature(installID+":"+createdAt+":"+secretId+":"+gaid, secretKey)
+            body["signature"] = Util.createSignature(
+                installID + ":" + createdAt + ":" + secretId + ":" + gaid,
+                secretKey
+            )
         }
 
         val adnAttributes = this.attributionParams?.getData()
@@ -103,7 +115,8 @@ class TrackierWorkRequest(val kind: String, private val appToken: String, privat
                 return
             }
             val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
-            val adapter: JsonAdapter<TrackierWorkRequest> = moshi.adapter(TrackierWorkRequest::class.java)
+            val adapter: JsonAdapter<TrackierWorkRequest> =
+                moshi.adapter(TrackierWorkRequest::class.java)
             val json = adapter.toJson(wrk)
             val constraints = getConstraints()
 
@@ -111,7 +124,8 @@ class TrackierWorkRequest(val kind: String, private val appToken: String, privat
                 .setBackoffCriteria(
                     BackoffPolicy.LINEAR,
                     OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
-                    TimeUnit.MILLISECONDS)
+                    TimeUnit.MILLISECONDS
+                )
                 .setConstraints(constraints)
                 .addTag(Constants.LOG_WORK_TAG)
                 .setInputData(workDataOf(Constants.LOG_WORK_INPUT_KEY to json))
