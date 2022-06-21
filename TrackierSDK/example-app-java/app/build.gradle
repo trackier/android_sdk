@@ -3,13 +3,13 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
+    compileSdkVersion 31
+    buildToolsVersion "31.0.0"
 
     defaultConfig {
         applicationId "com.trackier.example_app_java"
         minSdkVersion 16
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
@@ -39,6 +39,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'com.android.installreferrer:installreferrer:1.1'
     implementation "androidx.multidex:multidex:2.0.1"
-    implementation 'com.trackier:android-sdk:1.6.17'
+    implementation 'com.trackier:android-sdk:1.6.22'
     implementation 'com.google.android.gms:play-services-ads-identifier:17.0.0'
 }
