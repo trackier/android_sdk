@@ -43,7 +43,7 @@ class TrackierWorkRequest(
         body["referrer"] = refDetails.url
         if (refDetails.isDeepLink) {
             val deeplink = DeepLink(refDetails.url, true)
-            body["deeplinkParams"] = deeplink.getData()
+            body["dlParams"] = deeplink.getData()
         }
         body["clickId"] = refDetails.clickId
         body["clickTime"] = refDetails.clickTime
