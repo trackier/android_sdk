@@ -19,12 +19,12 @@ repositories {
 apply from: 'publish-module.gradle'
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.2"
+    compileSdkVersion 31
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode 24
         versionName "1.6.22"
 
@@ -54,13 +54,13 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
     implementation "androidx.annotation:annotation:1.1.0"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0"
 
-    def work_version = "2.2.0"
-    api "androidx.work:work-runtime-ktx:$work_version"
+    def work_version = "2.7.1"
+    implementation "androidx.work:work-runtime-ktx:$work_version"
 
     api "com.squareup.moshi:moshi-kotlin:1.8.0"
-    implementation 'com.android.installreferrer:installreferrer:1.1'
+    implementation 'com.android.installreferrer:installreferrer:2.2'
 
     def retrofit2_version = "2.6.0"
     api "com.squareup.retrofit2:retrofit:$retrofit2_version"
