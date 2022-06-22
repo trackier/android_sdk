@@ -67,7 +67,8 @@ Sync the project to retrieve the dependencies – see the following screenshot.
 
 Screenshot[2]
 
-<img width="1000" alt="Screenshot 2022-06-08 at 1 55 36 PM" src="https://user-images.githubusercontent.com/16884982/172569412-c37873d4-f582-429f-bfdc-db134602c905.png">
+<img width="1000" alt="Screenshot 2022-06-22 at 11 52 52 AM" src="https://user-images.githubusercontent.com/16884982/174958114-441c58a7-7db4-4973-ae62-00c3cac763fc.png">
+
 
 
 ## <a id="qs-add-request-permissions"></a>Add required permissions
@@ -110,7 +111,7 @@ Below are the Screenshot for the reference
 
 ScreenShot[4]
 
-<img width="1000" alt="Screenshot 2022-06-08 at 3 39 19 PM" src="https://user-images.githubusercontent.com/16884982/172591377-241c4847-104e-4e11-b1a7-5d8cbb632056.png">
+<img width="1000" alt="Screenshot 2022-06-22 at 12 01 26 PM" src="https://user-images.githubusercontent.com/16884982/174959194-d3c2e05f-7b0a-48cc-9058-e70ef7a04a4d.png">
 
 
 - Update your Android Manifest file by adding the following permission. This is required if your app is targeting devices with android version 12+
