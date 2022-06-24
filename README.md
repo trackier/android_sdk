@@ -325,7 +325,7 @@ Trackier sdk easily get that insights data from the app. Just follow with the si
 
 Trackier provides the `Built-in events` and `Customs events` on the Trackier panel.
 
-Built-in Events - Predefined events are the list of constants events which already been created on the dashboard. You can use directly to track
+Built-in Events - Built-in events are the list of constants events which already been created on the dashboard. You can use directly to track
 those events. Just need to implements events in the app projects.
 
 Screenshot[9]
