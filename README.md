@@ -171,7 +171,8 @@ In our Trackier example app, we use `Application` class named as `MainApplicatio
 
 We configured the manifest file as like mentioned in below:-
 
-```  
+```xml
+	
   <application
         android:name=".MainApplication"
         android:allowBackup="true"
@@ -255,7 +256,8 @@ In our Trackier example app, we use `Application` class named as `MainApplicatio
 
 We configured the manifest file as like mentioned in below:-
 
-```  
+```xml
+	
   <application
         android:name=".MainApplication"
         android:allowBackup="true"
@@ -336,7 +338,7 @@ Screenshot[9]
 
 #### Java
 
-```
+```java
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -397,7 +399,8 @@ orderId, revenue, currency, param1, param2, param3 ,param4, param5, param6, para
 
 #### Kotlin
 
-```
+```kotlin
+	
 import android.os.*
 import android.util.Log
 import android.widget.Button
@@ -463,7 +466,7 @@ Screenshot[10]
 
 #### Java 
 
-```
+```java
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -517,7 +520,8 @@ public class MainActivity extends AppCompatActivity {
 
 #### Kotlin
 
-```
+```kotlin
+	
 mport android.os.*
 import android.util.Log
 import android.widget.Button
@@ -570,7 +574,8 @@ It is mainly used to keeping record of generating revenue from the app and also 
 
   #### Java
 
-```
+```java
+	
  public class MainActivity extends AppCompatActivity {
 
     Button eventTrack;
@@ -610,7 +615,8 @@ It is mainly used to keeping record of generating revenue from the app and also 
 
 #### Kotlin
 
-```
+```kotlin
+	
 class MainActivity : AppCompatActivity() {
 
 
@@ -759,6 +765,7 @@ Trackier allow for passing the additional user details like `UserName`, `Mobile 
   #### Java
 
 ```java 
+	
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
@@ -943,7 +950,8 @@ Please follow the below example:-
   #### Java
 
 ```java 
-  import android.app.Application;
+	
+import android.app.Application;
 import com.trackier.sdk.TrackierSDK;
 import com.trackier.sdk.TrackierSDKConfig;
 
@@ -978,7 +986,7 @@ public class MainApplication extends Application {
 
 ```kotlin 
 
-   import android.app.Application
+import android.app.Application
 import com.trackier.sdk.TrackierSDK
 import com.trackier.sdk.TrackierSDKConfig
 import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
