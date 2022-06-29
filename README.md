@@ -327,7 +327,7 @@ Trackier sdk easily get that insights data from the app. Just follow with the si
 
 Trackier provides the `Built-in events` and `Customs events` on the Trackier panel.
 
-Built-in Events - Built-in events are the list of constants events which already been created on the dashboard. You can use directly to track
+**Built-in Events** - Built-in events are the list of constants events which already been created on the dashboard. You can use directly to track
 those events. Just need to implements events in the app projects.
 
 Screenshot[9]
@@ -456,7 +456,7 @@ You can integrate inbuilt params with the event. In-built param list are mention
 orderId, revenue, currency, param1, param2, param3 ,param4, param5, param6, param7, param8, param9, param10.
 
 
-Customs Events - Customs events are created by user as per their required business logic. You can create the events in the Trackier dashboard and integrate those events in the app project.
+**Customs Events** - Customs events are created by user as per their required business logic. You can create the events in the Trackier dashboard and integrate those events in the app project.
 
 Screenshot[10]
 
