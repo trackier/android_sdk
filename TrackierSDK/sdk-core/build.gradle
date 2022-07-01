@@ -2,8 +2,10 @@ plugins {
     id 'com.android.library'
     id 'kotlin-android'
     id 'maven-publish'
+    id("com.google.devtools.ksp").version("1.6.10-1.0.4")
 //    id 'kotlin-android-extensions'
 }
+
 
 //apply from: 'maven-push.gradle'
 
@@ -25,8 +27,8 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 31
-        versionCode 25
-        versionName "1.6.22"
+        versionCode 26
+        versionName "1.6.23"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -53,18 +55,19 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
-    implementation "androidx.annotation:annotation:1.1.0"
+    implementation "androidx.annotation:annotation:1.4.0"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0"
 
     def work_version = "2.7.1"
     implementation "androidx.work:work-runtime-ktx:$work_version"
 
-    api "com.squareup.moshi:moshi-kotlin:1.8.0"
+    implementation "com.squareup.moshi:moshi-kotlin:1.13.0"
+    ksp("com.squareup.moshi:moshi-kotlin-codegen:1.13.0")
     implementation 'com.android.installreferrer:installreferrer:2.2'
 
-    def retrofit2_version = "2.6.0"
-    api "com.squareup.retrofit2:retrofit:$retrofit2_version"
-    api "com.squareup.retrofit2:converter-moshi:$retrofit2_version"
+    def retrofit2_version = "2.9.0"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit2_version"
+    implementation "com.squareup.retrofit2:converter-moshi:$retrofit2_version"
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
