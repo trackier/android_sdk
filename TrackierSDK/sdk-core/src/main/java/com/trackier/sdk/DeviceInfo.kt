@@ -25,6 +25,7 @@ import android.telephony.TelephonyManager
 import android.util.DisplayMetrics
 import androidx.annotation.Keep
 import androidx.annotation.RequiresApi
+import com.squareup.moshi.JsonClass
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
@@ -34,6 +35,7 @@ import java.net.NetworkInterface
 import java.util.*
 
 @Keep
+@JsonClass(generateAdapter = true)
 data class DeviceInfo(
     val osName: String = "android",
     val name: String = Build.DEVICE,

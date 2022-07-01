@@ -1,8 +1,10 @@
 package com.trackier.sdk
 
 import androidx.annotation.Keep
+import com.squareup.moshi.JsonClass
 
 @Keep
+@JsonClass(generateAdapter = true)
 data class TrackierEvent(val id: String) {
     @JvmField var orderId: String? = null
     @JvmField var currency: String? = null
