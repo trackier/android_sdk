@@ -22,6 +22,7 @@
 
 # Kotlin and kotlinx proguard rules
 -dontwarn org.jetbrains.annotations.**
+-keep class kotlin.reflect.jvm.internal.**
 -keep class kotlin.Metadata { *; }
 -keep class kotlin.** { *; }
 -dontwarn kotlin.**

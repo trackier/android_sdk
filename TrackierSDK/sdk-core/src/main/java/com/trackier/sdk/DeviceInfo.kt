@@ -51,11 +51,11 @@ data class DeviceInfo(
     var appVersion: String? = null
     var appInstallTime: String? = null
     var appUpdateTime: String? = null
-    val sdkVersion = Constants.SDK_VERSION
+    var sdkVersion: String? = null
 
     var language: String? = null
     var country: String? = null
-    val timezone = TimeZone.getDefault().id
+    var timezone: String? = null
     val fingerprint = Build.FINGERPRINT
     val buildProduct = Build.PRODUCT
     val buildHost = Build.HOST
@@ -148,6 +148,8 @@ data class DeviceInfo(
             val (totalMemory, availableMemory) = getTotalAvailableMemory(context)
             deviceInfo.totalMemory = totalMemory
             deviceInfo.availableMemory = availableMemory
+            deviceInfo.sdkVersion = Constants.SDK_VERSION
+            deviceInfo.timezone = TimeZone.getDefault().id
         }
 
         private fun getDeviceBootTime(): String? {
@@ -449,6 +451,8 @@ data class DeviceInfo(
             }
         }
 
+
+        @SuppressLint("Range")
         fun getFBAttributionId(contentResolver: ContentResolver): String {
             try {
                 val attributionIdContentUri =
