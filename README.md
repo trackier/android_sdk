@@ -67,7 +67,7 @@ Sync the project to retrieve the dependencies – see the following screenshot.
 
 Screenshot[2]
 
-<img width="1000" alt="Screenshot 2022-06-22 at 11 52 52 AM" src="https://user-images.githubusercontent.com/16884982/174958114-441c58a7-7db4-4973-ae62-00c3cac763fc.png">
+<img width="1000" alt="Screenshot 2022-07-08 at 6 11 50 PM" src="https://user-images.githubusercontent.com/16884982/177994144-b59a2836-8acb-4c93-ac7b-79a6cac545ae.png">
 
 
 
