@@ -22,6 +22,7 @@ class TrackierWorkRequest(
     var installID = ""
     var sessionTime = ""
     var sdkt = ""
+    var sdkVersion = ""
     var attributionParams: AttributionParams? = null
     var customerId = ""
     var customerEmail = ""
@@ -58,6 +59,7 @@ class TrackierWorkRequest(
         body["appKey"] = appToken
         body["mode"] = mode
         body["sdkt"] = sdkt
+        body["sdkVersion"]= sdkVersion
         body["cuid"] = customerId
         body["cmail"] = customerEmail
         if (customerOptionals != null) {

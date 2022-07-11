@@ -9,6 +9,7 @@ class TrackierSDKConfig(var context: Context, val appToken: String, val env: Str
     private var attributionParams: AttributionParams? = null
     private var deepLinkListener: DeepLinkListener? = null
     private var sdtk: String = "android"
+    private var sdkVersion: String = Constants.SDK_VERSION
     private var minSessionTime: Int = 10
     private var manualTracking = false
     private var disableOrganicTrack = false
@@ -55,6 +56,14 @@ class TrackierSDKConfig(var context: Context, val appToken: String, val env: Str
         return this.sdtk
     }
 
+    fun getSDKVersion(): String {
+        return this.sdkVersion
+    }
+
+    fun setSDKVersion(sdkVersion: String) {
+        this.sdkVersion = sdkVersion
+    }
+
     fun setMinSessionDuration(value: Int) {
         if (value > 0) {
             this.minSessionTime = value
@@ -84,6 +93,7 @@ class TrackierSDKConfig(var context: Context, val appToken: String, val env: Str
     fun disableOrganicTracking(value: Boolean) {
         this.disableOrganicTrack = value
     }
+
     fun getOrganicTracking(): Boolean {
         return this.disableOrganicTrack
     }

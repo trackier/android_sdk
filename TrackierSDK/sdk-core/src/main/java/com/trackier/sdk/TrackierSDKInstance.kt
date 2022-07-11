@@ -147,6 +147,8 @@ class TrackierSDKInstance {
 
     private fun makeWorkRequest(kind: String): TrackierWorkRequest {
         val trackierWorkRequest = TrackierWorkRequest(kind, appToken, this.config.env)
+        trackierWorkRequest.sdkt = this.config.getSDKType()
+        trackierWorkRequest.sdkVersion = this.config.getSDKVersion()
         trackierWorkRequest.device = device
         trackierWorkRequest.gaid = gaid
         trackierWorkRequest.refDetails = getReferrerDetails()
@@ -155,7 +157,7 @@ class TrackierSDKInstance {
         trackierWorkRequest.customerEmail = this.customerEmail
         trackierWorkRequest.customerOptionals = this.customerOptionals
         trackierWorkRequest.attributionParams = this.config.getAttributionParams()
-        trackierWorkRequest.sdkt = this.config.getSDKType()
+     //   trackierWorkRequest.sdkt = this.config.getSDKType()
         trackierWorkRequest.disableOrganicTrack = disableOrganicTrack
         trackierWorkRequest.firstInstallTime = firstInstallTime
         trackierWorkRequest.organic = organic
