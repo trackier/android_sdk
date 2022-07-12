@@ -51,7 +51,7 @@ data class DeviceInfo(
     var appVersion: String? = null
     var appInstallTime: String? = null
     var appUpdateTime: String? = null
-  //  var sdkVersion: String? = null
+    var sdkVersion: String? = null
 
     var language: String? = null
     var country: String? = null
@@ -148,7 +148,7 @@ data class DeviceInfo(
             val (totalMemory, availableMemory) = getTotalAvailableMemory(context)
             deviceInfo.totalMemory = totalMemory
             deviceInfo.availableMemory = availableMemory
-           // deviceInfo.sdkVersion = Constants.SDK_VERSION
+            deviceInfo.sdkVersion = Constants.SDK_VERSION
             deviceInfo.timezone = TimeZone.getDefault().id
         }
 
