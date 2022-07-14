@@ -147,6 +147,11 @@ class TrackierSDKInstance {
 
     private fun makeWorkRequest(kind: String): TrackierWorkRequest {
         val trackierWorkRequest = TrackierWorkRequest(kind, appToken, this.config.env)
+        if (this.config.getSDKType() != "android") {
+            device.sdkVersion = this.config.getSDKVersion()
+        } else {
+           device.sdkVersion = Constants.SDK_VERSION
+        }
         trackierWorkRequest.device = device
         trackierWorkRequest.gaid = gaid
         trackierWorkRequest.refDetails = getReferrerDetails()
