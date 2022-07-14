@@ -150,7 +150,7 @@ class TrackierSDKInstance {
         if (this.config.getSDKType() != "android") {
             device.sdkVersion = this.config.getSDKVersion()
         }else {
-           device.sdkVersion= Constants.SDK_VERSION
+           device.sdkVersion = Constants.SDK_VERSION
         }
         trackierWorkRequest.device = device
         trackierWorkRequest.gaid = gaid
