@@ -149,7 +149,7 @@ class TrackierSDKInstance {
         val trackierWorkRequest = TrackierWorkRequest(kind, appToken, this.config.env)
         if (this.config.getSDKType() != "android") {
             device.sdkVersion = this.config.getSDKVersion()
-        }else {
+        } else {
            device.sdkVersion = Constants.SDK_VERSION
         }
         trackierWorkRequest.device = device
