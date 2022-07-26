@@ -152,6 +152,9 @@ class TrackierSDKInstance {
         } else {
            device.sdkVersion = Constants.SDK_VERSION
         }
+        if (this.config.getAndroidId().isNotEmpty()) {
+            device.androidId = this.config.getAndroidId()
+        }
         trackierWorkRequest.device = device
         trackierWorkRequest.gaid = gaid
         trackierWorkRequest.refDetails = getReferrerDetails()

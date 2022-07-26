@@ -15,6 +15,7 @@ class TrackierSDKConfig(var context: Context, val appToken: String, val env: Str
     private var disableOrganicTrack = false
     private var secretId: String = ""
     private var secretKey: String = ""
+    private var androidId: String = ""
 
     init {
         context = context.applicationContext
@@ -96,5 +97,13 @@ class TrackierSDKConfig(var context: Context, val appToken: String, val env: Str
 
     fun getOrganicTracking(): Boolean {
         return this.disableOrganicTrack
+    }
+
+    fun setAndroidId(value: String) {
+        this.androidId = value
+    }
+
+    fun getAndroidId(): String {
+        return this.androidId
     }
 }
