@@ -13,7 +13,7 @@
 * [Implement and initialize the SDK](#qs-implement-trackier-sdk)
     * [Retrieve your SDK key](#qs-retrieve-dev-key)
     * [Initialize the SDK](#qs-initialize-trackier-sdk)
-    * [Associate User Info during initialization of sdk](#qs-assosoiate-user-info)
+    * [Associate User Info during initialization of SDK](#qs-assosoiate-user-info)
 * [Events Tracking](#qs-track-event)
     * [Retrieve Event Id from dashboard](#qs-retrieve-event-id)
     * [Track with Currency & Revenue Event](#qs-track-event-with-currencey)
