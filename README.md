@@ -11,7 +11,7 @@
     * [Add required permissions](#qs-add-request-permissions)
     * [Getting Google Advertising ID](#qs-getting-gaid)
 * [Implement and initialize the SDK](#qs-implement-trackier-sdk)
-    * [Retrieve your dev key](#qs-retrieve-dev-key)
+    * [Retrieve your SDK key](#qs-retrieve-dev-key)
     * [Initialize the SDK](#qs-initialize-trackier-sdk)
     * [Associate User Info during initialization of sdk](#qs-assosoiate-user-info)
 * [Events Tracking](#qs-track-event)
@@ -135,9 +135,9 @@ Screenshot[5]
 
 ## <a id="qs-implement-trackier-sdk"></a>Integrate and Initialize the Trackier SDK
 
-### <a id="qs-retrieve-dev-key"></a>Retrieve your dev key
+### <a id="qs-retrieve-dev-key"></a>Retrieve your SDK key
 
-For initialising the Trackier SDk. First, We need to generate the SDK key from the Trackier MMP panel.
+For initialising the Trackier SDK. First, We need to generate the SDK key from the Trackier MMP panel.
 
 Following below are the steps to retrieve the SDK key:-
 
@@ -215,13 +215,13 @@ public class MainApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        final String TR_DEV_KEY  = "XXXXXXX-XXXX-XXXX-80e3-5938fadff"; //Please pass your SDK key here.
+        final String TR_SDK_KEY  = "XXXXXXX-XXXX-XXXX-80e3-5938fadff"; //Please pass your SDK key here.
 
         /*While Initializing the SDK, You need to pass the three parameter in the TrackierSDKConfig.
          * In First argument, you need to pass context of the application
          * In second argument, you need to pass the Trackier SDK api key
          * In third argument, you need to pass the environment which can be either "development", "production" or "testing". */
-        TrackierSDKConfig sdkConfig = new TrackierSDKConfig(this, TR_DEV_KEY,"development");
+        TrackierSDKConfig sdkConfig = new TrackierSDKConfig(this, TR_SDK_KEY,"development");
         TrackierSDK.initialize(sdkConfig);
     }
 
@@ -235,8 +235,8 @@ Screenshot[7]
 <img width="1000" alt="Screenshot 2022-06-09 at 1 04 05 AM" src="https://user-images.githubusercontent.com/16884982/172702379-45d55946-bb5f-491d-a0c2-277000a3b7c4.png">
 
 <p>
-Important: it is crucial to use the correct dev key when initializing the SDK. Using the wrong dev key or an
-incorrect dev key impact all traffic sent from the SDK and cause attribution and reporting issues.
+Important: it is crucial to use the correct SDK key when initializing the SDK. Using the wrong SDK key or an
+incorrect SDK key impact all traffic sent from the SDK and cause attribution and reporting issues.
 </p>
 
   #### Kotlin
@@ -297,13 +297,13 @@ class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        val TR_DEV_KEY: String = "xxxx-xx-4505-bc8b-xx" //Please pass your SDK key here.
+        val TR_SDK_KEY: String = "xxxx-xx-4505-bc8b-xx" //Please pass your SDK key here.
 
         /*While Initializing the SDK, You need to pass the three parameter in the TrackierSDKConfig.
             * In First argument, you need to pass context of the application
             * In second argument, you need to pass the Trackier SDK api key
             * In third argument, you need to pass the environment which can be either "development", "production" or "testing". */
-        val sdkConfig = TrackierSDKConfig(this, TR_DEV_KEY, "development")
+        val sdkConfig = TrackierSDKConfig(this, TR_SDK_KEY, "development")
         TrackierSDK.initialize(sdkConfig)
     }
 }
@@ -316,8 +316,8 @@ Screenshot[8]
 
 
 <p>
-Important: it is crucial to use the correct dev key when initializing the SDK. Using the wrong dev key or an
-incorrect dev key impact all traffic sent from the SDK and cause attribution and reporting issues.
+Important: it is crucial to use the correct SDK key when initializing the SDK. Using the wrong SDK key or an
+incorrect SDK key impact all traffic sent from the SDK and cause attribution and reporting issues.
 </p>
 
 ## <a id="qs-track-event"></a>Events Tracking
@@ -861,13 +861,13 @@ public class MainApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        final String TR_DEV_KEY = "XXXXXXX-XXXX-XXXX-80e3-5938fadff"; //Please pass your SDK key here.
+        final String TR_SDK_KEY = "XXXXXXX-XXXX-XXXX-80e3-5938fadff"; //Please pass your SDK key here.
 
-        /*While Initializing the Sdk, You need to pass the three parameter in the TrackierSDKConfig.
+        /*While Initializing the SDK, You need to pass the three parameter in the TrackierSDKConfig.
          * In First argument, you need to pass context of the application
          * In second argument, you need to pass the Trackier SDK api key
          * In third argument, you need to pass the environment which can be either "development", "production" or "testing". */
-        TrackierSDKConfig sdkConfig = new TrackierSDKConfig(this, TR_DEV_KEY, "development");
+        TrackierSDKConfig sdkConfig = new TrackierSDKConfig(this, TR_SDK_KEY, "development");
 
         //Passing User Information on time of initialization     
         sdkConfig.setManualMode(true);
@@ -897,13 +897,13 @@ class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        val TR_DEV_KEY: String = "xxxx-xx-4505-bc8b-xx" //Please pass your SDK key here.
+        val TR_SDK_KEY: String = "xxxx-xx-4505-bc8b-xx" //Please pass your SDK key here.
 
-        /*While Initializing the Sdk, You need to pass the three parameter in the TrackierSDKConfig.
+        /*While Initializing the SDK, You need to pass the three parameter in the TrackierSDKConfig.
             * In First argument, you need to pass context of the application
             * In second argument, you need to pass the Trackier SDK api key
             * In third argument, you need to pass the environment which can be either "development", "production" or "testing". */
-        val sdkConfig = TrackierSDKConfig(this, TR_DEV_KEY, "development")
+        val sdkConfig = TrackierSDKConfig(this, TR_SDK_KEY, "development")
 
         sdkConfig.setManualMode(true)
         TrackierSDK.setLocalRefTrack(true,"_")
@@ -963,13 +963,13 @@ public class MainApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        final String TR_DEV_KEY = "XXXXXXX-XXXX-XXXX-80e3-5938fadff"; //Please pass your SDK key here.
+        final String TR_SDK_KEY = "XXXXXXX-XXXX-XXXX-80e3-5938fadff"; //Please pass your SDK key here.
 
-        /*While Initializing the Sdk, You need to pass the three parameter in the TrackierSDKConfig.
+        /*While Initializing the SDK, You need to pass the three parameter in the TrackierSDKConfig.
          * In First argument, you need to pass context of the application
          * In second argument, you need to pass the Trackier SDK api key
          * In third argument, you need to pass the environment which can be either "development", "production" or "testing". */
-        TrackierSDKConfig sdkConfig = new TrackierSDKConfig(this, TR_DEV_KEY, "development");
+        TrackierSDKConfig sdkConfig = new TrackierSDKConfig(this, TR_SDK_KEY, "development");
 
         sdkConfig.disableOrganicTracking(true); // Pass true value for disable organic tracking.
         TrackierSDK.initialize(sdkConfig);
@@ -997,13 +997,12 @@ class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        val TR_DEV_KEY: String = "xxxx-xx-4505-bc8b-xx" //Please pass your SDK key here.
+        val TR_SDK_KEY: String = "xxxx-xx-4505-bc8b-xx" //Please pass your SDK key here.
 
-        /*While Initializing the Sdk, You need to pass the three parameter in the TrackierSDKConfig.
             * In First argument, you need to pass context of the application
             * In second argument, you need to pass the Trackier SDK api key
             * In third argument, you need to pass the environment which can be either "development", "production" or "testing". */
-        val sdkConfig = TrackierSDKConfig(this, TR_DEV_KEY, "development")
+        val sdkConfig = TrackierSDKConfig(this, TR_SDK_KEY, "development")
         sdkConfig.disableOrganicTracking(true); // Pass true value for disable organic tracking/
         TrackierSDK.initialize(sdkConfig)
     }
