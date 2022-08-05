@@ -18,7 +18,8 @@ data class TrackierEvent(val id: String) {
     @JvmField var param8: String? = null
     @JvmField var param9: String? = null
     @JvmField var param10: String? = null
-
+    @JvmField var c_code: String? = getCouponCode()
+    @JvmField var discount: Float? = getDiscount()
     @JvmField var revenue: Double? = null
     @JvmField var ev = mutableMapOf<String, Any>()
 
@@ -38,5 +39,18 @@ data class TrackierEvent(val id: String) {
         const val INVITE = "7lnE3OclNT"
         const val LOGIN = "o91gt1Q0PK"
         const val UPDATE = "sEQWVHGThl"
+    }
+    fun setCouponCode(c_code: String) {
+        this.c_code = c_code;
+    }
+    private fun getCouponCode(): String {
+        return this.c_code.toString()
+    }
+
+    fun setDiscount(discount: Float) {
+        this.discount = discount;
+    }
+    private fun getDiscount(): Float? {
+        return this.discount
     }
 }

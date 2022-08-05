@@ -31,13 +31,17 @@ class MainActivity : AppCompatActivity() {
         btn_event_track.setOnClickListener {
             val event = TrackierEvent(TrackierEvent.UPDATE)
             event.param1 = "Param_Name"
+//            event.c_code = "tes"
+//            event.discount = 3f
+//            TrackierSDK.setUserName("abcd")
+//            TrackierSDK.setUserPhone("1234456545")
             TrackierSDK.trackEvent(event)
             Log.d("TAG", "onClick: event_track ")
         }
 
         btn_event_curr_track.setOnClickListener {
             val event = TrackierEvent(TrackierEvent.UPDATE)
-            event.param1 = "Praram Name";
+            event.param1 = "Praram Name"
             event.revenue = 0.5
             event.currency = "USD"
             TrackierSDK.trackEvent(event)
@@ -92,7 +96,6 @@ class MainActivity : AppCompatActivity() {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         }
     }
-
 
 
     private fun loadRoot() {

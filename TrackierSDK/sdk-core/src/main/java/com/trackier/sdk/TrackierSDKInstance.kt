@@ -30,7 +30,8 @@ class TrackierSDKInstance {
 
     var firstInstallTime = ""
     var organic = false
-
+    var customerName = ""
+    var customerPhoneNumber = ""
     /**
      * Initialize method should be called to initialize the sdk
      */
@@ -169,7 +170,8 @@ class TrackierSDKInstance {
         trackierWorkRequest.organic = organic
         trackierWorkRequest.secretId = this.config.getAppSecretId()
         trackierWorkRequest.secretKey = this.config.getAppSecretKey()
-
+        trackierWorkRequest.customerName = this.customerName
+        trackierWorkRequest.customerPhoneNumber = this.customerPhoneNumber
         return trackierWorkRequest
     }
 

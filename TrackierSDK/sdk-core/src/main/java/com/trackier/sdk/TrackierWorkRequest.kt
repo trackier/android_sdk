@@ -31,7 +31,8 @@ class TrackierWorkRequest(
     var secretId: String = ""
     var secretKey: String = ""
     var organic = false
-
+    var customerName = ""
+    var customerPhoneNumber = ""
     private fun setDefaults(): MutableMap<String, Any> {
         val body = mutableMapOf<String, Any>()
         body["device"] = this.device
@@ -79,6 +80,8 @@ class TrackierWorkRequest(
             }
         }
         body["organic"] = organic
+        body["cphone"] = customerPhoneNumber
+        body["cname"] = customerName
         return body
     }
 
