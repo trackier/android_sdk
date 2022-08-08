@@ -21,7 +21,7 @@ class MainApplication : Application() {
         super.onCreate()
         // initialize for any
 
-        val TR_DEV_KEY: String = "0455721b-33c5-4c9f-805e-596d818d910a"
+        val TR_DEV_KEY: String = "xxxx-xx-4505-bc8b-xx"
 
         // Use ApplicationContext.
         // example: SharedPreferences etc...
