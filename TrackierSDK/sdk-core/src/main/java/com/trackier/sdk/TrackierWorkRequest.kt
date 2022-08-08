@@ -25,6 +25,8 @@ class TrackierWorkRequest(
     var attributionParams: AttributionParams? = null
     var customerId = ""
     var customerEmail = ""
+    var customerName = ""
+    var customerPhoneNumber = ""
     var customerOptionals: MutableMap<String, Any>? = null
     var disableOrganicTrack = false
     var firstInstallTime = ""
@@ -79,6 +81,8 @@ class TrackierWorkRequest(
             }
         }
         body["organic"] = organic
+        body["cphone"] = customerPhoneNumber
+        body["cname"] = customerName
         return body
     }
 

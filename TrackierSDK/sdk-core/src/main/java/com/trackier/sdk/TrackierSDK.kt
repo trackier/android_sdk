@@ -98,4 +98,14 @@ object TrackierSDK {
     fun trackAsOrganic(organic: Boolean) {
         instance.organic = organic
     }
+
+    @JvmStatic
+    fun setUserName(userName: String) {
+        instance.customerName = userName
+    }
+
+    @JvmStatic
+    fun setUserPhone(userPhone: String) {
+        instance.customerPhoneNumber = userPhone
+    }
 }

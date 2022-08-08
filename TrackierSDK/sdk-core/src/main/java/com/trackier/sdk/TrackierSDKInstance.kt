@@ -26,6 +26,8 @@ class TrackierSDKInstance {
 
     var customerId = ""
     var customerEmail = ""
+    var customerName = ""
+    var customerPhoneNumber = ""
     var customerOptionals: MutableMap<String, Any>? = null
 
     var firstInstallTime = ""
@@ -169,7 +171,8 @@ class TrackierSDKInstance {
         trackierWorkRequest.organic = organic
         trackierWorkRequest.secretId = this.config.getAppSecretId()
         trackierWorkRequest.secretKey = this.config.getAppSecretKey()
-
+        trackierWorkRequest.customerName = this.customerName
+        trackierWorkRequest.customerPhoneNumber = this.customerPhoneNumber
         return trackierWorkRequest
     }
 
