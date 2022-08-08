@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
 
         btn_event_curr_track.setOnClickListener {
             val event = TrackierEvent(TrackierEvent.UPDATE)
-            event.param1 = "Praram Name"
+            event.param1 = "Param Name"
             event.revenue = 0.5
             event.currency = "USD"
             TrackierSDK.trackEvent(event)
