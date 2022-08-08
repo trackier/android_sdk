@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 TrackierEvent event = new TrackierEvent(TrackierEvent.UPDATE);
                 event.param1 = "Param Name";
+                event.couponCode = "TESTING_10";
 //                event.c_code = "test_java";
 //                event.discount = 5f;
 //                TrackierSDK.setUserName("xyz");
