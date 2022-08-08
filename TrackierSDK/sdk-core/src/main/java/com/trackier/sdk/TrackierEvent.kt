@@ -42,7 +42,7 @@ data class TrackierEvent(val id: String) {
     }
 
     fun setCouponCode(value: String) {
-        this.c_code = c_code;
+        this.c_code = value;
     }
 
     fun getCouponCode(): String {
