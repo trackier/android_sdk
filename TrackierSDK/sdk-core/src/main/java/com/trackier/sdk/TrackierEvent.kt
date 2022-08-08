@@ -41,7 +41,7 @@ data class TrackierEvent(val id: String) {
         const val UPDATE = "sEQWVHGThl"
     }
 
-    fun setCouponCode(c_code: String) {
+    fun setCouponCode(value: String) {
         this.c_code = c_code;
     }
 
