@@ -18,7 +18,7 @@ data class TrackierEvent(val id: String) {
     @JvmField var param8: String? = null
     @JvmField var param9: String? = null
     @JvmField var param10: String? = null
-    @JvmField var c_code: String? = getCouponCode()
+    @JvmField var c_code: String? = null
     @JvmField var discount: Float? = null
     @JvmField var revenue: Double? = null
     @JvmField var ev = mutableMapOf<String, Any>()
