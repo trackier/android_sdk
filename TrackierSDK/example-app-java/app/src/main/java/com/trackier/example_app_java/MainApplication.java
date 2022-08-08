@@ -25,7 +25,7 @@ public class MainApplication extends Application {
         setmContext(getApplicationContext());
         mInstance = this;
 
-        final String TR_DEV_KEY  = "328b7ad9-0496-4db8-80e3-5938fadff8b7";
+        final String TR_DEV_KEY  = "f4fjfjgjg-33c5-4c9f-xxxxxxx";
         TrackierSDKConfig sdkConfig = new TrackierSDKConfig(this, TR_DEV_KEY,"development");
 //        AttributionParams params = new AttributionParams();
 //        params.setParterId("ADD_PARTNER_ID_HERE");

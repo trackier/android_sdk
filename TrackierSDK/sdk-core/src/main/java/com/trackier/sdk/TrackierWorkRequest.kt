@@ -25,14 +25,15 @@ class TrackierWorkRequest(
     var attributionParams: AttributionParams? = null
     var customerId = ""
     var customerEmail = ""
+    var customerName = ""
+    var customerPhoneNumber = ""
     var customerOptionals: MutableMap<String, Any>? = null
     var disableOrganicTrack = false
     var firstInstallTime = ""
     var secretId: String = ""
     var secretKey: String = ""
     var organic = false
-    var customerName = ""
-    var customerPhoneNumber = ""
+
     private fun setDefaults(): MutableMap<String, Any> {
         val body = mutableMapOf<String, Any>()
         body["device"] = this.device

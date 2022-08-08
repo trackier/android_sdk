@@ -26,12 +26,13 @@ class TrackierSDKInstance {
 
     var customerId = ""
     var customerEmail = ""
+    var customerName = ""
+    var customerPhoneNumber = ""
     var customerOptionals: MutableMap<String, Any>? = null
 
     var firstInstallTime = ""
     var organic = false
-    var customerName = ""
-    var customerPhoneNumber = ""
+
     /**
      * Initialize method should be called to initialize the sdk
      */
