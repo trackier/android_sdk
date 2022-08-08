@@ -1,6 +1,7 @@
 package com.trackier.sdk
 
 import androidx.annotation.Keep
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @Keep
@@ -18,7 +19,9 @@ data class TrackierEvent(val id: String) {
     @JvmField var param8: String? = null
     @JvmField var param9: String? = null
     @JvmField var param10: String? = null
-    @JvmField var c_code: String? = null
+    @JvmField
+    @Json(name = "c_code")
+    var couponCode: String? = null
     @JvmField var discount: Float? = null
     @JvmField var revenue: Double? = null
     @JvmField var ev = mutableMapOf<String, Any>()
@@ -40,13 +43,4 @@ data class TrackierEvent(val id: String) {
         const val LOGIN = "o91gt1Q0PK"
         const val UPDATE = "sEQWVHGThl"
     }
-
-    fun setCouponCode(value: String) {
-        this.c_code = value;
-    }
-
-    fun getCouponCode(): String {
-        return this.c_code.toString()
-    }
-
 }

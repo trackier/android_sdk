@@ -21,7 +21,7 @@ class MainApplication : Application() {
         super.onCreate()
         // initialize for any
 
-        val TR_DEV_KEY: String = "xxxx-xx-4505-bc8b-xx"
+        val TR_SDK_KEY: String = "0455721b-33c5-4c9f-805e-xx"
 
         // Use ApplicationContext.
         // example: SharedPreferences etc...
@@ -32,7 +32,7 @@ class MainApplication : Application() {
 //        sdkConfig.setAttributionParams(apkAttributes)
 //        TrackierSDK.initialize(sdkConfig)
 
-        val sdkConfig = TrackierSDKConfig(this, TR_DEV_KEY, "development")
+        val sdkConfig = TrackierSDKConfig(this, TR_SDK_KEY, "development")
         sdkConfig.setDeepLinkListener(deepLinkListener)
 
 

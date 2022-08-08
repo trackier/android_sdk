@@ -31,6 +31,8 @@ class MainActivity : AppCompatActivity() {
         btn_event_track.setOnClickListener {
             val event = TrackierEvent(TrackierEvent.UPDATE)
             event.param1 = "Param_Name"
+            event.couponCode = "TEST_COUPON"
+            event.discount = 10.5f
 //            event.c_code = "tes"
 //            event.discount = 3f
 //            TrackierSDK.setUserName("abcd")
