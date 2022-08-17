@@ -21,6 +21,7 @@
 * [Defer Start SDK](#qs-defer-start-sdk)
 * [Disable Organic Tracking](#qs-disable-orgainic-tracking)
 * [Uninstall Tracking](#qs-track-uninstall)
+* [SDK Signing](#qs-sdk-signing)
 * [Proguard Settings](#qs-progaurd-trackier-sdk)
 
 ## <a id="qs-add-trackier-sdk"></a>Integrate Trackier SDK to your app
@@ -1012,8 +1013,84 @@ class MainApplication : Application() {
 ```
 
 
+## <a id="qs-sdk-signing"></a>SDK Signing 
+
+Check below the example code 
+
+ #### Java
+
+```java 
+	
+import android.app.Application;
+import com.trackier.sdk.TrackierSDK;
+import com.trackier.sdk.TrackierSDKConfig;
+
+import java.util.HashMap;
+
+public class MainApplication extends Application {
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        final String TR_SDK_KEY = "XXXXXXX-XXXX-XXXX-80e3-5938fadff"; //Please pass your SDK key here.
+
+        /*While Initializing the SDK, You need to pass the three parameter in the TrackierSDKConfig.
+         * In First argument, you need to pass context of the application
+         * In second argument, you need to pass the Trackier SDK api key
+         * In third argument, you need to pass the environment which can be either "development", "production" or "testing". */
+        TrackierSDKConfig sdkConfig = new TrackierSDKConfig(this, TR_SDK_KEY, "development");
+
+        sdkConfig.disableOrganicTracking(true); // Pass true value for disable organic tracking.
+	
+	/*For SDK Signing*/
+	sdkConfig.setAppSecret("xxxx-xxxx","xxxx-xxx"); // Pass the secretId and secretKey
+	
+        TrackierSDK.initialize(sdkConfig);
+    }
+
+}
+
+
+```
+
+
+  #### Kotlin
+
+```kotlin 
+
+import android.app.Application
+import com.trackier.sdk.TrackierSDK
+import com.trackier.sdk.TrackierSDKConfig
+import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
+
+class MainApplication : Application() {
+
+
+    override fun onCreate() {
+        super.onCreate()
+
+        val TR_SDK_KEY: String = "xxxx-xx-4505-bc8b-xx" //Please pass your SDK key here.
+
+            * In First argument, you need to pass context of the application
+            * In second argument, you need to pass the Trackier SDK api key
+            * In third argument, you need to pass the environment which can be either "development", "production" or "testing". */
+        val sdkConfig = TrackierSDKConfig(this, TR_SDK_KEY, "development")
+        sdkConfig.disableOrganicTracking(true); // Pass true value for disable organic tracking/
+	
+	/*For SDK Signing*/
+	sdkConfig.setAppSecret("xxxx-xxxx","xxxx-xxx") // Pass the secretId and secretKey
+	
+        TrackierSDK.initialize(sdkConfig)
+    }
+}
+
+
+```
+
 
 ## <a id="qs-progaurd-trackier-sdk"></a>Proguard Settings 
+
 
 If your app is using proguard then add these lines to the proguard config file 
 
