@@ -31,7 +31,7 @@
 
 ```gradle
   repositories {
-    mavenCentral() //Please add this code to your module level build.gradle
+    mavenCentral() // Please add this code to your module level build.gradle
   }
 ```
 Below are the for screenshot reference.
@@ -46,7 +46,7 @@ Screenshot[1]
 You can find the latest version [here](https://search.maven.org/artifact/com.trackier/android-sdk)
 
 ```gradle 
-  implementation 'com.trackier:android-sdk:1.6.29' //Add this Trackier SDK dependency in the build.gradle
+  implementation 'com.trackier:android-sdk:1.6.29' // Add this Trackier SDK dependency in the build.gradle
 ```
 Also, please check the screenshot[2] in the below section for reference.
 
@@ -59,8 +59,8 @@ Add the Android Install Referrer as a dependency. You can find the latest versio
     // make sure to use the latest SDK version:
     // https://mvnrepository.com/artifact/com.trackier/android-sdk   
   
-    implementation 'com.trackier:android-sdk:1.6.29' //Add this Trackier SDK dependency in the build.gradle
-    implementation 'com.android.installreferrer:installreferrer:2.2' //Add this install referrer dependency in the build.gradle
+    implementation 'com.trackier:android-sdk:1.6.29' // Add this Trackier SDK dependency in the build.gradle
+    implementation 'com.android.installreferrer:installreferrer:2.2' // Add this install referrer dependency in the build.gradle
   }
 ```
 
@@ -125,7 +125,7 @@ ScreenShot[4]
 ```xml
 <meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" /> //Add this meta-data in the manifest.xml under Application tag.
+            android:value="@integer/google_play_services_version" /> // Add this meta-data in the manifest.xml under Application tag.
 ```
 Below are the screenshot of application tag in manifest.xml for the reference
 
@@ -143,7 +143,7 @@ For initialising the Trackier SDK. First, We need to generate the SDK key from t
 Following below are the steps to retrieve the SDK key:-
 
 - Login your Trackier Panel and select your application.
-- In the Dashboard, Click on the` SDK Integration` option on the left side of panel. 
+- In the Dashboard, Click on the `SDK Integration` option on the left side of panel. 
 - Under on the SDK Integration, You will be get the SDK Key.
 
 After follow all steps, Your SDK key look like the below screenshot
@@ -215,12 +215,12 @@ public class MainApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        final String TR_SDK_KEY  = "XXXXXXX-XXXX-XXXX-80e3-5938fadff"; //Please pass your SDK key here.
+        final String TR_SDK_KEY  = "XXXXXXX-XXXX-XXXX-80e3-5938fadff"; // Please pass your SDK key here.
 
-        /*While Initializing the SDK, You need to pass the three parameter in the TrackierSDKConfig.
-         * In First argument, you need to pass context of the application
-         * In second argument, you need to pass the Trackier SDK api key
-         * In third argument, you need to pass the environment which can be either "development", "production" or "testing". */
+        /* While Initializing the SDK, You need to pass the three parameter in the TrackierSDKConfig.
+             * In First argument, you need to pass context of the application
+             * In second argument, you need to pass the Trackier SDK api key
+             * In third argument, you need to pass the environment which can be either "development", "production" or "testing". */
         TrackierSDKConfig sdkConfig = new TrackierSDKConfig(this, TR_SDK_KEY,"development");
         TrackierSDK.initialize(sdkConfig);
     }
@@ -297,9 +297,9 @@ class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        val TR_SDK_KEY: String = "xxxx-xx-4505-bc8b-xx" //Please pass your SDK key here.
+        val TR_SDK_KEY: String = "xxxx-xx-4505-bc8b-xx" // Please pass your SDK key here.
 
-        /*While Initializing the SDK, You need to pass the three parameter in the TrackierSDKConfig.
+        /* While Initializing the SDK, You need to pass the three parameter in the TrackierSDKConfig.
             * In First argument, you need to pass context of the application
             * In second argument, you need to pass the Trackier SDK api key
             * In third argument, you need to pass the environment which can be either "development", "production" or "testing". */
@@ -369,13 +369,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void eventsTracking(){
         // Below are the example of built-in events function calling
-        //The arguments - "TrackierEvent.LOGIN" passed in the Trackier event class is Events id
+        // The arguments - "TrackierEvent.LOGIN" passed in the Trackier event class is Events id
 
         TrackierEvent event = new TrackierEvent(TrackierEvent.LOGIN);
 
-        /*Below are the function for the adding the extra data,
-        You can add the extra data like login details of user or anything you need.
-        We have 10 params to add data, Below 5 are mentioned*/
+        /* Below are the function for the adding the extra data,
+          You can add the extra data like login details of user or anything you need.
+          We have 10 params to add data, Below 5 are mentioned */
 
         event.param1 = "Param 1";
         event.param2 = "Param 2";
@@ -429,13 +429,13 @@ class MainActivity : AppCompatActivity() {
     fun eventsTracking(){
         
         // Below are the example of built-in events function calling
-        //The arguments - "TrackierEvent.LOGIN" passed in the Trackier event class is Events id.
+        // The arguments - "TrackierEvent.LOGIN" passed in the Trackier event class is Events id.
 
         val event = TrackierEvent(TrackierEvent.LOGIN)
 
-        /*Below are the function for the adding the extra data,
-       You can add the extra data like login details of user or anything you need.
-       We have 10 params to add data, Below 5 are mentioned*/
+        /* Below are the function for the adding the extra data,
+          You can add the extra data like login details of user or anything you need.
+          We have 10 params to add data, Below 5 are mentioned */
 
         event.param1 = "Param 1";
         event.param2 = "Param 2";
@@ -498,13 +498,13 @@ public class MainActivity extends AppCompatActivity {
     private void customEventsTracking(){
 
         // Below are the example of customs events function calling
-        //The arguments - "sEMWSCTXeu" passed in the event class is Events id
+        // The arguments - "sEMWSCTXeu" passed in the event class is Events id
 
         TrackierEvent event = new TrackierEvent("sEMWSCTXeu");
 
-        /*Below are the function for the adding the extra data,
-        You can add the extra data like login details of user or anything you need.
-        We have 10 params to add data, Below 5 are mentioned*/
+        /* Below are the function for the adding the extra data,
+          You can add the extra data like login details of user or anything you need.
+          We have 10 params to add data, Below 5 are mentioned */
         event.param1 = "Param 1";
         event.param2 = "Param 2";
         event.param3 = "Param 3";
@@ -547,12 +547,12 @@ class MainActivity : AppCompatActivity() {
 
     fun customEventsTrcking() {
         // Below are the example of customs events function calling
-        //The arguments - "sEMWSCTXeu" passed in the event class is Events id
+        // The arguments - "sEMWSCTXeu" passed in the event class is Events id
         val event = TrackierEvent("sEMWSCTXeu")
 
-        /*Below are the function for the adding the extra data,
-         You can add the extra data like login details of user or anything you need.
-         We have 10 params to add data, Below 5 are mentioned*/
+        /* Below are the function for the adding the extra data,
+          You can add the extra data like login details of user or anything you need.
+          We have 10 params to add data, Below 5 are mentioned */
         event.param1 = "Praram Name";
         event.param2 = "Param 2";
         event.param3 = "Param 3";
@@ -596,12 +596,12 @@ It is mainly used to keeping record of generating revenue from the app and also 
 
     private void revenueEventsTracking(){
         // Below are the example of inbuilt events function calling
-        //The arguments - "TrackierEvent.LOGIN" passed in the event class is Events id
+        // The arguments - "TrackierEvent.LOGIN" passed in the event class is Events id
         TrackierEvent event = new TrackierEvent("sEMWSCTXeu");
         
-        //Passing the revenue events be like below example
-        event.revenue = 2.5; //Pass your generated revenue here.
-        event.currency = "USD"; //Pass your currency here.
+        // Passing the revenue events be like below example
+        event.revenue = 2.5; // Pass your generated revenue here.
+        event.currency = "USD"; // Pass your currency here.
         
         TrackierSDK.trackEvent(event);
         Log.d("TAG", "onClick: event_track ");
@@ -634,12 +634,12 @@ class MainActivity : AppCompatActivity() {
 
     fun revenueEventsTrcking() {
         // Below are the example of customs events function calling
-        //The arguments - "sEMWSCTXeu" passed in the event class is Events id
+        // The arguments - "sEMWSCTXeu" passed in the event class is Events id
         val event = TrackierEvent("sEMWSCTXeu")
 
-        //Passing the revenue events be like below example
-        event.revenue = 2.5 //Pass your generateed revenue here.
-        event.currency = "USD" //Pass your currency here.
+        // Passing the revenue events be like below example
+        event.revenue = 2.5 // Pass your generateed revenue here.
+        event.currency = "USD" // Pass your currency here.
 
         TrackierSDK.trackEvent(event)
         Log.d("TAG", "onClick: event_curr_track ")
@@ -660,14 +660,14 @@ class MainActivity : AppCompatActivity() {
 
    private void customEventsTracking(){
         // Below are the example of inbuilt events function calling
-        //The arguments - "TrackierEvent.LOGIN" passed in the event class is Events id
+        // The arguments - "TrackierEvent.LOGIN" passed in the event class is Events id
         TrackierEvent event = new TrackierEvent("sEMWSCTXeu");
 
-        //Passing the extra data through customs params
+        // Passing the extra data through customs params
         HashMap<String,Object>  eventCustomParams= new HashMap<>();
         eventCustomParams.put("customParam1","xxxxxx");
         eventCustomParams.put("customParam2","xxxxxx");
-        event.ev = eventCustomParams; //Pass the reference to the ev
+        event.ev = eventCustomParams; // Pass the reference to the ev
         TrackierSDK.trackEvent(event);
         Log.d("TAG", "onClick: event_track ");
 
@@ -708,13 +708,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void userDetails(){
         
-        /*Passing the UserId and User EmailId Data */
-        TrackierSDK.setUserId("XXXXXXXX"); //Pass the UserId values here
-        TrackierSDK.setUserEmail("abc@gmail.com"); //Pass the user email id in the argument.
+        /* Passing the UserId and User EmailId Data */
+        TrackierSDK.setUserId("XXXXXXXX"); // Pass the UserId values here
+        TrackierSDK.setUserEmail("abc@gmail.com"); // Pass the user email id in the argument.
         
-        /*Passing the additional data */
+        /* Passing the additional data */
         HashMap<String,Object> userDetails = new HashMap<>();
-        userDetails.put("Name","Sanu"); //You can pass the Username data.
+        userDetails.put("Name","Sanu"); // You can pass the Username data.
         userDetails.put("UserMobile","873287XXXX"); // You can pass user mobile number
         TrackierSDK.setUserAdditionalDetails(userDetails);
     }
@@ -742,15 +742,15 @@ class MainActivity : AppCompatActivity() {
 
     fun userDetails(){
         
-        /*Passing the UserId and UserEmail Data*/
-        TrackierSDK.setUserId("XXXXXXXX") //Pass the UserId values here
-        TrackierSDK.setUserEmail("abc@gmail.com") //Pass the user email id in the argument.
+        /* Passing the UserId and UserEmail Data */
+        TrackierSDK.setUserId("XXXXXXXX") // Pass the UserId values here
+        TrackierSDK.setUserEmail("abc@gmail.com") // Pass the user email id in the argument.
         
-        /*Passing the Additional Data*/
+        /* Passing the Additional Data */
         val userAdditionalDetails: MutableMap<String,Any> = mutableMapOf()
-        userAdditionalDetails.put("UserName","ABC") //You can pass the Username data.
+        userAdditionalDetails.put("UserName","ABC") // You can pass the Username data.
         userAdditionalDetails.put("MobileNumber","8878328XXX") // You can pass user mobile number
-        TrackierSDK.setUserAdditionalDetails(userAdditionalDetails) //Pass the userAdditionalDetails reference in this method.
+        TrackierSDK.setUserAdditionalDetails(userAdditionalDetails) // Pass the userAdditionalDetails reference in this method.
     }
 
 }
@@ -784,7 +784,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void userDetails(){
         HashMap<String,Object> userDetails = new HashMap<>();
-        userDetails.put("Name","Sanu"); //You can pass the Username data.
+        userDetails.put("Name","Sanu"); // You can pass the Username data.
         userDetails.put("UserMobile","873287XXXX"); // You can pass user mobile number
         TrackierSDK.setUserAdditionalDetails(userDetails);
     }
@@ -811,9 +811,9 @@ class MainActivity : AppCompatActivity() {
 
     fun userDetails(){
         val userAdditionalDetails: MutableMap<String,Any> = mutableMapOf()
-        userAdditionalDetails.put("UserName","ABC") //You can pass the Username data.
+        userAdditionalDetails.put("UserName","ABC") // You can pass the Username data.
         userAdditionalDetails.put("MobileNumber","8878328XXX") // You can pass user mobile number.
-        TrackierSDK.setUserAdditionalDetails(userAdditionalDetails) //Pass the userAdditionalDetails reference in this method.
+        TrackierSDK.setUserAdditionalDetails(userAdditionalDetails) // Pass the userAdditionalDetails reference in this method.
     }
 
 }
@@ -861,19 +861,19 @@ public class MainApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        final String TR_SDK_KEY = "XXXXXXX-XXXX-XXXX-80e3-5938fadff"; //Please pass your SDK key here.
+        final String TR_SDK_KEY = "XXXXXXX-XXXX-XXXX-80e3-5938fadff"; // Please pass your SDK key here.
 
-        /*While Initializing the SDK, You need to pass the three parameter in the TrackierSDKConfig.
-         * In First argument, you need to pass context of the application
-         * In second argument, you need to pass the Trackier SDK api key
-         * In third argument, you need to pass the environment which can be either "development", "production" or "testing". */
+        /* While Initializing the SDK, You need to pass the three parameter in the TrackierSDKConfig.
+             * In First argument, you need to pass context of the application
+             * In second argument, you need to pass the Trackier SDK api key
+             * In third argument, you need to pass the environment which can be either "development", "production" or "testing". */
         TrackierSDKConfig sdkConfig = new TrackierSDKConfig(this, TR_SDK_KEY, "development");
 
-        //Passing User Information on time of initialization     
+        // Passing User Information on time of initialization     
         sdkConfig.setManualMode(true);
         TrackierSDK.setLocalRefTrack(true, "_");
-        TrackierSDK.setUserId("XXXXXXXX"); //Pass the UserId values here
-        TrackierSDK.setUserEmail("abc@gmail.com"); //Pass the user email id in the argument.
+        TrackierSDK.setUserId("XXXXXXXX"); // Pass the UserId values here
+        TrackierSDK.setUserEmail("abc@gmail.com"); // Pass the user email id in the argument.
         TrackierSDK.initialize(sdkConfig);
      
     }
@@ -897,9 +897,9 @@ class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        val TR_SDK_KEY: String = "xxxx-xx-4505-bc8b-xx" //Please pass your SDK key here.
+        val TR_SDK_KEY: String = "xxxx-xx-4505-bc8b-xx" // Please pass your SDK key here.
 
-        /*While Initializing the SDK, You need to pass the three parameter in the TrackierSDKConfig.
+        /* While Initializing the SDK, You need to pass the three parameter in the TrackierSDKConfig.
             * In First argument, you need to pass context of the application
             * In second argument, you need to pass the Trackier SDK api key
             * In third argument, you need to pass the environment which can be either "development", "production" or "testing". */
@@ -908,9 +908,9 @@ class MainApplication : Application() {
         sdkConfig.setManualMode(true)
         TrackierSDK.setLocalRefTrack(true,"_")
         TrackierSDK.initialize(sdkConfig)
-        //Passing User Information on time of initialization
-        TrackierSDK.setUserId("XXXXXXXX")//Pass the UserId values here
-        TrackierSDK.setUserEmail("abc@gmail.com")//Pass the user email id in the argument.
+        // Passing User Information on time of initialization
+        TrackierSDK.setUserId("XXXXXXXX") // Pass the UserId values here
+        TrackierSDK.setUserEmail("abc@gmail.com") // Pass the user email id in the argument.
         TrackierSDK.initialize(sdkConfig)
     }
 }
@@ -963,12 +963,12 @@ public class MainApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        final String TR_SDK_KEY = "XXXXXXX-XXXX-XXXX-80e3-5938fadff"; //Please pass your SDK key here.
+        final String TR_SDK_KEY = "XXXXXXX-XXXX-XXXX-80e3-5938fadff"; // Please pass your SDK key here.
 
-        /*While Initializing the SDK, You need to pass the three parameter in the TrackierSDKConfig.
-         * In First argument, you need to pass context of the application
-         * In second argument, you need to pass the Trackier SDK api key
-         * In third argument, you need to pass the environment which can be either "development", "production" or "testing". */
+        /* While Initializing the SDK, You need to pass the three parameter in the TrackierSDKConfig.
+             * In First argument, you need to pass context of the application
+             * In second argument, you need to pass the Trackier SDK api key
+             * In third argument, you need to pass the environment which can be either "development", "production" or "testing". */
         TrackierSDKConfig sdkConfig = new TrackierSDKConfig(this, TR_SDK_KEY, "development");
 
         sdkConfig.disableOrganicTracking(true); // Pass true value for disable organic tracking.
@@ -997,11 +997,12 @@ class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        val TR_SDK_KEY: String = "xxxx-xx-4505-bc8b-xx" //Please pass your SDK key here.
+        val TR_SDK_KEY: String = "xxxx-xx-4505-bc8b-xx" // Please pass your SDK key here.
 
-            * In First argument, you need to pass context of the application
-            * In second argument, you need to pass the Trackier SDK api key
-            * In third argument, you need to pass the environment which can be either "development", "production" or "testing". */
+        /* While Initializing the SDK, You need to pass the three parameter in the TrackierSDKConfig.
+             * In First argument, you need to pass context of the application
+             * In second argument, you need to pass the Trackier SDK api key
+             * In third argument, you need to pass the environment which can be either "development", "production" or "testing". */
         val sdkConfig = TrackierSDKConfig(this, TR_SDK_KEY, "development")
         sdkConfig.disableOrganicTracking(true); // Pass true value for disable organic tracking/
         TrackierSDK.initialize(sdkConfig)
@@ -1046,19 +1047,19 @@ public class MainApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        final String TR_SDK_KEY = "XXXXXXX-XXXX-XXXX-80e3-5938fadff"; //Please pass your SDK key here.
+        final String TR_SDK_KEY = "XXXXXXX-XXXX-XXXX-80e3-5938fadff"; // Please pass your SDK key here.
 
-        /*While Initializing the SDK, You need to pass the three parameter in the TrackierSDKConfig.
-         * In First argument, you need to pass context of the application
-         * In second argument, you need to pass the Trackier SDK api key
-         * In third argument, you need to pass the environment which can be either "development", "production" or "testing". */
+        /* While Initializing the SDK, You need to pass the three parameter in the TrackierSDKConfig.
+             * In First argument, you need to pass context of the application
+             * In second argument, you need to pass the Trackier SDK api key
+             * In third argument, you need to pass the environment which can be either "development", "production" or "testing". */
         TrackierSDKConfig sdkConfig = new TrackierSDKConfig(this, TR_SDK_KEY, "development");
 
         sdkConfig.disableOrganicTracking(true); // Pass true value for disable organic tracking.
-	
-	/*For SDK Signing*/
-	sdkConfig.setAppSecret("xxxx-xxxx","xxxx-xxx"); // Pass the secretId and secretKey
-	
+
+        /* For SDK Signing */
+        sdkConfig.setAppSecret("xxxx","xxxx-xxx"); // Pass the secretId and secretKey
+
         TrackierSDK.initialize(sdkConfig);
     }
 
@@ -1079,21 +1080,21 @@ import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
 
 class MainApplication : Application() {
 
-
     override fun onCreate() {
         super.onCreate()
 
-        val TR_SDK_KEY: String = "xxxx-xx-4505-bc8b-xx" //Please pass your SDK key here.
+        val TR_SDK_KEY: String = "xxxx-xx-4505-bc8b-xx" // Please pass your SDK key here.
 
-            * In First argument, you need to pass context of the application
-            * In second argument, you need to pass the Trackier SDK api key
-            * In third argument, you need to pass the environment which can be either "development", "production" or "testing". */
+        /* While Initializing the SDK, You need to pass the three parameter in the TrackierSDKConfig.
+             * In First argument, you need to pass context of the application
+             * In second argument, you need to pass the Trackier SDK api key
+             * In third argument, you need to pass the environment which can be either "development", "production" or "testing". */
         val sdkConfig = TrackierSDKConfig(this, TR_SDK_KEY, "development")
         sdkConfig.disableOrganicTracking(true); // Pass true value for disable organic tracking/
-	
-	/*For SDK Signing*/
-	sdkConfig.setAppSecret("xxxx-xxxx","xxxx-xxx") // Pass the secretId and secretKey
-	
+
+        /* For SDK Signing */
+        sdkConfig.setAppSecret("xxxx","xxxx-xxx") // Pass the secretId and secretKey
+
         TrackierSDK.initialize(sdkConfig)
     }
 }
