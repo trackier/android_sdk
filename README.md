@@ -1015,6 +1015,21 @@ class MainApplication : Application() {
 
 ## <a id="qs-sdk-signing"></a>SDK Signing 
 
+Following below are the steps to retrieve the SDK key:-
+
+- Login your Trackier Panel
+- Select your application and click on Action button and login as
+- In the Dashboard, Click on the` SDK Integration` option on the left side of panel. 
+- under on the SDK Integration, Click on the Advanced tab 
+- Under the Advanced tab, you will get the secretId and secretKey
+
+Please check on the below screenshot
+
+Screenshot[11]
+
+![Screenshot 2022-08-18 at 10 57 53 AM (1)](https://user-images.githubusercontent.com/16884982/185306195-ebcfbe8f-d180-4d5a-97d2-c93573da80a3.png)
+
+
 Check below the example code 
 
  #### Java
