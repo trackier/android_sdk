@@ -1028,7 +1028,7 @@ Screenshot[11]
 ![Screenshot 2022-08-18 at 10 57 53 AM (1)](https://user-images.githubusercontent.com/16884982/185306195-ebcfbe8f-d180-4d5a-97d2-c93573da80a3.png)
 
 
-Check below the example code 
+Check below the example code for passing the secretId and secretKey to the SDK
 
  #### Java
 
