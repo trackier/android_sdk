@@ -142,10 +142,9 @@ For initialising the Trackier SDK. First, We need to generate the SDK key from t
 
 Following below are the steps to retrieve the SDK key:-
 
-- Login your Trackier Panel
-- Select your application and click on Action button and login as
+- Login your Trackier Panel and select your application.
 - In the Dashboard, Click on the` SDK Integration` option on the left side of panel. 
-- under on the SDK Integration, You will be get the SDK Key.
+- Under on the SDK Integration, You will be get the SDK Key.
 
 After follow all steps, Your SDK key look like the below screenshot
 
@@ -1017,10 +1016,9 @@ class MainApplication : Application() {
 
 Following below are the steps to retrieve the secretId and secretKey :-
 
-- Login your Trackier Panel
-- Select your application and click on Action button and login as
-- In the Dashboard, Click on the` SDK Integration` option on the left side of panel. 
-- Under on the SDK Integration, Click on the Advanced tab. 
+- Login your Trackier Panel and select your application.
+- In the Dashboard, click on the `SDK Integration` option on the left side of panel. 
+- Under on the SDK Integration, click on the Advanced tab. 
 - Under the Advanced tab, you will get the secretId and secretKey.
 
 Please check on the below screenshot
