@@ -282,21 +282,14 @@ class TrackierSDKInstance {
         val currentTime = Util.dateFormatter.format(currentTs)
         try {
             val lastSessionTime = getLastSessionTime()
-            var lastSessTs: Long = 0
-            if (lastSessionTime != "") {
-                val lst = Util.dateFormatter.parse(lastSessionTime)?.time
-                if (lst?.equals(0) == false) {
-                    lastSessTs = lst
-                }
-            }
-            val sessionDiff = (currentTs - lastSessTs).toInt()
-            if (sessionDiff > this.config.getMinSessionDuration()) {
-                val wrkRequest = makeWorkRequest(TrackierWorkRequest.KIND_SESSION_TRACK)
-                wrkRequest.sessionTime = lastSessionTime
-                APIRepository.processWork(wrkRequest)
+
+            val wrkRequest = makeWorkRequest(TrackierWorkRequest.KIND_SESSION_TRACK)
+            wrkRequest.sessionTime = lastSessionTime
+            val resp = APIRepository.processWork(wrkRequest)
+            if (resp?.success == true) {
+                setLastSessionTime(currentTime)
             }
         } catch (e: Exception) {}
-        setLastSessionTime(currentTime)
     }
 
     fun callDeepLinkListener() {
