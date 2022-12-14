@@ -93,7 +93,6 @@ data class DeviceInfo(
     var cpuDetails: String = ""
     var isOnCharging: String? = null
     var headPhonesPlugged = false
-    var installedApplication: String? = null
     var ipAddress: String? = null
     var availableMemory: String? = null
     var totalMemory: String? = null
@@ -143,7 +142,6 @@ data class DeviceInfo(
             if (VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 deviceInfo.headPhonesPlugged = getHeadphonesPlugged(context)
             }
-            deviceInfo.installedApplication = getDeviceInstallApplication(context)
             deviceInfo.ipAddress = getIpv4HostAddress()
             val (totalMemory, availableMemory) = getTotalAvailableMemory(context)
             deviceInfo.totalMemory = totalMemory
@@ -201,17 +199,6 @@ data class DeviceInfo(
                 StatFs(iPath.path).availableBlocksLong * StatFs(iPath.path).blockSizeLong
             val iTotalSpace = StatFs(iPath.path).blockCountLong * StatFs(iPath.path).blockSizeLong
             return Pair("$iAvailableSpace", "$iTotalSpace")
-        }
-
-        @SuppressLint("QueryPermissionsNeeded", "WrongConstant")
-        fun getDeviceInstallApplication(context: Context): String? {
-            return try {
-                val pm = context.packageManager
-                val apps = pm.getInstalledApplications(PackageManager.GET_GIDS)
-                Util.md5(apps.joinToString())
-            } catch (ex: Exception) {
-                null
-            }
         }
 
         private fun getDeviceChargingStatus(context: Context): String? {
