@@ -4,17 +4,16 @@ import android.content.Context
 import com.android.installreferrer.api.InstallReferrerClient
 import com.android.installreferrer.api.InstallReferrerStateListener
 import com.android.installreferrer.api.ReferrerDetails
-import kotlinx.coroutines.delay
 import java.util.*
 import kotlin.Exception
+import kotlinx.coroutines.delay
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
+import kotlinx.coroutines.suspendCancellableCoroutine
 
-class InstallReferrer(context: Context) {
-    private val referrerClient = InstallReferrerClient.newBuilder(context).build()
+class InstallReferrer(private val context: Context) {
 
-    private fun setupFinished(responseCode: Int): RefererDetails {
+    private fun setupFinished(referrerClient: InstallReferrerClient, responseCode: Int): RefererDetails {
         return when (responseCode) {
             InstallReferrerClient.InstallReferrerResponse.OK -> {   // Connection established.
                 val response: ReferrerDetails = referrerClient.installReferrer
@@ -39,11 +38,12 @@ class InstallReferrer(context: Context) {
     }
 
     private suspend fun getInfo(): RefererDetails {
-        return suspendCoroutine {
+        val referrerClient = InstallReferrerClient.newBuilder(context).build()
+        return suspendCancellableCoroutine {
             referrerClient.startConnection(object : InstallReferrerStateListener {
                 override fun onInstallReferrerSetupFinished(responseCode: Int) {
                     try {
-                        val rd = setupFinished(responseCode)
+                        val rd = setupFinished(referrerClient, responseCode)
                         referrerClient.endConnection()
                         it.resume(rd)
                     } catch (ex: Exception) {
@@ -55,7 +55,9 @@ class InstallReferrer(context: Context) {
                 // Google Play by calling the startConnection() method.
                 override fun onInstallReferrerServiceDisconnected() {
                     referrerClient.endConnection()
-                    it.resumeWithException(InstallReferrerException("SERVICE_DISCONNECTED"))
+                    if (it.isActive) {
+                        it.resumeWithException(InstallReferrerException("SERVICE_DISCONNECTED"))
+                    }
                 }
             })
         }
