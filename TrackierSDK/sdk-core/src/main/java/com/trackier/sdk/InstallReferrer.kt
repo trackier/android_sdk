@@ -55,6 +55,7 @@ class InstallReferrer(private val context: Context) {
                 // Google Play by calling the startConnection() method.
                 override fun onInstallReferrerServiceDisconnected() {
                     referrerClient.endConnection()
+                    // https://stackoverflow.com/questions/48227346/kotlin-coroutine-throws-java-lang-illegalstateexception-already-resumed-but-go#comment112497041_60549898
                     if (it.isActive) {
                         it.resumeWithException(InstallReferrerException("SERVICE_DISCONNECTED"))
                     }
