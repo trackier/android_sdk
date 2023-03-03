@@ -21,14 +21,14 @@ repositories {
 apply from: 'publish-module.gradle'
 
 android {
-    compileSdkVersion 31
-    buildToolsVersion "30.0.3"
+    compileSdkVersion 33
+    buildToolsVersion "33.0.1"
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 31
-        versionCode 31
-        versionName "1.6.33"
+        targetSdkVersion 33
+        versionCode 33
+        versionName "1.6.37"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
