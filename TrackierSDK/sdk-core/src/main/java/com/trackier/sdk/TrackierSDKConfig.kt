@@ -1,7 +1,6 @@
 package com.trackier.sdk
 
 import android.content.Context
-import android.util.Log
 import java.util.logging.Level
 import java.util.logging.Logger
 
@@ -23,7 +22,6 @@ class TrackierSDKConfig(var context: Context, val appToken: String, val env: Str
         val level = if (env == Constants.ENV_PRODUCTION) Level.SEVERE else Level.FINEST
         Factory.setLogLevel(level)
         logger = Factory.logger
-        Util.setApplicationContext(this.context.applicationContext)
     }
 
     fun setAppSecret(secretId: String, secretKey: String) {

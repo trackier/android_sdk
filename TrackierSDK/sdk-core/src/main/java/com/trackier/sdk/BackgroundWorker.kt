@@ -12,7 +12,6 @@ import kotlin.Exception
 
 class BackgroundWorker(appContext: Context, val workerParameters: WorkerParameters):
     CoroutineWorker(appContext, workerParameters) {
-    private var instance = TrackierSDKInstance()
     private fun getWorkData(): TrackierWorkRequest? {
         val json = inputData.getString(Constants.LOG_WORK_INPUT_KEY)
         val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
@@ -29,7 +28,7 @@ class BackgroundWorker(appContext: Context, val workerParameters: WorkerParamete
             try {
                 val resp = APIRepository.doWork(workRequest!!)
                 if (resp?.success == true && !resp.clickId.isEmpty()) {
-                    Util.campaignData(resp)
+                    Util.campaignData(applicationContext, resp)
                 }
             } catch (ex: HttpException) {
                 Log.d("background_workder_Htt", "${ex}")

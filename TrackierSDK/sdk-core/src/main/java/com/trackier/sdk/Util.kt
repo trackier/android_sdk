@@ -160,32 +160,23 @@ object Util {
         }
     }
     
-    fun setApplicationContext(context: Context) {
-        applicationContext = context.applicationContext
+    fun campaignData(context: Context, res: ResponseData) {
+        setSharedPrefString(context,"ad",res.ad)
+        setSharedPrefString(context,"adId",res.adId)
+        setSharedPrefString(context,"camp",res.camp)
+        setSharedPrefString(context,"campId",res.campId)
+        setSharedPrefString(context,"adSet",res.adSet)
+        setSharedPrefString(context,"adSetId",res.adSetId)
+        setSharedPrefString(context,"channel",res.channel)
+        setSharedPrefString(context,"p1",res.p1)
+        setSharedPrefString(context,"p2",res.p2)
+        setSharedPrefString(context,"p3",res.p3)
+        setSharedPrefString(context,"p4",res.p4)
+        setSharedPrefString(context,"p5",res.p5)
+        setSharedPrefString(context,"clickId",res.clickId)
+        setSharedPrefString(context,"dlv",res.dlv)
+        setSharedPrefString(context,"pid",res.pid)
+        setSharedPrefString(context,"isRetargeting", res.isRetargeting.toString())
+        setSharedPrefString(context.applicationContext,"dlv", res.dlv)
     }
-    
-    fun getApplicationContext(): Context? {
-        return applicationContext
-    }
-    
-    fun campaignData(res: ResponseData) {
-        getApplicationContext()?.let { setSharedPrefString(it,"ad",res.ad) }
-        getApplicationContext()?.let { setSharedPrefString(it,"adId",res.adId) }
-        getApplicationContext()?.let { setSharedPrefString(it,"camp",res.camp) }
-        getApplicationContext()?.let { setSharedPrefString(it,"campId",res.campId) }
-        getApplicationContext()?.let { setSharedPrefString(it,"adSet",res.adSet) }
-        getApplicationContext()?.let { setSharedPrefString(it,"adSetId",res.adSetId) }
-        getApplicationContext()?.let { setSharedPrefString(it,"channel",res.channel) }
-        getApplicationContext()?.let { setSharedPrefString(it,"p1",res.p1) }
-        getApplicationContext()?.let { setSharedPrefString(it,"p2",res.p2) }
-        getApplicationContext()?.let { setSharedPrefString(it,"p3",res.p3) }
-        getApplicationContext()?.let { setSharedPrefString(it,"p4",res.p4) }
-        getApplicationContext()?.let { setSharedPrefString(it,"p5",res.p5) }
-        getApplicationContext()?.let { setSharedPrefString(it,"clickId",res.clickId) }
-        getApplicationContext()?.let { setSharedPrefString(it,"dlv",res.dlv) }
-        getApplicationContext()?.let { setSharedPrefString(it,"pid",res.pid) }
-        getApplicationContext()?.let { setSharedPrefString(it,"isRetargeting", res.isRetargeting.toString()) }
-        getApplicationContext()?.let { setSharedPrefString(it.applicationContext,"dlv", res.dlv) }
-    }
-    
 }

@@ -1,6 +1,5 @@
 package com.trackier.sdk
 
-import android.content.Context
 
 object Constants {
     const val SDK_VERSION = "1.6.40"

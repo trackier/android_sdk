@@ -12,7 +12,6 @@ class TrackierSDKInstance {
     lateinit var config: TrackierSDKConfig
     private var refDetails: RefererDetails? = null
     private var appToken: String = ""
-    
     var isEnabled = true
     var isInitialized = false
     var configLoaded = false
