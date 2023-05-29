@@ -4,17 +4,19 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Build
+import android.util.Log
 import java.io.BufferedReader
 import java.io.FileReader
 import java.math.BigDecimal
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
+import java.util.*
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
-import java.util.*
 
 object Util {
     private val HEX_CHARS = "0123456789ABCDEF".toCharArray()
+    private var applicationContext: Context? = null
     val dateFormatter = SimpleDateFormat(Constants.DATE_TIME_FORMAT, Locale.US)
     init {
         dateFormatter.timeZone = TimeZone.getTimeZone("UTC")
@@ -157,4 +159,33 @@ object Util {
             return null
         }
     }
+    
+    fun setApplicationContext(context: Context) {
+        applicationContext = context.applicationContext
+    }
+    
+    fun getApplicationContext(): Context? {
+        return applicationContext
+    }
+    
+    fun campaignData(res: ResponseData) {
+        getApplicationContext()?.let { setSharedPrefString(it,"ad",res.ad) }
+        getApplicationContext()?.let { setSharedPrefString(it,"adId",res.adId) }
+        getApplicationContext()?.let { setSharedPrefString(it,"camp",res.camp) }
+        getApplicationContext()?.let { setSharedPrefString(it,"campId",res.campId) }
+        getApplicationContext()?.let { setSharedPrefString(it,"adSet",res.adSet) }
+        getApplicationContext()?.let { setSharedPrefString(it,"adSetId",res.adSetId) }
+        getApplicationContext()?.let { setSharedPrefString(it,"channel",res.channel) }
+        getApplicationContext()?.let { setSharedPrefString(it,"p1",res.p1) }
+        getApplicationContext()?.let { setSharedPrefString(it,"p2",res.p2) }
+        getApplicationContext()?.let { setSharedPrefString(it,"p3",res.p3) }
+        getApplicationContext()?.let { setSharedPrefString(it,"p4",res.p4) }
+        getApplicationContext()?.let { setSharedPrefString(it,"p5",res.p5) }
+        getApplicationContext()?.let { setSharedPrefString(it,"clickId",res.clickId) }
+        getApplicationContext()?.let { setSharedPrefString(it,"dlv",res.dlv) }
+        getApplicationContext()?.let { setSharedPrefString(it,"pid",res.pid) }
+        getApplicationContext()?.let { setSharedPrefString(it,"isRetargeting", res.isRetargeting.toString()) }
+        getApplicationContext()?.let { setSharedPrefString(it.applicationContext,"dlv", res.dlv) }
+    }
+    
 }

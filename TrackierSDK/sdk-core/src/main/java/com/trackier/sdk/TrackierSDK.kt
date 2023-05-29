@@ -2,6 +2,7 @@ package com.trackier.sdk
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.annotation.Keep
 
 @Keep
@@ -107,5 +108,80 @@ object TrackierSDK {
     @JvmStatic
     fun setUserPhone(userPhone: String) {
         instance.customerPhoneNumber = userPhone
+    }
+    
+    @JvmStatic
+    fun getAd(): String {
+        return Util.getSharedPrefString(instance.config.context, Constants.SHARED_PREF_AD)
+    }
+    
+    @JvmStatic
+    fun getAdID(): String {
+        return Util.getSharedPrefString(instance.config.context, Constants.SHARED_PREF_ADID)
+    }
+    
+    @JvmStatic
+    fun getAdSet(): String {
+        return Util.getSharedPrefString(instance.config.context, Constants.SHARED_PREF_ADSET)
+    }
+    
+    @JvmStatic
+    fun getAdSetID(): String {
+        return Util.getSharedPrefString(instance.config.context, Constants.SHARED_PREF_ADSETID)
+    }
+    
+    @JvmStatic
+    fun getCampaign(): String {
+        return Util.getSharedPrefString(instance.config.context, Constants.SHARED_PREF_CAMPAIGN)
+    }
+    
+    @JvmStatic
+    fun getCampaignID(): String {
+        return Util.getSharedPrefString(instance.config.context, Constants.SHARED_PREF_CAMPAIGNID)
+    }
+    
+    @JvmStatic
+    fun getChannel(): String {
+        return Util.getSharedPrefString(instance.config.context, Constants.SHARED_PREF_CHANNEL)
+    }
+    
+    @JvmStatic
+    fun getP1(): String {
+        return Util.getSharedPrefString(instance.config.context, Constants.SHARED_PREF_P1)
+    }
+    
+    @JvmStatic
+    fun getP2(): String {
+        return Util.getSharedPrefString(instance.config.context, Constants.SHARED_PREF_P2)
+    }
+    
+    @JvmStatic
+    fun getP3(): String {
+        return Util.getSharedPrefString(instance.config.context, Constants.SHARED_PREF_P3)
+    }
+    
+    @JvmStatic
+    fun getP4(): String {
+        return Util.getSharedPrefString(instance.config.context, Constants.SHARED_PREF_P4)
+    }
+    
+    @JvmStatic
+    fun getP5(): String {
+        return Util.getSharedPrefString(instance.config.context, Constants.SHARED_PREF_P5)
+    }
+    
+    @JvmStatic
+    fun getClickId(): String {
+        return Util.getSharedPrefString(instance.config.context, Constants.SHARED_PREF_CLICKID)
+    }
+    
+    @JvmStatic
+    fun getDlv(): String {
+        return Util.getSharedPrefString(instance.config.context, Constants.SHARED_PREF_DLV)
+    }
+    
+    @JvmStatic
+    fun getPid(): String {
+        return Util.getSharedPrefString(instance.config.context, Constants.SHARED_PREF_PID)
     }
 }
