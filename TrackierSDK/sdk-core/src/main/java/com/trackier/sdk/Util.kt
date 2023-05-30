@@ -15,7 +15,6 @@ import javax.crypto.spec.SecretKeySpec
 
 object Util {
     private val HEX_CHARS = "0123456789ABCDEF".toCharArray()
-    private var applicationContext: Context? = null
     val dateFormatter = SimpleDateFormat(Constants.DATE_TIME_FORMAT, Locale.US)
     init {
         dateFormatter.timeZone = TimeZone.getTimeZone("UTC")
