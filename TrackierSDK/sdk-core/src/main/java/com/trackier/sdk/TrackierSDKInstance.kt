@@ -12,7 +12,6 @@ class TrackierSDKInstance {
     lateinit var config: TrackierSDKConfig
     private var refDetails: RefererDetails? = null
     private var appToken: String = ""
-
     var isEnabled = true
     var isInitialized = false
     var configLoaded = false
@@ -214,8 +213,7 @@ class TrackierSDKInstance {
         } catch (ex: Exception) {
             Factory.logger.warning("Unable to get referrer data on install")
         }
-
-
+        
         val wrkRequest = makeWorkRequest(TrackierWorkRequest.KIND_INSTALL)
         try {
             TrackierWorkRequest.enqueue(wrkRequest)

@@ -26,7 +26,10 @@ class BackgroundWorker(appContext: Context, val workerParameters: WorkerParamete
         try {
             val workRequest = getWorkData()
             try {
-                APIRepository.doWork(workRequest!!)
+                val resp = APIRepository.doWork(workRequest!!)
+                if (resp?.success == true && !resp.clickId.isEmpty()) {
+                    Util.campaignData(applicationContext, resp)
+                }
             } catch (ex: HttpException) {
                 Log.d("background_workder_Htt", "${ex}")
                 return Result.retry()

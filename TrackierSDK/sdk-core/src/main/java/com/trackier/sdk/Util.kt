@@ -9,9 +9,9 @@ import java.io.FileReader
 import java.math.BigDecimal
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
+import java.util.*
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
-import java.util.*
 
 object Util {
     private val HEX_CHARS = "0123456789ABCDEF".toCharArray()
@@ -156,5 +156,24 @@ object Util {
         } catch (ex: Exception) {
             return null
         }
+    }
+    
+    fun campaignData(context: Context, res: ResponseData) {
+        setSharedPrefString(context, Constants.SHARED_PREF_AD, res.ad)
+        setSharedPrefString(context, Constants.SHARED_PREF_ADID, res.adId)
+        setSharedPrefString(context, Constants.SHARED_PREF_CAMPAIGN, res.camp)
+        setSharedPrefString(context, Constants.SHARED_PREF_CAMPAIGNID, res.campId)
+        setSharedPrefString(context, Constants.SHARED_PREF_ADSET, res.adSet)
+        setSharedPrefString(context, Constants.SHARED_PREF_ADSETID, res.adSetId)
+        setSharedPrefString(context, Constants.SHARED_PREF_CHANNEL, res.channel)
+        setSharedPrefString(context, Constants.SHARED_PREF_P1, res.p1)
+        setSharedPrefString(context, Constants.SHARED_PREF_P2, res.p2)
+        setSharedPrefString(context, Constants.SHARED_PREF_P3, res.p3)
+        setSharedPrefString(context, Constants.SHARED_PREF_P4, res.p4)
+        setSharedPrefString(context, Constants.SHARED_PREF_P5, res.p5)
+        setSharedPrefString(context, Constants.SHARED_PREF_CLICKID, res.clickId)
+        setSharedPrefString(context, Constants.SHARED_PREF_DLV, res.dlv)
+        setSharedPrefString(context, Constants.SHARED_PREF_PID, res.pid)
+        setSharedPrefString(context, Constants.SHARED_PREF_ISRETARGETING, res.isRetargeting.toString())
     }
 }

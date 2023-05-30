@@ -1,8 +1,8 @@
 package com.trackier.sdk
 
 import android.content.Context
-import java.util.logging.Logger
 import java.util.logging.Level
+import java.util.logging.Logger
 
 class TrackierSDKConfig(var context: Context, val appToken: String, val env: String) {
     private val logger: Logger
@@ -106,4 +106,5 @@ class TrackierSDKConfig(var context: Context, val appToken: String, val env: Str
     fun getAndroidId(): String {
         return this.androidId
     }
+    
 }
