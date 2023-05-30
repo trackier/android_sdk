@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Build
-import android.util.Log
 import java.io.BufferedReader
 import java.io.FileReader
 import java.math.BigDecimal
@@ -161,21 +160,21 @@ object Util {
     }
     
     fun campaignData(context: Context, res: ResponseData) {
-        setSharedPrefString(context,Constants.SHARED_PREF_AD,res.ad)
-        setSharedPrefString(context,Constants.SHARED_PREF_ADID,res.adId)
-        setSharedPrefString(context,Constants.SHARED_PREF_CAMPAIGN,res.camp)
-        setSharedPrefString(context,Constants.SHARED_PREF_CAMPAIGNID,res.campId)
-        setSharedPrefString(context,Constants.SHARED_PREF_ADSET,res.adSet)
-        setSharedPrefString(context,Constants.SHARED_PREF_ADSETID,res.adSetId)
-        setSharedPrefString(context,Constants.SHARED_PREF_CHANNEL,res.channel)
-        setSharedPrefString(context,Constants.SHARED_PREF_P1,res.p1)
-        setSharedPrefString(context,Constants.SHARED_PREF_P2,res.p2)
-        setSharedPrefString(context,Constants.SHARED_PREF_P3,res.p3)
-        setSharedPrefString(context,Constants.SHARED_PREF_P4,res.p4)
-        setSharedPrefString(context,Constants.SHARED_PREF_P5,res.p5)
-        setSharedPrefString(context,Constants.SHARED_PREF_CLICKID,res.clickId)
-        setSharedPrefString(context,Constants.SHARED_PREF_DLV,res.dlv)
-        setSharedPrefString(context,Constants.SHARED_PREF_PID,res.pid)
-        setSharedPrefString(context,Constants.SHARED_PREF_ISRETARGETING, res.isRetargeting.toString())
+        setSharedPrefString(context, Constants.SHARED_PREF_AD, res.ad)
+        setSharedPrefString(context, Constants.SHARED_PREF_ADID, res.adId)
+        setSharedPrefString(context, Constants.SHARED_PREF_CAMPAIGN, res.camp)
+        setSharedPrefString(context, Constants.SHARED_PREF_CAMPAIGNID, res.campId)
+        setSharedPrefString(context, Constants.SHARED_PREF_ADSET, res.adSet)
+        setSharedPrefString(context, Constants.SHARED_PREF_ADSETID, res.adSetId)
+        setSharedPrefString(context, Constants.SHARED_PREF_CHANNEL, res.channel)
+        setSharedPrefString(context, Constants.SHARED_PREF_P1, res.p1)
+        setSharedPrefString(context, Constants.SHARED_PREF_P2, res.p2)
+        setSharedPrefString(context, Constants.SHARED_PREF_P3, res.p3)
+        setSharedPrefString(context, Constants.SHARED_PREF_P4, res.p4)
+        setSharedPrefString(context, Constants.SHARED_PREF_P5, res.p5)
+        setSharedPrefString(context, Constants.SHARED_PREF_CLICKID, res.clickId)
+        setSharedPrefString(context, Constants.SHARED_PREF_DLV, res.dlv)
+        setSharedPrefString(context, Constants.SHARED_PREF_PID, res.pid)
+        setSharedPrefString(context, Constants.SHARED_PREF_ISRETARGETING, res.isRetargeting.toString())
     }
 }
