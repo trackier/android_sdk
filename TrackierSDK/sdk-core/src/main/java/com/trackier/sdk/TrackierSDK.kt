@@ -184,4 +184,9 @@ object TrackierSDK {
     fun getPid(): String {
         return Util.getSharedPrefString(instance.config.context, Constants.SHARED_PREF_PID)
     }
+    
+    @JvmStatic
+    fun getIsRetargeting(): String {
+        return Util.getSharedPrefString(instance.config.context, Constants.SHARED_PREF_ISRETARGETING)
+    }
 }
