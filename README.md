@@ -1104,7 +1104,7 @@ class MainApplication : Application() {
 
 ## <a id="qs-campaign-data"></a>Getting Campaign Data
 	
-For getting the campaign data, We have a function that return the campaign data. Check below the example code.
+For getting the campaign data, We have a function that return the campaign data. Please check below the example code.
 
 ```Java
 	
