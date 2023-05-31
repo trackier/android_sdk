@@ -46,7 +46,7 @@ Screenshot[1]
 You can find the latest version [here](https://search.maven.org/artifact/com.trackier/android-sdk)
 
 ```gradle 
-  implementation 'com.trackier:android-sdk:1.6.39' // Add this Trackier SDK dependency in the build.gradle
+  implementation 'com.trackier:android-sdk:1.6.44' // Add this Trackier SDK dependency in the build.gradle
 ```
 Also, please check the screenshot[2] in the below section for reference.
 
@@ -59,7 +59,7 @@ Add the Android Install Referrer as a dependency. You can find the latest versio
     // make sure to use the latest SDK version:
     // https://mvnrepository.com/artifact/com.trackier/android-sdk   
   
-    implementation 'com.trackier:android-sdk:1.6.39' // Add this Trackier SDK dependency in the build.gradle
+    implementation 'com.trackier:android-sdk:1.6.44' // Add this Trackier SDK dependency in the build.gradle
     implementation 'com.android.installreferrer:installreferrer:2.2' // Add this install referrer dependency in the build.gradle
   }
 ```
@@ -68,8 +68,7 @@ Sync the project to retrieve the dependencies – see the following screenshot.
 
 Screenshot[2]
 
-<img width="1000" alt="Screenshot 2022-07-08 at 6 11 50 PM" src="https://user-images.githubusercontent.com/16884982/177994144-b59a2836-8acb-4c93-ac7b-79a6cac545ae.png">
-
+<img width="1000" alt="Screenshot 2022-07-08 at 6 11 50 PM" src="https://github.com/trackier/android_sdk/assets/16884982/6915e7ac-79af-4ac9-9c83-9051c5bf3e82">
 
 
 ## <a id="qs-add-request-permissions"></a>Add required permissions
@@ -1098,10 +1097,9 @@ class MainApplication : Application() {
         TrackierSDK.initialize(sdkConfig)
     }
 }
+		
 
-
-```
-
+```	
 
 ## <a id="qs-progaurd-trackier-sdk"></a>Proguard Settings 
 
