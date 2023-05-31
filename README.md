@@ -22,6 +22,7 @@
 * [Disable Organic Tracking](#qs-disable-orgainic-tracking)
 * [Uninstall Tracking](#qs-track-uninstall)
 * [SDK Signing](#qs-sdk-signing)
+* [Getting Campaign Data](#qs-campaign-data)
 * [Proguard Settings](#qs-progaurd-trackier-sdk)
 
 ## <a id="qs-add-trackier-sdk"></a>Integrate Trackier SDK to your app
@@ -1100,6 +1101,71 @@ class MainApplication : Application() {
 		
 
 ```	
+
+## <a id="qs-campaign-data"></a>Getting Campaign Data
+	
+For getting the campaign data, We have a function that return the campaign data. Check below the example code.
+
+```Java
+	
+ eventTrackWithCurrency.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TrackierEvent event = new TrackierEvent(TrackierEvent.UPDATE);
+                event.param1 = "Praram Name";
+                event.revenue = 0.5;
+	        event.currency = "USD";
+		String ad = TrackierSDK.getAd();
+		String adId = TrackierSDK.getAdID();
+		String camp = TrackierSDK.getCampaign();
+		String campID = TrackierSDK.getCampaignID();
+		String adSet = TrackierSDK.getAdSet();
+		String adSetID = TrackierSDK.getAdSetID();
+		String channel = TrackierSDK.getChannel();
+		String p1 = TrackierSDK.getP1();
+		String p2 = TrackierSDK.getP2();
+		String p3 = TrackierSDK.getP3();
+		String p4 = TrackierSDK.getP4();
+		String p5 = TrackierSDK.getP5();
+		String clickId = TrackierSDK.getClickId();
+		String dlv = TrackierSDK.getDlv();
+		String pid = TrackierSDK.getPid();
+		String isRetargetting = TrackierSDK.getIsRetargeting();
+                TrackierSDK.trackEvent(event);
+                Log.d("TAG", "onClick: eventTrackWithCurrency");
+            }
+        });
+	
+```
+	
+Code for kotlin 
+
+```Kotlin
+	
+btn_event_track.setOnClickListener(View.OnClickListener {
+            val event = TrackierEvent(TrackierEvent.UPDATE)
+            event.param1 = "Praram Name"
+            event.revenue = 0.5
+            event.currency = "USD"
+            val ad: String = getAd()
+            val adId: String = getAdID()
+            val camp: String = getCampaign()
+            val campID: String = getCampaignID()
+            val adSet: String = getAdSet()
+            val adSetID: String = getAdSetID()
+            val channel: String = getChannel()
+            val p1: String = getP1()
+            val p2: String = getP2()
+            val p3: String = getP3()
+            val p4: String = getP4()
+            val p5: String = getP5()
+            val clickId: String = getClickId()
+            val dlv: String = getDlv()
+            val pid: String = getPid()
+            val isRetargetting: String = getIsRetargeting()
+            trackEvent(event)
+        })
+```
 
 ## <a id="qs-progaurd-trackier-sdk"></a>Proguard Settings 
 
