@@ -188,4 +188,22 @@ object TrackierSDK {
     fun getIsRetargeting(): String {
         return Util.getSharedPrefString(instance.config.context, Constants.SHARED_PREF_ISRETARGETING)
     }
+    
+    @JvmStatic
+    fun setPreinstallAttribution(pid: String, campaign: String, campaignId: String) {
+        try {
+            val prefs = Util.getSharedPref(instance.config.context)
+            prefs.edit().putString(Constants.PRE_INSTALL_ATTRIBUTION_PID, pid)
+                .putString(Constants.PRE_INSTALL_ATTRIBUTION_CAMPAIGN, campaign)
+                .putString(Constants.PRE_INSTALL_ATTRIBUTION_CAMPAIGNID, campaignId)
+                .apply()
+        } catch (ex: Exception) {}
+    }
+    
+    @JvmStatic
+    fun checkXiaomiReferrer(context: Context): String {
+        return Util.getSharedPrefString(context, Constants.SHARED_PREF_XIAOMI_INSTALL_URL)
+        
+    }
+    
 }

@@ -1,17 +1,26 @@
 package com.trackier.sdk
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
+import android.content.pm.PackageManager.NameNotFoundException
 import android.content.res.Configuration
 import android.os.Build
+import android.util.Log
+import com.trackier.sdk.Factory.logger
 import java.io.BufferedReader
+import java.io.File
 import java.io.FileReader
+import java.lang.reflect.Method
 import java.math.BigDecimal
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
+
 
 object Util {
     private val HEX_CHARS = "0123456789ABCDEF".toCharArray()
@@ -175,5 +184,157 @@ object Util {
         setSharedPrefString(context, Constants.SHARED_PREF_DLV, res.dlv)
         setSharedPrefString(context, Constants.SHARED_PREF_PID, res.pid)
         setSharedPrefString(context, Constants.SHARED_PREF_ISRETARGETING, res.isRetargeting.toString())
+    }
+    
+    fun getSysPropertyPath(): String? {
+        var value: String? = ""
+        try {
+            value = Class.forName(Constants.ANDROID_SYSTEM_PROPERTIES)
+                .getMethod("get", String::class.java)
+                .invoke(null, Constants.SYSTEM_PROPERTIES_PRE_INSTALL_PATH) as String
+            logger.info("Get system property " + value)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return value
+    }
+    
+    fun getPreInstallData(path: String): String {
+        var bufferedReader: BufferedReader? = null
+        var line: String? = ""
+        try {
+            if (!path.isEmpty()){
+                bufferedReader = BufferedReader(FileReader(File(path)))
+            }
+            val jsonFile = StringBuilder()
+            while (bufferedReader!!.readLine().also { line = it } != null) {
+                jsonFile.append(line)
+                return jsonFile.toString()
+            }
+        } catch (e: Exception) {
+            logger.info("Failed to read System Property " + e.message)
+        }
+        return ""
+    }
+    
+    fun getPreInstallDataFromDefaultPathWay(): String {
+        if (!getPreInstallData(Constants.PRE_DEFINED_PATH1).isEmpty()) {
+            return Constants.PRE_DEFINED_PATH1
+        } else if (!getPreInstallData(Constants.PRE_DEFINED_PATH2).isEmpty()) {
+            return Constants.PRE_DEFINED_PATH2
+        }
+        return ""
+    }
+    
+    fun getPreInstallDataFromPreInstallFilePath(context: Context): String {
+        var getData = ""
+        getData = getPreInstallData(getSysPropertyPath().toString())
+        if (!getData.isEmpty()) {
+            return getData;
+        }
+        getData = getPreInstallData(getPreInstalllManifestData(context, Constants.PRE_INSTALL_MANIFEST_PATH))
+        if (!getData.isEmpty()) {
+            return getData;
+        }
+        getData = getPreInstallData(getPreInstallDataFromDefaultPathWay())
+        if (!getData.isEmpty()) {
+            return getData;
+        }
+        return getData
+    }
+    
+    fun getPreInstalllManifestData(context: Context, key: String): String {
+        var tempValue = ""
+        try {
+            if (key == Constants.PRE_INSTALL_MANIFEST_NAME){
+                val ai = context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
+                val bundle = ai.metaData
+                tempValue = bundle.getString(Constants.PRE_INSTALL_MANIFEST_NAME).toString()
+                return tempValue
+            } else if (key == (Constants.PRE_INSTALL_MANIFEST_PATH)) {
+                val ai = context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
+                val bundle = ai.metaData
+                tempValue = bundle.getString(Constants.PRE_INSTALL_MANIFEST_PATH).toString()
+                return tempValue
+            }
+            logger.info( "getManifestData \$propertyName = $tempValue")
+        } catch (e: NameNotFoundException) {
+            logger.info( "getManifestData NameNotFound = " + e.message)
+            e.printStackTrace()
+        } catch (e: NullPointerException) {
+            logger.info( "getManifestData NullPointer = " + e.message)
+            e.printStackTrace()
+        } catch (e: Exception) {
+            logger.info( "getManifestData Exception = " + e.message)
+            e.printStackTrace()
+        }
+        return tempValue
+    }
+    
+    fun isXioamiPreInstallApp(pkgName: String?): Boolean {
+        try {
+            val miui = Class.forName("miui.os.MiuiInit")
+            val method: Method = miui.getMethod("isPreinstalledPAIPackage", String::class.java)
+            return method.invoke(null, pkgName) as Boolean
+        } catch (e: Exception) {
+            logger.info( "isXioamiPreInstallApp Exception = " + e.message)
+        }
+        return false
+    }
+    
+    fun applicationIsSystemApp(mContext: Context): Boolean {
+        try {
+            val applicationInfo = mContext.packageManager.getApplicationInfo(mContext.packageName!!, 0)
+            val appLocation = applicationInfo.publicSourceDir
+            Log.d("xxxx","applicationIsSystemApp"+ appLocation)
+            if (appLocation != null && appLocation.startsWith(Constants.SYSTEM_PATH)) {
+                return true
+            }
+        } catch (e: NameNotFoundException) {
+            e.printStackTrace() // TODO Can handle as your logic
+        }
+        return false
+    }
+    
+    fun applicationIsSystemAppFlagSystem(mContext: Context): Boolean {
+        try {
+            val applicationInfo = mContext.packageManager.getApplicationInfo(mContext.packageName!!, 0)
+            // FLAG_SYSTEM is only set to system applications,
+            // this will work even if application is installed in external storage
+            // Check if package is system app
+            if (applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM != 0) {
+                return true
+            }
+        } catch (e: NameNotFoundException) {
+            e.printStackTrace() // TODO Can handle as your logic
+        }
+        return false
+    }
+    
+    fun isPreInstallApp(context: Context): MutableMap<String, Boolean> {
+        val params = mutableMapOf<String, Boolean>()
+        params["isXioamiPreInstallApp"] = isXioamiPreInstallApp(context.packageName)
+        params["applicationIsSystemApp"] = applicationIsSystemApp(context)
+        params["applicationIsSystemAppFlagSystem"] = applicationIsSystemAppFlagSystem(context)
+        return params
+    }
+    
+    fun preinstallAttribution(context: Context): MutableMap<String, String> {
+        val params = mutableMapOf<String, String>()
+        params["preInstallAttribution_Pid"] = getSharedPrefString(context, Constants.PRE_INSTALL_ATTRIBUTION_PID)
+        params["preInstallAttribution_Camapign"] = getSharedPrefString(context, Constants.PRE_INSTALL_ATTRIBUTION_CAMPAIGN)
+        params["preInstallAttribution_CamapignId"] = getSharedPrefString(context, Constants.PRE_INSTALL_ATTRIBUTION_CAMPAIGNID)
+        return params
+    }
+    
+    fun getPreLoadAndPAIdata(context: Context): MutableMap<String, Any> {
+        val params = mutableMapOf<String, Any>()
+        params["preInstallDataFromPreInstallFilePath"] = getPreInstallDataFromPreInstallFilePath(context)
+        params["preInstalllManifest"] = getPreInstalllManifestData(context, Constants.PRE_INSTALL_MANIFEST_NAME)
+        params["preInstalllAttribution"] = preinstallAttribution(context)
+        params["isPreInstallApp"] = isPreInstallApp(context)
+        params["googleReferrer"] = getSharedPrefString(context, Constants.SHARED_PREF_INSTALL_URL)
+        params["miuiReferrer"] = getSharedPrefString(context, Constants.SHARED_PREF_XIAOMI_INSTALL_URL)
+        return params
     }
 }

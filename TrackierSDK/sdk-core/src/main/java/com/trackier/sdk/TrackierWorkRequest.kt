@@ -15,7 +15,6 @@ class TrackierWorkRequest(
     var gaid: String? = null
     var isLAT = false
     lateinit var device: DeviceInfo
-
     var event = TrackierEvent(Constants.UNKNOWN_EVENT)
     var refDetails = RefererDetails.default()
     private val createdAt = Util.dateFormatter.format(Date())
@@ -33,6 +32,7 @@ class TrackierWorkRequest(
     var secretId: String = ""
     var secretKey: String = ""
     var organic = false
+    var preInstall_Data: MutableMap<String, Any>? = null
 
     private fun setDefaults(): MutableMap<String, Any> {
         val body = mutableMapOf<String, Any>()
@@ -83,6 +83,7 @@ class TrackierWorkRequest(
         body["organic"] = organic
         body["cphone"] = customerPhoneNumber
         body["cname"] = customerName
+        body["getPreLoadAndPAIdata"] = preInstall_Data.toString()
         return body
     }
 

@@ -11,6 +11,7 @@ class TrackierSDKInstance {
     private val device = DeviceInfo()
     lateinit var config: TrackierSDKConfig
     private var refDetails: RefererDetails? = null
+    private var refXiaomiDetails: XiaomiReferrerDetails? = null
     private var appToken: String = ""
     var isEnabled = true
     var isInitialized = false
@@ -31,6 +32,9 @@ class TrackierSDKInstance {
 
     var firstInstallTime = ""
     var organic = false
+    
+    var preInstall_Data: MutableMap<String, Any>? = null
+    
 
     /**
      * Initialize method should be called to initialize the sdk
@@ -118,6 +122,17 @@ class TrackierSDKInstance {
                     .apply()
         } catch (ex: Exception) {}
     }
+    
+    private fun setXiaomiReferrerDetails(xiaomiRefererDetails: XiaomiReferrerDetails) {
+        refXiaomiDetails = xiaomiRefererDetails
+        try {
+            val prefs = Util.getSharedPref(this.config.context)
+            prefs.edit().putString(Constants.SHARED_PREF_XIAOMI_INSTALL_URL, refXiaomiDetails!!.installReferrer)
+                .putInt(Constants.SHARED_PREF_XIAOMI_CLICKTIMESTAMP, refXiaomiDetails!!.referrerClickTimestampSeconds)
+                .putInt(Constants.SHARED_PREF_XIAOMI_INSTALLTIMEBEGIN, refXiaomiDetails!!.installBeginTimestampSeconds)
+                .apply()
+        } catch (ex: Exception) {}
+    }
 
     private fun setInstallID(installID: String) {
         Util.setSharedPrefString(this.config.context, Constants.SHARED_PREF_INSTALL_ID, installID)
@@ -172,6 +187,7 @@ class TrackierSDKInstance {
         trackierWorkRequest.secretKey = this.config.getAppSecretKey()
         trackierWorkRequest.customerName = this.customerName
         trackierWorkRequest.customerPhoneNumber = this.customerPhoneNumber
+        trackierWorkRequest.preInstall_Data = this.preInstall_Data
         return trackierWorkRequest
     }
 
@@ -208,12 +224,17 @@ class TrackierSDKInstance {
                     val installRef = InstallReferrer(this.config.context)
                     val refDetails = installRef.getRefDetails()
                     this.setReferrerDetails(refDetails)
+                    val xiaomiInstallRef = installRef.getXiaomiRefDetails()
+                    if (xiaomiInstallRef != null) {
+                        this.setXiaomiReferrerDetails(xiaomiInstallRef)
+                    }
                 }
+                
             }
         } catch (ex: Exception) {
             Factory.logger.warning("Unable to get referrer data on install")
         }
-        
+        preInstall_Data = Util.getPreLoadAndPAIdata(config.context)
         val wrkRequest = makeWorkRequest(TrackierWorkRequest.KIND_INSTALL)
         try {
             TrackierWorkRequest.enqueue(wrkRequest)
