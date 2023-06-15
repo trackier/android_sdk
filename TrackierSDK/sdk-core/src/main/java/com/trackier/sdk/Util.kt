@@ -261,9 +261,6 @@ object Util {
         } catch (e: NameNotFoundException) {
             logger.info( "getManifestData NameNotFound = " + e.message)
             e.printStackTrace()
-        } catch (e: NullPointerException) {
-            logger.info( "getManifestData NullPointer = " + e.message)
-            e.printStackTrace()
         } catch (e: Exception) {
             logger.info( "getManifestData Exception = " + e.message)
             e.printStackTrace()

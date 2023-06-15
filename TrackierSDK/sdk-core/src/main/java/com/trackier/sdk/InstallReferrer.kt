@@ -91,7 +91,6 @@ class InstallReferrer(private val context: Context) {
         responseCode: Int,
         referrerClient: GetAppsReferrerClient
     ): XiaomiReferrerDetails? {
-        try {
             when (responseCode) {
                 OK -> try {
                     val response: GetAppsReferrerDetails = referrerClient.installReferrer
@@ -103,9 +102,6 @@ class InstallReferrer(private val context: Context) {
                 FEATURE_NOT_SUPPORTED -> logger.info("XiaomiReferrer onGetAppsReferrerSetupFinished: FEATURE_NOT_SUPPORTED")
                 SERVICE_UNAVAILABLE -> logger.info("XiaomiReferrer onGetAppsReferrerSetupFinished: SERVICE_UNAVAILABLE")
             }
-        } catch (e: Exception) {
-            logger.info("XiaomiReferrer onGetAppsReferrerSetupFinished: " + e.message)
-        }
         return null
     }
     
