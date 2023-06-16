@@ -281,7 +281,7 @@ object Util {
     
     fun applicationIsSystemApp(mContext: Context): Boolean {
         try {
-            val applicationInfo = mContext.packageManager.getApplicationInfo(mContext.packageName!!, 0)
+            val applicationInfo = mContext.packageManager.getApplicationInfo(mContext.packageName, 0)
             val appLocation = applicationInfo.publicSourceDir
             Log.d("xxxx","applicationIsSystemApp"+ appLocation)
             if (appLocation != null && appLocation.startsWith(Constants.SYSTEM_PATH)) {
@@ -295,7 +295,7 @@ object Util {
     
     fun applicationIsSystemAppFlagSystem(mContext: Context): Boolean {
         try {
-            val applicationInfo = mContext.packageManager.getApplicationInfo(mContext.packageName!!, 0)
+            val applicationInfo = mContext.packageManager.getApplicationInfo(mContext.packageName, 0)
             // FLAG_SYSTEM is only set to system applications,
             // this will work even if application is installed in external storage
             // Check if package is system app

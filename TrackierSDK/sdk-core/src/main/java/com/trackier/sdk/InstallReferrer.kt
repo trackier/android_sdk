@@ -92,12 +92,10 @@ class InstallReferrer(private val context: Context) {
         referrerClient: GetAppsReferrerClient
     ): XiaomiReferrerDetails? {
             when (responseCode) {
-                OK -> try {
+                OK -> {
                     val response: GetAppsReferrerDetails = referrerClient.installReferrer
                     val referrerUrl: String = response.installReferrer.toString()
                     return XiaomiReferrerDetails(referrerUrl, response.referrerClickTimestampSeconds.toInt(), response.installBeginTimestampSeconds.toInt())
-                } catch (e: Exception) {
-                    logger.info("XiaomiReferrer getInstallReferrer: " + e.message)
                 }
                 FEATURE_NOT_SUPPORTED -> logger.info("XiaomiReferrer onGetAppsReferrerSetupFinished: FEATURE_NOT_SUPPORTED")
                 SERVICE_UNAVAILABLE -> logger.info("XiaomiReferrer onGetAppsReferrerSetupFinished: SERVICE_UNAVAILABLE")
