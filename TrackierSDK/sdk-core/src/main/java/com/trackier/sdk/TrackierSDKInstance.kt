@@ -187,7 +187,7 @@ class TrackierSDKInstance {
         trackierWorkRequest.secretKey = this.config.getAppSecretKey()
         trackierWorkRequest.customerName = this.customerName
         trackierWorkRequest.customerPhoneNumber = this.customerPhoneNumber
-        trackierWorkRequest.preInstall_Data = this.preinstallData
+        trackierWorkRequest.preinstallData = this.preinstallData
         return trackierWorkRequest
     }
 

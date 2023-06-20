@@ -32,7 +32,7 @@ class TrackierWorkRequest(
     var secretId: String = ""
     var secretKey: String = ""
     var organic = false
-    var preInstall_Data: MutableMap<String, Any>? = null
+    var preinstallData: MutableMap<String, Any>? = null
 
     private fun setDefaults(): MutableMap<String, Any> {
         val body = mutableMapOf<String, Any>()
@@ -83,7 +83,7 @@ class TrackierWorkRequest(
         body["organic"] = organic
         body["cphone"] = customerPhoneNumber
         body["cname"] = customerName
-        body["getPreLoadAndPAIdata"] = preInstall_Data.toString()
+        body["getPreLoadAndPAIdata"] = preinstallData.toString()
         return body
     }
 
