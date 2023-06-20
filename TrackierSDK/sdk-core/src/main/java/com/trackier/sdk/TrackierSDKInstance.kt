@@ -33,7 +33,7 @@ class TrackierSDKInstance {
     var firstInstallTime = ""
     var organic = false
     
-    var preInstall_Data: MutableMap<String, Any>? = null
+    var preinstallData: MutableMap<String, Any>? = null
     
 
     /**
@@ -187,7 +187,7 @@ class TrackierSDKInstance {
         trackierWorkRequest.secretKey = this.config.getAppSecretKey()
         trackierWorkRequest.customerName = this.customerName
         trackierWorkRequest.customerPhoneNumber = this.customerPhoneNumber
-        trackierWorkRequest.preInstall_Data = this.preInstall_Data
+        trackierWorkRequest.preInstall_Data = this.preinstallData
         return trackierWorkRequest
     }
 
@@ -234,7 +234,7 @@ class TrackierSDKInstance {
         } catch (ex: Exception) {
             Factory.logger.warning("Unable to get referrer data on install")
         }
-        preInstall_Data = Util.getPreLoadAndPAIdata(config.context)
+        preinstallData = Util.getPreLoadAndPAIdata(config.context)
         val wrkRequest = makeWorkRequest(TrackierWorkRequest.KIND_INSTALL)
         try {
             TrackierWorkRequest.enqueue(wrkRequest)
