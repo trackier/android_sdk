@@ -1,6 +1,6 @@
 package com.trackier.sdk
 
-import android.annotation.SuppressLint
+
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.ApplicationInfo
@@ -242,22 +242,30 @@ object Util {
         }
         return getData
     }
+
+    fun getApplicationInfo(context: Context): ApplicationInfo {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val app: ApplicationInfo = context.packageManager.getApplicationInfo(context.packageName, PackageManager.ApplicationInfoFlags.of(0))
+            return app
+        }
+        val app: ApplicationInfo = context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
+        return app
+    }
     
     fun getPreInstalllManifestData(context: Context, key: String): String {
         var tempValue = ""
         try {
             if (key == Constants.PRE_INSTALL_MANIFEST_NAME){
-                val ai = context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
+                val ai = getApplicationInfo(context)
                 val bundle = ai.metaData
                 tempValue = bundle.getString(Constants.PRE_INSTALL_MANIFEST_NAME).toString()
-                return tempValue
+
             } else if (key == (Constants.PRE_INSTALL_MANIFEST_PATH)) {
-                val ai = context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
+                val ai = getApplicationInfo(context)
                 val bundle = ai.metaData
                 tempValue = bundle.getString(Constants.PRE_INSTALL_MANIFEST_PATH).toString()
-                return tempValue
             }
-            logger.info( "getManifestData \$propertyName = $tempValue")
+//            logger.info( "getManifestData \$propertyName = $tempValue")
         } catch (e: NameNotFoundException) {
             logger.info( "getManifestData NameNotFound = " + e.message)
             e.printStackTrace()
