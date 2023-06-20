@@ -186,24 +186,24 @@ object Util {
         setSharedPrefString(context, Constants.SHARED_PREF_ISRETARGETING, res.isRetargeting.toString())
     }
     
-    fun getSysPropertyPath(): String? {
+    private fun getSysPropertyPath(): String? {
         var value: String? = ""
         try {
             value = Class.forName(Constants.ANDROID_SYSTEM_PROPERTIES)
                 .getMethod("get", String::class.java)
                 .invoke(null, Constants.SYSTEM_PROPERTIES_PRE_INSTALL_PATH) as String
-            logger.info("Get system property " + value)
+            logger.info("Get system property $value")
         } catch (e: Exception) {
             e.printStackTrace()
         }
         return value
     }
     
-    fun getPreInstallData(path: String): String {
+    private fun getPreInstallData(path: String): String {
         var bufferedReader: BufferedReader? = null
         var line: String? = ""
         try {
-            if (!path.isEmpty()){
+            if (path.isNotEmpty()) {
                 bufferedReader = BufferedReader(FileReader(File(path)))
             }
             val jsonFile = StringBuilder()
@@ -217,42 +217,40 @@ object Util {
         return ""
     }
     
-    fun getPreInstallDataFromDefaultPathWay(): String {
-        if (!getPreInstallData(Constants.PRE_DEFINED_PATH1).isEmpty()) {
+    private fun getPreInstallDataFromDefaultPathWay(): String {
+        if (getPreInstallData(Constants.PRE_DEFINED_PATH1).isNotEmpty()) {
             return Constants.PRE_DEFINED_PATH1
-        } else if (!getPreInstallData(Constants.PRE_DEFINED_PATH2).isEmpty()) {
+        } else if (getPreInstallData(Constants.PRE_DEFINED_PATH2).isNotEmpty()) {
             return Constants.PRE_DEFINED_PATH2
         }
         return ""
     }
     
-    fun getPreInstallDataFromPreInstallFilePath(context: Context): String {
+    private fun getPreInstallDataFromPreInstallFilePath(context: Context): String {
         var getData = ""
         getData = getPreInstallData(getSysPropertyPath().toString())
-        if (!getData.isEmpty()) {
-            return getData;
+        if (getData.isNotEmpty()) {
+            return getData
         }
         getData = getPreInstallData(getPreInstalllManifestData(context, Constants.PRE_INSTALL_MANIFEST_PATH))
-        if (!getData.isEmpty()) {
-            return getData;
+        if (getData.isNotEmpty()) {
+            return getData
         }
         getData = getPreInstallData(getPreInstallDataFromDefaultPathWay())
-        if (!getData.isEmpty()) {
-            return getData;
+        if (getData.isNotEmpty()) {
+            return getData
         }
         return getData
     }
 
-    fun getApplicationInfo(context: Context): ApplicationInfo {
+    private fun getApplicationInfo(context: Context): ApplicationInfo {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            val app: ApplicationInfo = context.packageManager.getApplicationInfo(context.packageName, PackageManager.ApplicationInfoFlags.of(0))
-            return app
+            return context.packageManager.getApplicationInfo(context.packageName, PackageManager.ApplicationInfoFlags.of(PackageManager.GET_META_DATA.toLong()))
         }
-        val app: ApplicationInfo = context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
-        return app
+        return context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
     }
     
-    fun getPreInstalllManifestData(context: Context, key: String): String {
+    private fun getPreInstalllManifestData(context: Context, key: String): String {
         var tempValue = ""
         try {
             if (key == Constants.PRE_INSTALL_MANIFEST_NAME){
@@ -276,7 +274,7 @@ object Util {
         return tempValue
     }
     
-    fun isXioamiPreInstallApp(pkgName: String?): Boolean {
+    private fun isXioamiPreInstallApp(pkgName: String?): Boolean {
         try {
             val miui = Class.forName("miui.os.MiuiInit")
             val method: Method = miui.getMethod("isPreinstalledPAIPackage", String::class.java)
@@ -287,11 +285,11 @@ object Util {
         return false
     }
     
-    fun applicationIsSystemApp(mContext: Context): Boolean {
+    private fun applicationIsSystemApp(mContext: Context): Boolean {
         try {
             val applicationInfo = mContext.packageManager.getApplicationInfo(mContext.packageName, 0)
             val appLocation = applicationInfo.publicSourceDir
-            Log.d("xxxx","applicationIsSystemApp"+ appLocation)
+            Log.d("xxxx", "applicationIsSystemApp $appLocation")
             if (appLocation != null && appLocation.startsWith(Constants.SYSTEM_PATH)) {
                 return true
             }
@@ -301,7 +299,7 @@ object Util {
         return false
     }
     
-    fun applicationIsSystemAppFlagSystem(mContext: Context): Boolean {
+    private fun applicationIsSystemAppFlagSystem(mContext: Context): Boolean {
         try {
             val applicationInfo = mContext.packageManager.getApplicationInfo(mContext.packageName, 0)
             // FLAG_SYSTEM is only set to system applications,
@@ -316,7 +314,7 @@ object Util {
         return false
     }
     
-    fun isPreInstallApp(context: Context): MutableMap<String, Boolean> {
+    private fun isPreInstallApp(context: Context): MutableMap<String, Boolean> {
         val params = mutableMapOf<String, Boolean>()
         params["isXioamiPreInstallApp"] = isXioamiPreInstallApp(context.packageName)
         params["applicationIsSystemApp"] = applicationIsSystemApp(context)
@@ -324,7 +322,7 @@ object Util {
         return params
     }
     
-    fun preinstallAttribution(context: Context): MutableMap<String, String> {
+    private fun preinstallAttribution(context: Context): MutableMap<String, String> {
         val params = mutableMapOf<String, String>()
         params["preInstallAttribution_Pid"] = getSharedPrefString(context, Constants.PRE_INSTALL_ATTRIBUTION_PID)
         params["preInstallAttribution_Camapign"] = getSharedPrefString(context, Constants.PRE_INSTALL_ATTRIBUTION_CAMPAIGN)
@@ -335,8 +333,8 @@ object Util {
     fun getPreLoadAndPAIdata(context: Context): MutableMap<String, Any> {
         val params = mutableMapOf<String, Any>()
         params["preInstallDataFromPreInstallFilePath"] = getPreInstallDataFromPreInstallFilePath(context)
-        params["preInstalllManifest"] = getPreInstalllManifestData(context, Constants.PRE_INSTALL_MANIFEST_NAME)
-        params["preInstalllAttribution"] = preinstallAttribution(context)
+        params["preInstallManifest"] = getPreInstalllManifestData(context, Constants.PRE_INSTALL_MANIFEST_NAME)
+        params["preInstallAttribution"] = preinstallAttribution(context)
         params["isPreInstallApp"] = isPreInstallApp(context)
         params["googleReferrer"] = getSharedPrefString(context, Constants.SHARED_PREF_INSTALL_URL)
         params["miuiReferrer"] = getSharedPrefString(context, Constants.SHARED_PREF_XIAOMI_INSTALL_URL)
