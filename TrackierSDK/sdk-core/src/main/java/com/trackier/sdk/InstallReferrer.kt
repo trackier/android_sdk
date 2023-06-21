@@ -4,16 +4,26 @@ import android.content.Context
 import com.android.installreferrer.api.InstallReferrerClient
 import com.android.installreferrer.api.InstallReferrerStateListener
 import com.android.installreferrer.api.ReferrerDetails
-import java.util.*
-import kotlin.Exception
+import com.miui.referrer.annotation.GetAppsReferrerResponse.Companion.FEATURE_NOT_SUPPORTED
+import com.miui.referrer.annotation.GetAppsReferrerResponse.Companion.OK
+import com.miui.referrer.annotation.GetAppsReferrerResponse.Companion.SERVICE_UNAVAILABLE
+import com.miui.referrer.api.GetAppsReferrerClient
+import com.miui.referrer.api.GetAppsReferrerDetails
+import com.miui.referrer.api.GetAppsReferrerStateListener
+import com.trackier.sdk.Factory.logger
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.suspendCancellableCoroutine
+import java.util.*
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
-import kotlinx.coroutines.suspendCancellableCoroutine
+
 
 class InstallReferrer(private val context: Context) {
-
-    private fun setupFinished(referrerClient: InstallReferrerClient, responseCode: Int): RefererDetails {
+    
+    private fun setupFinished(
+        referrerClient: InstallReferrerClient,
+        responseCode: Int
+    ): RefererDetails {
         return when (responseCode) {
             InstallReferrerClient.InstallReferrerResponse.OK -> {   // Connection established.
                 val response: ReferrerDetails = referrerClient.installReferrer
@@ -36,7 +46,7 @@ class InstallReferrer(private val context: Context) {
             else -> RefererDetails.default()
         }
     }
-
+    
     private suspend fun getInfo(): RefererDetails {
         val referrerClient = InstallReferrerClient.newBuilder(context).build()
         return suspendCancellableCoroutine {
@@ -50,7 +60,7 @@ class InstallReferrer(private val context: Context) {
                         it.resumeWithException(ex)
                     }
                 }
-
+                
                 // Try to restart the connection on the next request to
                 // Google Play by calling the startConnection() method.
                 override fun onInstallReferrerServiceDisconnected() {
@@ -63,7 +73,7 @@ class InstallReferrer(private val context: Context) {
             })
         }
     }
-
+    
     suspend fun getRefDetails(): RefererDetails {
         for (i in 1..5) {
             try {
@@ -75,5 +85,54 @@ class InstallReferrer(private val context: Context) {
             }
         }
         return RefererDetails.default()
+    }
+    
+    fun xiaomiReferrer(
+        responseCode: Int,
+        referrerClient: GetAppsReferrerClient
+    ): XiaomiReferrerDetails? {
+            when (responseCode) {
+                OK -> {
+                    val response: GetAppsReferrerDetails = referrerClient.installReferrer
+                    val referrerUrl: String = response.installReferrer.toString()
+                    return XiaomiReferrerDetails(referrerUrl, response.referrerClickTimestampSeconds.toInt(), response.installBeginTimestampSeconds.toInt())
+                }
+                FEATURE_NOT_SUPPORTED -> logger.info("XiaomiReferrer onGetAppsReferrerSetupFinished: FEATURE_NOT_SUPPORTED")
+                SERVICE_UNAVAILABLE -> logger.info("XiaomiReferrer onGetAppsReferrerSetupFinished: SERVICE_UNAVAILABLE")
+            }
+        return null
+    }
+    
+    private suspend fun getXiaomiInfo(): XiaomiReferrerDetails? {
+        val referrerClient = GetAppsReferrerClient.newBuilder(context).build()
+        return suspendCancellableCoroutine {
+            referrerClient.startConnection(object : GetAppsReferrerStateListener {
+                override fun onGetAppsReferrerSetupFinished(state: Int) {
+                    try {
+                        val rd = xiaomiReferrer(state, referrerClient)
+                        referrerClient.endConnection()
+                        it.resume(rd)
+                    } catch (ex: Exception) {
+                        it.resumeWithException(ex)
+                    }
+                }
+                override fun onGetAppsServiceDisconnected() {
+                   //TODO("Not yet implemented")
+                }
+            })
+        }
+    }
+    
+    suspend fun getXiaomiRefDetails(): XiaomiReferrerDetails? {
+        for (i in 1..5) {
+            try {
+                return getXiaomiInfo()
+            } catch (ex: InstallReferrerException) {
+                delay(1000 * i.toLong())
+            } catch (ex: Exception) {
+                delay(1000 * i.toLong())
+            }
+        }
+        return XiaomiReferrerDetails.default()
     }
 }
