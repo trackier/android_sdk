@@ -37,10 +37,10 @@ object Constants {
     const val SHARED_PREF_PID = "pid"
     const val SHARED_PREF_ISRETARGETING = "isRetargeting"
     
-    const val PRE_INSTALL_MANIFEST_PATH = "TR_PRE_INSTALL_PATH"
+    const val PRE_INSTALL_MANIFEST_KEY = "TR_PRE_INSTALL_PATH"
     const val SYSTEM_PROPERTIES_PRE_INSTALL_PATH = "ro.trackier.preinstall.path"
     //const val SYSTEM_PROPERTIES_PRE_INSTALL_PATH = "ro.product.name"
-    const val ANDROID_SYSTEM_PROPERTIES = "android.os.SystemProperties"
+    const val ANDROID_SYSTEM_PROPERTIES_CLASS = "android.os.SystemProperties"
     const val PRE_INSTALL_ATTRIBUTION_CAMPAIGN = "campaign"
     const val PRE_INSTALL_ATTRIBUTION_PID = "pid"
     const val PRE_INSTALL_ATTRIBUTION_CAMPAIGNID = "campaignId"

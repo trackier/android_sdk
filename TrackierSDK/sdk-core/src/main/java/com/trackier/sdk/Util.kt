@@ -189,7 +189,7 @@ object Util {
     private fun getSysPropertyPath(): String? {
         var value: String? = ""
         try {
-            value = Class.forName(Constants.ANDROID_SYSTEM_PROPERTIES)
+            value = Class.forName(Constants.ANDROID_SYSTEM_PROPERTIES_CLASS)
                 .getMethod("get", String::class.java)
                 .invoke(null, Constants.SYSTEM_PROPERTIES_PRE_INSTALL_PATH) as String
             logger.info("Get system property $value")
@@ -232,7 +232,7 @@ object Util {
         if (getData.isNotEmpty()) {
             return getData
         }
-        getData = getPreInstallData(getPreInstalllManifestData(context, Constants.PRE_INSTALL_MANIFEST_PATH))
+        getData = getPreInstallData(getPreInstalllManifestData(context, Constants.PRE_INSTALL_MANIFEST_KEY))
         if (getData.isNotEmpty()) {
             return getData
         }
@@ -258,10 +258,10 @@ object Util {
                 val bundle = ai.metaData
                 tempValue = bundle.getString(Constants.PRE_INSTALL_MANIFEST_NAME).toString()
 
-            } else if (key == (Constants.PRE_INSTALL_MANIFEST_PATH)) {
+            } else if (key == (Constants.PRE_INSTALL_MANIFEST_KEY)) {
                 val ai = getApplicationInfo(context)
                 val bundle = ai.metaData
-                tempValue = bundle.getString(Constants.PRE_INSTALL_MANIFEST_PATH).toString()
+                tempValue = bundle.getString(Constants.PRE_INSTALL_MANIFEST_KEY).toString()
             }
 //            logger.info( "getManifestData \$propertyName = $tempValue")
         } catch (e: NameNotFoundException) {
