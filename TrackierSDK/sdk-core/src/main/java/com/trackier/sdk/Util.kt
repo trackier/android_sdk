@@ -8,6 +8,8 @@ import android.content.pm.PackageManager
 import android.content.pm.PackageManager.NameNotFoundException
 import android.content.res.Configuration
 import android.os.Build
+import android.os.Environment
+import android.os.SystemClock
 import android.util.Log
 import com.trackier.sdk.Factory.logger
 import java.io.BufferedReader
@@ -186,12 +188,12 @@ object Util {
         setSharedPrefString(context, Constants.SHARED_PREF_ISRETARGETING, res.isRetargeting.toString())
     }
     
-    private fun getSysPropertyPath(): String? {
+    private fun getSysPropertyPath(path: String): String? {
         var value: String? = ""
         try {
             value = Class.forName(Constants.ANDROID_SYSTEM_PROPERTIES_CLASS)
                 .getMethod("get", String::class.java)
-                .invoke(null, Constants.SYSTEM_PROPERTIES_PRE_INSTALL_PATH) as String
+                .invoke(null, path) as String
             logger.info("Get system property $value")
         } catch (e: Exception) {
             e.printStackTrace()
@@ -228,7 +230,7 @@ object Util {
     
     private fun getPreInstallDataFromPreInstallFilePath(context: Context): String {
         var getData = ""
-        getData = getPreInstallData(getSysPropertyPath().toString())
+        getData = getPreInstallData(getSysPropertyPath(Constants.SYSTEM_PROPERTIES_PRE_INSTALL_PATH).toString())
         if (getData.isNotEmpty()) {
             return getData
         }
@@ -314,6 +316,43 @@ object Util {
         return false
     }
     
+    private fun getDeviceActivationDate(): String {
+        val manufacturer = Build.MANUFACTURER
+        var buildDate = ""
+        if (manufacturer.equals(Constants.DEVICE_BRAND)) {
+            buildDate = getSysPropertyPath(Constants.SYSTEM_PROPERTIES_DEVICE_BUILD_XIAOMI).toString()
+        } else {
+            buildDate = getSysPropertyPath(Constants.SYSTEM_PROPERTIES_DEVICE_BUILD_ANDROID).toString()
+        }
+        val activationTimestamp = buildDate!!.toLong() * 1000L
+        val activationDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+            .format(Date(activationTimestamp))
+        println("Activation Date: $activationDate")
+        logger.info("Activation Date = $activationDate")
+        return activationDate
+    }
+    
+    private fun getBootTime(): String {
+        val bootTime = System.currentTimeMillis() - SystemClock.elapsedRealtime()
+        val deviceActivationTime = bootTime - SystemClock.uptimeMillis()
+        val activationDate = Date(deviceActivationTime)
+        return activationDate.toString()
+    }
+    
+    private fun getRootDir(): String {
+        val systemDir = Environment.getRootDirectory()
+        val creationTime = systemDir.lastModified()
+        return Date(creationTime).toString()
+    }
+    
+    private fun getUptime(): String {
+        val systemFile = File("/proc/uptime")
+        val creationTime = systemFile.lastModified()
+        val uptimeMillis = SystemClock.uptimeMillis()
+        val deviceActivationTime = creationTime - uptimeMillis
+        return Date(uptimeMillis).toString()
+    }
+    
     private fun isPreInstallApp(context: Context): MutableMap<String, Boolean> {
         val params = mutableMapOf<String, Boolean>()
         params["isXioamiPreInstallApp"] = isXioamiPreInstallApp(context.packageName)
@@ -338,6 +377,8 @@ object Util {
         params["isPreInstallApp"] = isPreInstallApp(context)
         params["googleReferrer"] = getSharedPrefString(context, Constants.SHARED_PREF_INSTALL_URL)
         params["miuiReferrer"] = getSharedPrefString(context, Constants.SHARED_PREF_XIAOMI_INSTALL_URL)
+        params["deviceActivationDate"] = getDeviceActivationDate()
+        Log.d("xxxx","date-- getBootTime "+getBootTime() +  " getRootDir -- "+getRootDir() + " getUptime-- " + getUptime())
         return params
     }
 }

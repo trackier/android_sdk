@@ -2,7 +2,7 @@ package com.trackier.sdk
 
 
 object Constants {
-    const val SDK_VERSION = "1.6.45"
+    const val SDK_VERSION = "1.6.46"
     const val USER_AGENT = "com.cloudstuff.trackiersdk:trackier-android:" + SDK_VERSION
     const val API_VERSION = "v1"
     const val BASE_URL = "https://events.trackier.io/" + API_VERSION + "/"
@@ -35,10 +35,14 @@ object Constants {
     const val SHARED_PREF_CLICKID = "clickId"
     const val SHARED_PREF_DLV = "dlv"
     const val SHARED_PREF_PID = "pid"
+    const val SHARED_PREF_MESSAGE = "message"
+    const val SHARED_PREF_SUCCESS = "success"
     const val SHARED_PREF_ISRETARGETING = "isRetargeting"
     
     const val PRE_INSTALL_MANIFEST_KEY = "TR_PRE_INSTALL_PATH"
     const val SYSTEM_PROPERTIES_PRE_INSTALL_PATH = "ro.trackier.preinstall.path"
+    const val SYSTEM_PROPERTIES_DEVICE_BUILD_ANDROID = "ro.build.date.utc"
+    const val SYSTEM_PROPERTIES_DEVICE_BUILD_XIAOMI = "ro.boottime.init"
     //const val SYSTEM_PROPERTIES_PRE_INSTALL_PATH = "ro.product.name"
     const val ANDROID_SYSTEM_PROPERTIES_CLASS = "android.os.SystemProperties"
     const val PRE_INSTALL_ATTRIBUTION_CAMPAIGN = "campaign"
@@ -50,6 +54,7 @@ object Constants {
     const val PRE_INSTALL_MANIFEST_NAME = "TR_PRE_INSTALL_NAME"
     const val SHARED_PREF_LAST_SESSION_TIME = "last_session_time"
     const val SHARED_PREF_FIRST_INSTALL = "first_install"
+    const val DEVICE_BRAND = "xiaomi"
 
     const val ENV_PRODUCTION = "production"
     const val ENV_SANDBOX = "sandbox"
