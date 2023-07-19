@@ -327,7 +327,6 @@ object Util {
         val activationTimestamp = buildDate!!.toLong() * 1000L
         val activationDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
             .format(Date(activationTimestamp))
-        logger.info("Activation Date = $activationDate")
         return activationDate
     }
     
