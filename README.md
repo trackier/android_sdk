@@ -48,7 +48,7 @@ Screenshot[1]
 You can find the latest version [here](https://search.maven.org/artifact/com.trackier/android-sdk)
 
 ```gradle 
-  implementation 'com.trackier:android-sdk:1.6.45' // Add this Trackier SDK dependency in the build.gradle
+  implementation 'com.trackier:android-sdk:1.6.46' // Add this Trackier SDK dependency in the build.gradle
 ```
 Also, please check the screenshot[2] in the below section for reference.
 
@@ -61,7 +61,7 @@ Add the Android Install Referrer as a dependency. You can find the latest versio
     // make sure to use the latest SDK version:
     // https://mvnrepository.com/artifact/com.trackier/android-sdk   
   
-    implementation 'com.trackier:android-sdk:1.6.45' // Add this Trackier SDK dependency in the build.gradle
+    implementation 'com.trackier:android-sdk:1.6.46' // Add this Trackier SDK dependency in the build.gradle
     implementation 'com.android.installreferrer:installreferrer:2.2' // Add this install referrer dependency in the build.gradle
   }
 ```
@@ -70,8 +70,7 @@ Sync the project to retrieve the dependencies – see the following screenshot.
 
 Screenshot[2]
 
-<img width="1432" alt="Screenshot 2023-06-23 at 1 42 01 PM" src="https://github.com/trackier/android_sdk/assets/16884982/fb97d9af-d39a-49a2-b65c-594372b1001b">
-
+<img width="1432" alt="Screenshot 2023-06-23 at 1 42 01 PM" src="https://github.com/trackier/android_sdk/assets/16884982/ded02b6a-2570-4e62-9863-6b0b5c35e30a">
 
 ## <a id="qs-add-request-permissions"></a>Add required permissions
 
