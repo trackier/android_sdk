@@ -339,18 +339,10 @@ object Util {
         return activationDate.toString()
     }
     
-    private fun getRootDir(): String {
+    private fun osUpdateTime(): String {
         val systemDir = Environment.getRootDirectory()
         val creationTime = systemDir.lastModified()
         return Date(creationTime).toString()
-    }
-    
-    private fun getUptime(): String {
-        val systemFile = File("/proc/uptime")
-        val creationTime = systemFile.lastModified()
-        val uptimeMillis = SystemClock.uptimeMillis()
-        val deviceActivationTime = creationTime - uptimeMillis
-        return Date(uptimeMillis).toString()
     }
     
     private fun isPreInstallApp(context: Context): MutableMap<String, Boolean> {
@@ -378,7 +370,8 @@ object Util {
         params["googleReferrer"] = getSharedPrefString(context, Constants.SHARED_PREF_INSTALL_URL)
         params["miuiReferrer"] = getSharedPrefString(context, Constants.SHARED_PREF_XIAOMI_INSTALL_URL)
         params["deviceActivationDate"] = getDeviceActivationDate()
-        Log.d("xxxx","date-- getBootTime "+getBootTime() +  " getRootDir -- "+getRootDir() + " getUptime-- " + getUptime())
+        params["deviceBootTime"] = getBootTime()
+        params["osUpdateTime"] = osUpdateTime()
         return params
     }
 }

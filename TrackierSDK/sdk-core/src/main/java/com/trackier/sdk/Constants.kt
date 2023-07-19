@@ -35,8 +35,6 @@ object Constants {
     const val SHARED_PREF_CLICKID = "clickId"
     const val SHARED_PREF_DLV = "dlv"
     const val SHARED_PREF_PID = "pid"
-    const val SHARED_PREF_MESSAGE = "message"
-    const val SHARED_PREF_SUCCESS = "success"
     const val SHARED_PREF_ISRETARGETING = "isRetargeting"
     
     const val PRE_INSTALL_MANIFEST_KEY = "TR_PRE_INSTALL_PATH"
