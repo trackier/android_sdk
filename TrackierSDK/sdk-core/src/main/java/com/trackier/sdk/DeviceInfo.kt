@@ -160,18 +160,22 @@ data class DeviceInfo(
                 null
             }
         }
-
+        
         private fun getIpv4HostAddress(): String {
             var ipaddr: String = ""
-            NetworkInterface.getNetworkInterfaces()?.toList()?.map { networkInterface ->
-                networkInterface.inetAddresses?.toList()?.find {
-                    !it.isLoopbackAddress && it is Inet4Address
-                }?.let { ipaddr = it.hostAddress }
+            try {
+                val networkInterfaces = NetworkInterface.getNetworkInterfaces()
+                networkInterfaces?.toList()?.forEach { networkInterface ->
+                    networkInterface.inetAddresses?.toList()?.find {
+                        !it.isLoopbackAddress && it is Inet4Address
+                    }?.let { ipaddr = it.hostAddress }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
             return ipaddr
         }
-
-
+        
         private fun getDeviceOrientation(context: Context): String {
             val orientation = context.resources.configuration.orientation
             return if (orientation == Configuration.ORIENTATION_PORTRAIT)
@@ -191,7 +195,7 @@ data class DeviceInfo(
                 Pair(null, null)
             }
         }
-
+        
         @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
         fun getTotalAvailableStorage(): Pair<String?, String?> {
             val iPath: File = Environment.getDataDirectory()

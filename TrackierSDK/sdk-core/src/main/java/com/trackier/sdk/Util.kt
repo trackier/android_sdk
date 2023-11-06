@@ -220,27 +220,41 @@ object Util {
     }
     
     private fun getPreInstallDataFromDefaultPathWay(): String {
-        if (getPreInstallData(Constants.PRE_DEFINED_PATH1).isNotEmpty()) {
-            return Constants.PRE_DEFINED_PATH1
-        } else if (getPreInstallData(Constants.PRE_DEFINED_PATH2).isNotEmpty()) {
-            return Constants.PRE_DEFINED_PATH2
+        try {
+            if (getPreInstallData(Constants.PRE_DEFINED_PATH1).isNotEmpty()) {
+                return Constants.PRE_DEFINED_PATH1
+            } else if (getPreInstallData(Constants.PRE_DEFINED_PATH2).isNotEmpty()) {
+                return Constants.PRE_DEFINED_PATH2
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
         return ""
     }
     
     private fun getPreInstallDataFromPreInstallFilePath(context: Context): String {
         var getData = ""
-        getData = getPreInstallData(getSysPropertyPath(Constants.SYSTEM_PROPERTIES_PRE_INSTALL_PATH).toString())
-        if (getData.isNotEmpty()) {
-            return getData
-        }
-        getData = getPreInstallData(getPreInstalllManifestData(context, Constants.PRE_INSTALL_MANIFEST_KEY))
-        if (getData.isNotEmpty()) {
-            return getData
-        }
-        getData = getPreInstallData(getPreInstallDataFromDefaultPathWay())
-        if (getData.isNotEmpty()) {
-            return getData
+        try {
+            getData =
+                getPreInstallData(getSysPropertyPath(Constants.SYSTEM_PROPERTIES_PRE_INSTALL_PATH).toString())
+            if (getData.isNotEmpty()) {
+                return getData
+            }
+            getData = getPreInstallData(
+                getPreInstalllManifestData(
+                    context,
+                    Constants.PRE_INSTALL_MANIFEST_KEY
+                )
+            )
+            if (getData.isNotEmpty()) {
+                return getData
+            }
+            getData = getPreInstallData(getPreInstallDataFromDefaultPathWay())
+            if (getData.isNotEmpty()) {
+                return getData
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
         return getData
     }
@@ -324,17 +338,32 @@ object Util {
         } else {
             buildDate = getSysPropertyPath(Constants.SYSTEM_PROPERTIES_DEVICE_BUILD_ANDROID).toString()
         }
-        val activationTimestamp = buildDate!!.toLong() * 1000L
-        val activationDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-            .format(Date(activationTimestamp))
-        return activationDate
+        if (buildDate.isNotEmpty()) {
+            try {
+                val activationTimestamp = buildDate.toLong() * 1000L
+                val activationDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date(activationTimestamp))
+                println("Activation Date: $activationDate")
+                logger.info("Activation Date = $activationDate")
+                return activationDate
+            } catch (e: NumberFormatException) {
+                e.printStackTrace()
+            }
+        } else {
+            logger.info("Activation date is empty")
+        }
+        return ""
     }
     
     private fun getBootTime(): String {
-        val bootTime = System.currentTimeMillis() - SystemClock.elapsedRealtime()
-        val deviceActivationTime = bootTime - SystemClock.uptimeMillis()
-        val activationDate = Date(deviceActivationTime)
-        return activationDate.toString()
+        var activationDate = ""
+        try {
+            val bootTime = System.currentTimeMillis() - SystemClock.elapsedRealtime()
+            val deviceActivationTime = bootTime - SystemClock.uptimeMillis()
+            activationDate = Date(deviceActivationTime).toString()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return activationDate
     }
     
     private fun osUpdateTime(): String {
