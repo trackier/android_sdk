@@ -2,6 +2,7 @@ package com.trackier.sdk
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.annotation.Keep
 
 @Keep
@@ -185,6 +186,11 @@ object TrackierSDK {
     }
     
     @JvmStatic
+    fun getPartner(): String {
+        return Util.getSharedPrefString(instance.config.context, Constants.SHARED_PREF_PARTNER)
+    }
+    
+    @JvmStatic
     fun getIsRetargeting(): String {
         return Util.getSharedPrefString(instance.config.context, Constants.SHARED_PREF_ISRETARGETING)
     }
@@ -196,6 +202,22 @@ object TrackierSDK {
             .putString(Constants.PRE_INSTALL_ATTRIBUTION_CAMPAIGN, campaign)
             .putString(Constants.PRE_INSTALL_ATTRIBUTION_CAMPAIGNID, campaignId)
             .apply()
+    }
+    
+    enum class Gender{
+        MALE,
+        Female,
+        OTHERS
+    }
+    
+    @JvmStatic
+    fun setGender(gender: Gender) {
+        instance.gender = gender.toString()
+    }
+    
+    @JvmStatic
+    fun setDOB(dob: String) {
+        instance.dob = dob
     }
     
 }

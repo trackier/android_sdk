@@ -2,7 +2,7 @@ package com.trackier.sdk
 
 
 object Constants {
-    const val SDK_VERSION = "1.6.47"
+    const val SDK_VERSION = "1.6.48"
     const val USER_AGENT = "com.cloudstuff.trackiersdk:trackier-android:" + SDK_VERSION
     const val API_VERSION = "v1"
     const val BASE_URL = "https://events.trackier.io/" + API_VERSION + "/"
@@ -35,6 +35,7 @@ object Constants {
     const val SHARED_PREF_CLICKID = "clickId"
     const val SHARED_PREF_DLV = "dlv"
     const val SHARED_PREF_PID = "pid"
+    const val SHARED_PREF_PARTNER = "partner"
     const val SHARED_PREF_ISRETARGETING = "isRetargeting"
     
     const val PRE_INSTALL_MANIFEST_KEY = "TR_PRE_INSTALL_PATH"

@@ -185,6 +185,7 @@ object Util {
         setSharedPrefString(context, Constants.SHARED_PREF_CLICKID, res.clickId)
         setSharedPrefString(context, Constants.SHARED_PREF_DLV, res.dlv)
         setSharedPrefString(context, Constants.SHARED_PREF_PID, res.pid)
+        setSharedPrefString(context, Constants.SHARED_PREF_PARTNER, res.partner)
         setSharedPrefString(context, Constants.SHARED_PREF_ISRETARGETING, res.isRetargeting.toString())
     }
     

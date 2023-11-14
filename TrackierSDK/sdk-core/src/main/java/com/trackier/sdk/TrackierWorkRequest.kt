@@ -32,6 +32,8 @@ class TrackierWorkRequest(
     var secretId: String = ""
     var secretKey: String = ""
     var organic = false
+    var gender = ""
+    var dob = ""
     var preinstallData: MutableMap<String, Any>? = null
 
     private fun setDefaults(): MutableMap<String, Any> {
@@ -81,6 +83,8 @@ class TrackierWorkRequest(
             }
         }
         body["organic"] = organic
+        body["gender"] = gender
+        body["dob"] = dob
         body["cphone"] = customerPhoneNumber
         body["cname"] = customerName
         body["getPreLoadAndPAIdata"] = preinstallData.toString()
