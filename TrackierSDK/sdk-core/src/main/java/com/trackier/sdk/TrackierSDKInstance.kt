@@ -32,6 +32,8 @@ class TrackierSDKInstance {
 
     var firstInstallTime = ""
     var organic = false
+    var gender = ""
+    var dob = ""
     
     var preinstallData: MutableMap<String, Any>? = null
     
@@ -183,6 +185,8 @@ class TrackierSDKInstance {
         trackierWorkRequest.disableOrganicTrack = disableOrganicTrack
         trackierWorkRequest.firstInstallTime = firstInstallTime
         trackierWorkRequest.organic = organic
+        trackierWorkRequest.gender = gender
+        trackierWorkRequest.dob = dob
         trackierWorkRequest.secretId = this.config.getAppSecretId()
         trackierWorkRequest.secretKey = this.config.getAppSecretKey()
         trackierWorkRequest.customerName = this.customerName

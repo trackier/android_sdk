@@ -23,6 +23,7 @@ data class ResponseData(
     var clickId: String,
     var dlv: String,
     var pid: String,
+    var partner: String,
     val isRetargeting: Boolean
 ) {
 }
