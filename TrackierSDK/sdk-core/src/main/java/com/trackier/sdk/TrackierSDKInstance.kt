@@ -1,11 +1,15 @@
 package com.trackier.sdk
 
+import android.net.Uri
+import android.text.TextUtils
+import com.trackier.sdk.DeferredAppLinkDataHandler.AppLinkFetchEvents
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.Exception
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class TrackierSDKInstance {
     private val device = DeviceInfo()
@@ -83,8 +87,24 @@ class TrackierSDKInstance {
         return this.gaid.toString()
     }
 
-    private suspend fun initAttributionInfo() {
+    private suspend fun initAttributionInfo(): String? {
         isInitialized = true
+        return suspendCoroutine {
+            val appLinkRqSucceeded: Boolean = DeferredAppLinkDataHandler.fetchDeferredAppLinkData(config.context, object : AppLinkFetchEvents {
+                    override fun onAppLinkFetchFinished(nativeAppLinkUrl: String?) {
+                        if (nativeAppLinkUrl != null) {
+                            val appLinkUri: Uri = Uri.parse(nativeAppLinkUrl)
+                            val bncLinkClickId: String? = appLinkUri.getQueryParameter("link_click_id")
+                            if (!TextUtils.isEmpty(bncLinkClickId)) {
+                                it.resume(bncLinkClickId)
+                            }
+                        }
+                    }
+                })
+            if(!appLinkRqSucceeded){
+                it.resume("")
+            }
+        }
     }
 
     fun fireInstall() {
