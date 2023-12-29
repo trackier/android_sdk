@@ -836,7 +836,7 @@ Trackier uninstall functionality is used to track the uninstall of the applicati
 * Add the above code to your app to set up a common identifier. 
 * Set the `app_remove` event as a conversion event in Firebase. 
 * Use the Firebase cloud function to send uninstall information to Trackier MMP. 
-* You can find the support article [here](https://help.trackier.com/support/solutions/articles/31000162841-android-uninstall-tracking). 
+* You can find the support article [here](https://help-mmp.trackier.com/en/articles/8165821-android-uninstall-tracking). 
 
 
 ## <a id="qs-defer-start-sdk"></a>Defer SDK start
