@@ -205,9 +205,9 @@ object TrackierSDK {
     }
     
     enum class Gender{
-        MALE,
+        Male,
         Female,
-        OTHERS
+        Others
     }
     
     @JvmStatic
@@ -220,4 +220,9 @@ object TrackierSDK {
         instance.dob = dob
     }
     
+    @JvmStatic
+    fun storeRetargetting(context: Context, uri: String) {
+        val ctx = context.applicationContext
+        Util.setSharedPrefString(ctx, Constants.STORE_RETARGETTING, uri)
+    }
 }

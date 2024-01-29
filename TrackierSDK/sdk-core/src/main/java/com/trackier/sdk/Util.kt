@@ -59,6 +59,13 @@ object Util {
 
         return printHexBinary(sha256Hmac.doFinal(data.toByteArray()))
     }
+    
+    fun retargettingData(url: String, time: String): String {
+        val body = mutableMapOf<String, Any>()
+        body["date&time"] = time
+        body["url"] = url
+        return body.toString()
+    }
 
     fun getYear(date: String): Int {
         try {

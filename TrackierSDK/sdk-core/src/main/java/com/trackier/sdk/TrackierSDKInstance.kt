@@ -1,5 +1,6 @@
 package com.trackier.sdk
 
+import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -34,7 +35,7 @@ class TrackierSDKInstance {
     var organic = false
     var gender = ""
     var dob = ""
-    
+    var storeRetargetting = ""
     var preinstallData: MutableMap<String, Any>? = null
     
 
@@ -192,6 +193,8 @@ class TrackierSDKInstance {
         trackierWorkRequest.customerName = this.customerName
         trackierWorkRequest.customerPhoneNumber = this.customerPhoneNumber
         trackierWorkRequest.preinstallData = this.preinstallData
+        trackierWorkRequest.storeRetargetting = Util.getSharedPrefString(this.config.context, Constants.STORE_RETARGETTING)
+        
         return trackierWorkRequest
     }
 
