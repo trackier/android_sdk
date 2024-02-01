@@ -54,7 +54,8 @@ object Constants {
     const val SHARED_PREF_LAST_SESSION_TIME = "last_session_time"
     const val SHARED_PREF_FIRST_INSTALL = "first_install"
     const val DEVICE_BRAND = "xiaomi"
-    const val STORE_RETARGETTING = "retargetting"
+    const val STORE_RETARGETING = "retargeting"
+    const val STORE_RETARGETING_TIME = "rtgtime"
 
     const val ENV_PRODUCTION = "production"
     const val ENV_SANDBOX = "sandbox"

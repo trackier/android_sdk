@@ -193,7 +193,7 @@ class TrackierSDKInstance {
         trackierWorkRequest.customerName = this.customerName
         trackierWorkRequest.customerPhoneNumber = this.customerPhoneNumber
         trackierWorkRequest.preinstallData = this.preinstallData
-        trackierWorkRequest.storeRetargetting = Util.getSharedPrefString(this.config.context, Constants.STORE_RETARGETTING)
+        trackierWorkRequest.storeRetargeting = getRetargetingData()
         
         return trackierWorkRequest
     }
@@ -337,5 +337,12 @@ class TrackierSDKInstance {
         }
         Util.setSharedPrefString(this.config.context, Constants.SHARED_PREF_DEEP_LINK_CALLED, "true")
         dlt.onDeepLinking(dlResult)
+    }
+    
+    fun getRetargetingData(): String {
+        val body = mutableMapOf<String, Any>()
+        body["rtgtime"] = Util.getSharedPrefString(this.config.context, Constants.STORE_RETARGETING_TIME)
+        body["url"] = Util.getSharedPrefString(this.config.context, Constants.STORE_RETARGETING)
+        return body.toString()
     }
 }
