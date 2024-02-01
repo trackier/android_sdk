@@ -35,7 +35,6 @@ class TrackierSDKInstance {
     var organic = false
     var gender = ""
     var dob = ""
-    var storeRetargeting = ""
     var preinstallData: MutableMap<String, Any>? = null
     
 
@@ -339,10 +338,10 @@ class TrackierSDKInstance {
         dlt.onDeepLinking(dlResult)
     }
     
-    fun getRetargetingData(): String {
+    fun getRetargetingData(): MutableMap<String, Any> {
         val body = mutableMapOf<String, Any>()
         body["rtgtime"] = Util.getSharedPrefString(this.config.context, Constants.STORE_RETARGETING_TIME)
         body["url"] = Util.getSharedPrefString(this.config.context, Constants.STORE_RETARGETING)
-        return body.toString()
+        return body
     }
 }
