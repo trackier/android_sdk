@@ -35,7 +35,7 @@ class TrackierSDKInstance {
     var organic = false
     var gender = ""
     var dob = ""
-    var storeRetargetting = ""
+    var storeRetargeting = ""
     var preinstallData: MutableMap<String, Any>? = null
     
 
