@@ -1,5 +1,6 @@
 package com.trackier.sdk
 
+import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -34,7 +35,6 @@ class TrackierSDKInstance {
     var organic = false
     var gender = ""
     var dob = ""
-    
     var preinstallData: MutableMap<String, Any>? = null
     
 
@@ -192,6 +192,8 @@ class TrackierSDKInstance {
         trackierWorkRequest.customerName = this.customerName
         trackierWorkRequest.customerPhoneNumber = this.customerPhoneNumber
         trackierWorkRequest.preinstallData = this.preinstallData
+        trackierWorkRequest.storeRetargeting = getRetargetingData()
+        
         return trackierWorkRequest
     }
 
@@ -334,5 +336,12 @@ class TrackierSDKInstance {
         }
         Util.setSharedPrefString(this.config.context, Constants.SHARED_PREF_DEEP_LINK_CALLED, "true")
         dlt.onDeepLinking(dlResult)
+    }
+    
+    fun getRetargetingData(): MutableMap<String, Any> {
+        val body = mutableMapOf<String, Any>()
+        body["rtgtime"] = Util.getSharedPrefString(this.config.context, Constants.STORE_RETARGETING_TIME)
+        body["url"] = Util.getSharedPrefString(this.config.context, Constants.STORE_RETARGETING)
+        return body
     }
 }

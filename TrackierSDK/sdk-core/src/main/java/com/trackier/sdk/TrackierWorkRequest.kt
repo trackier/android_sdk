@@ -35,6 +35,7 @@ class TrackierWorkRequest(
     var gender = ""
     var dob = ""
     var preinstallData: MutableMap<String, Any>? = null
+    var storeRetargeting: MutableMap<String, Any>? = null
 
     private fun setDefaults(): MutableMap<String, Any> {
         val body = mutableMapOf<String, Any>()
@@ -88,6 +89,7 @@ class TrackierWorkRequest(
         body["cphone"] = customerPhoneNumber
         body["cname"] = customerName
         body["getPreLoadAndPAIdata"] = preinstallData.toString()
+        body["storeRetargeting"] = storeRetargeting.toString()
         return body
     }
 

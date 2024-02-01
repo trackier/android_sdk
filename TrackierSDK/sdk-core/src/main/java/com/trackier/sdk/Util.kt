@@ -59,6 +59,7 @@ object Util {
 
         return printHexBinary(sha256Hmac.doFinal(data.toByteArray()))
     }
+    
 
     fun getYear(date: String): Int {
         try {

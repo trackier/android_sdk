@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.annotation.Keep
+import java.util.Date
 
 @Keep
 object TrackierSDK {
@@ -205,9 +206,9 @@ object TrackierSDK {
     }
     
     enum class Gender{
-        MALE,
+        Male,
         Female,
-        OTHERS
+        Others
     }
     
     @JvmStatic
@@ -220,4 +221,11 @@ object TrackierSDK {
         instance.dob = dob
     }
     
+    @JvmStatic
+    fun storeRetargetting(context: Context, uri: String) {
+        val ctx = context.applicationContext
+        Util.setSharedPrefString(ctx, Constants.STORE_RETARGETING, uri)
+        Util.setSharedPrefString(ctx, Constants.STORE_RETARGETING_TIME, Util.dateFormatter.format(
+            Date()))
+    }
 }
