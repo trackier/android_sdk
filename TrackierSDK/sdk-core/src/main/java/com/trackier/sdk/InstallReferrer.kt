@@ -108,14 +108,19 @@ class InstallReferrer(private val context: Context) {
                     try {
                         val rd = xiaomiReferrer(state, referrerClient)
                         referrerClient.endConnection()
-                        continuation.resume(rd)
+                        if (continuation.isActive) {
+                            continuation.resume(rd)
+                        }
                     } catch (ex: Exception) {
                         continuation.resumeWithException(ex)
                     }
                 }
                 override fun onGetAppsServiceDisconnected() {
                     // Handle service disconnection if needed
-                    // For now, let's not do anything
+                    referrerClient.endConnection()
+                    if (continuation.isActive) {
+                        continuation.resumeWithException(InstallReferrerException("SERVICE_DISCONNECTED"))
+                    }
                 }
             })
         }
