@@ -105,19 +105,20 @@ class InstallReferrer(private val context: Context) {
     
     private suspend fun getXiaomiInfo(): XiaomiReferrerDetails? {
         val referrerClient = GetAppsReferrerClient.newBuilder(context).build()
-        return suspendCancellableCoroutine {
+        return suspendCancellableCoroutine { continuation ->
             referrerClient.startConnection(object : GetAppsReferrerStateListener {
                 override fun onGetAppsReferrerSetupFinished(state: Int) {
                     try {
                         val rd = xiaomiReferrer(state, referrerClient)
                         referrerClient.endConnection()
-                        it.resume(rd)
+                        continuation.resume(rd)
                     } catch (ex: Exception) {
-                        it.resumeWithException(ex)
+                        continuation.resumeWithException(ex)
                     }
                 }
                 override fun onGetAppsServiceDisconnected() {
-                   //TODO("Not yet implemented")
+                    // Handle service disconnection if needed
+                    // For now, let's not do anything
                 }
             })
         }
