@@ -49,25 +49,22 @@ class InstallReferrer(private val context: Context) {
     
     private suspend fun getInfo(): RefererDetails {
         val referrerClient = InstallReferrerClient.newBuilder(context).build()
-        return suspendCancellableCoroutine {
+        return suspendCancellableCoroutine { continuation ->
             referrerClient.startConnection(object : InstallReferrerStateListener {
                 override fun onInstallReferrerSetupFinished(responseCode: Int) {
                     try {
                         val rd = setupFinished(referrerClient, responseCode)
                         referrerClient.endConnection()
-                        it.resume(rd)
+                        continuation.resume(rd)
                     } catch (ex: Exception) {
-                        it.resumeWithException(ex)
+                        continuation.resumeWithException(ex)
                     }
                 }
                 
-                // Try to restart the connection on the next request to
-                // Google Play by calling the startConnection() method.
                 override fun onInstallReferrerServiceDisconnected() {
                     referrerClient.endConnection()
-                    // https://stackoverflow.com/questions/48227346/kotlin-coroutine-throws-java-lang-illegalstateexception-already-resumed-but-go#comment112497041_60549898
-                    if (it.isActive) {
-                        it.resumeWithException(InstallReferrerException("SERVICE_DISCONNECTED"))
+                    if (continuation.isActive) {
+                        continuation.resumeWithException(InstallReferrerException("SERVICE_DISCONNECTED"))
                     }
                 }
             })
@@ -105,19 +102,25 @@ class InstallReferrer(private val context: Context) {
     
     private suspend fun getXiaomiInfo(): XiaomiReferrerDetails? {
         val referrerClient = GetAppsReferrerClient.newBuilder(context).build()
-        return suspendCancellableCoroutine {
+        return suspendCancellableCoroutine { continuation ->
             referrerClient.startConnection(object : GetAppsReferrerStateListener {
                 override fun onGetAppsReferrerSetupFinished(state: Int) {
                     try {
                         val rd = xiaomiReferrer(state, referrerClient)
                         referrerClient.endConnection()
-                        it.resume(rd)
+                        if (continuation.isActive) {
+                            continuation.resume(rd)
+                        }
                     } catch (ex: Exception) {
-                        it.resumeWithException(ex)
+                        continuation.resumeWithException(ex)
                     }
                 }
                 override fun onGetAppsServiceDisconnected() {
-                   //TODO("Not yet implemented")
+                    // Handle service disconnection if needed
+                    referrerClient.endConnection()
+                    if (continuation.isActive) {
+                        continuation.resumeWithException(InstallReferrerException("SERVICE_DISCONNECTED"))
+                    }
                 }
             })
         }

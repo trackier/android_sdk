@@ -27,7 +27,7 @@ class BackgroundWorker(appContext: Context, val workerParameters: WorkerParamete
             val workRequest = getWorkData()
             try {
                 val resp = APIRepository.doWork(workRequest!!)
-                if (resp?.success == true && !resp.clickId.isEmpty()) {
+                if (resp?.success == true && resp.clickId != null) {
                     Util.campaignData(applicationContext, resp)
                 }
             } catch (ex: HttpException) {

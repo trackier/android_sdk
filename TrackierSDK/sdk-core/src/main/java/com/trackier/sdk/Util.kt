@@ -171,22 +171,22 @@ object Util {
     }
     
     fun campaignData(context: Context, res: ResponseData) {
-        setSharedPrefString(context, Constants.SHARED_PREF_AD, res.ad)
-        setSharedPrefString(context, Constants.SHARED_PREF_ADID, res.adId)
-        setSharedPrefString(context, Constants.SHARED_PREF_CAMPAIGN, res.camp)
-        setSharedPrefString(context, Constants.SHARED_PREF_CAMPAIGNID, res.campId)
-        setSharedPrefString(context, Constants.SHARED_PREF_ADSET, res.adSet)
-        setSharedPrefString(context, Constants.SHARED_PREF_ADSETID, res.adSetId)
-        setSharedPrefString(context, Constants.SHARED_PREF_CHANNEL, res.channel)
-        setSharedPrefString(context, Constants.SHARED_PREF_P1, res.p1)
-        setSharedPrefString(context, Constants.SHARED_PREF_P2, res.p2)
-        setSharedPrefString(context, Constants.SHARED_PREF_P3, res.p3)
-        setSharedPrefString(context, Constants.SHARED_PREF_P4, res.p4)
-        setSharedPrefString(context, Constants.SHARED_PREF_P5, res.p5)
-        setSharedPrefString(context, Constants.SHARED_PREF_CLICKID, res.clickId)
-        setSharedPrefString(context, Constants.SHARED_PREF_DLV, res.dlv)
-        setSharedPrefString(context, Constants.SHARED_PREF_PID, res.pid)
-        setSharedPrefString(context, Constants.SHARED_PREF_PARTNER, res.partner)
+        res.ad?.let { setSharedPrefString(context, Constants.SHARED_PREF_AD, it) }
+        res.adId?.let { setSharedPrefString(context, Constants.SHARED_PREF_ADID, it) }
+        res.camp?.let { setSharedPrefString(context, Constants.SHARED_PREF_CAMPAIGN, it) }
+        res.campId?.let { setSharedPrefString(context, Constants.SHARED_PREF_CAMPAIGNID, it) }
+        res.adSet?.let { setSharedPrefString(context, Constants.SHARED_PREF_ADSET, it) }
+        res.adSetId?.let { setSharedPrefString(context, Constants.SHARED_PREF_ADSETID, it) }
+        res.channel?.let { setSharedPrefString(context, Constants.SHARED_PREF_CHANNEL, it) }
+        res.p1?.let { setSharedPrefString(context, Constants.SHARED_PREF_P1, it) }
+        res.p2?.let { setSharedPrefString(context, Constants.SHARED_PREF_P2, it) }
+        res.p3?.let { setSharedPrefString(context, Constants.SHARED_PREF_P3, it) }
+        res.p4?.let { setSharedPrefString(context, Constants.SHARED_PREF_P4, it) }
+        res.p5?.let { setSharedPrefString(context, Constants.SHARED_PREF_P5, it) }
+        res.clickId?.let { setSharedPrefString(context, Constants.SHARED_PREF_CLICKID, it) }
+        res.dlv?.let { setSharedPrefString(context, Constants.SHARED_PREF_DLV, it) }
+        res.pid?.let { setSharedPrefString(context, Constants.SHARED_PREF_PID, it) }
+        res.partner?.let { setSharedPrefString(context, Constants.SHARED_PREF_PARTNER, it) }
         setSharedPrefString(context, Constants.SHARED_PREF_ISRETARGETING, res.isRetargeting.toString())
     }
     
@@ -348,7 +348,6 @@ object Util {
                 logger.info("Activation Date = $activationDate")
                 return activationDate
             } catch (e: NumberFormatException) {
-                e.printStackTrace()
             }
         } else {
             logger.info("Activation date is empty")
