@@ -8,6 +8,7 @@
     * [Add the SDK using gradle](#qs-add-sdk-gradle)
     * [Add the latest version of Trackier SDK as a dependency](#qs-add-latest-version-sdk)
     * [Adding Android install referrer to your app](#qs-add-install-referre)
+    * [Adding Xiaomi GetApps store referrer](#qs-add-xiaomi-install-referrer)
     * [Add required permissions](#qs-add-request-permissions)
     * [Getting Google Advertising ID](#qs-getting-gaid)
 * [Implement and initialize the SDK](#qs-implement-trackier-sdk)
@@ -72,7 +73,16 @@ Screenshot[2]
 
 <img width="1432" alt="Screenshot 2024-02-16 at 3 59 20 PM" src="https://github.com/trackier/android_sdk/assets/16884982/18af8f5c-4011-48b7-b62d-86b4b05ccff8">
 
+## <a id="qs-add-xiaomi-install-referrer"></a>Adding Xiaomi GetApps store referrer
 
+```gradle
+
+dependencies {
+  // ...
+  implementation "com.miui.referrer:homereferrer:1.0.0.6"
+}
+
+```
 
 ## <a id="qs-add-request-permissions"></a>Add required permissions
 
