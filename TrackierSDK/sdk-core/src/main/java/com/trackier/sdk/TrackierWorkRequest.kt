@@ -36,6 +36,7 @@ class TrackierWorkRequest(
     var dob = ""
     var preinstallData: MutableMap<String, Any>? = null
     lateinit var storeRetargeting: Map<String, Any>
+    var deeplinkUrl = ""
     
     private fun setDefaults(): MutableMap<String, Any> {
         val body = mutableMapOf<String, Any>()
@@ -108,12 +109,20 @@ class TrackierWorkRequest(
         body["lastSessionTime"] = this.sessionTime
         return body
     }
+    
+    fun getDeeplinksData(): MutableMap<String, Any> {
+        val body = mutableMapOf<String, Any>()
+        body["url"] = this.deeplinkUrl
+        body["intent"] = "Intent"
+        return body
+    }
 
     companion object {
         const val KIND_UNKNOWN = "unknown"
         const val KIND_INSTALL = "install"
         const val KIND_EVENT = "event"
         const val KIND_SESSION_TRACK = "session_track"
+        const val KIND_DEEPLINKS = "deeplinks"
 
         private fun getConstraints(): Constraints {
             return Constraints.Builder()

@@ -4,6 +4,9 @@ import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.annotation.Keep
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.Date
 
 @Keep
@@ -55,11 +58,17 @@ object TrackierSDK {
     fun parseDeepLink(uri: Uri, context: Context) {
         val ctx = context.applicationContext
         val prefs = Util.getSharedPref(ctx)
-        prefs.edit().putString(Constants.SHARED_PREF_DEEP_LINK, uri.query)
-            .remove(Constants.SHARED_PREF_DEEP_LINK_CALLED).apply()
-
-        if (instance.isInitialized) {
-            instance.callDeepLinkListener()
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                instance.deeplinkData(uri.toString())
+            } catch (e: Exception) {
+            }
+            prefs.edit().putString(Constants.SHARED_PREF_DEEP_LINK, uri.query)
+                .remove(Constants.SHARED_PREF_DEEP_LINK_CALLED).apply()
+        
+            if (instance.isInitialized) {
+                instance.callDeepLinkListener()
+            }
         }
     }
 

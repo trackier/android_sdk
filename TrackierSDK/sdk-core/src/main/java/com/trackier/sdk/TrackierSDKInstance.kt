@@ -316,6 +316,21 @@ class TrackierSDKInstance {
             }
         } catch (e: Exception) {}
     }
+    
+    suspend fun deeplinkData(url: String) {
+        val wrkRequest = makeWorkRequest(TrackierWorkRequest.KIND_DEEPLINKS)
+        wrkRequest.deeplinkUrl = url
+        try {
+            val resp = APIRepository.processWorkDeeplinks(wrkRequest)
+            if (resp?.success == true) {
+                Log.d("trackiersdk","deeplink_success"+resp.url)
+            } else {
+                Log.d("trackiersdk","deeplink_fail"+resp.toString())
+            }
+        } catch (ex: Exception) {
+            APIRepository.doWorkDeeplinks(wrkRequest)
+        }
+    }
 
     fun callDeepLinkListener() {
         val dlt = this.config.getDeepLinkListener() ?: return

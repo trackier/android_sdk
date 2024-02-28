@@ -24,6 +24,6 @@ data class ResponseData(
     var dlv: String?,
     var pid: String?,
     var partner: String?,
-    val isRetargeting: Boolean?
+    val isRetargeting: Boolean?,
 ) {
 }
