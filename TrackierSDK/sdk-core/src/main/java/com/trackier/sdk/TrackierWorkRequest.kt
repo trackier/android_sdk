@@ -113,7 +113,11 @@ class TrackierWorkRequest(
     fun getDeeplinksData(): MutableMap<String, Any> {
         val body = mutableMapOf<String, Any>()
         body["url"] = this.deeplinkUrl
-        body["intent"] = "Intent"
+        body["os"] = this.device.osName
+        body["osv"] = this.device.osVersion
+        body["sdkv"] = Constants.SDK_VERSION
+        body["apv"] = this.device.appVersion.toString()
+        body["appKey"] = appToken
         return body
     }
 
