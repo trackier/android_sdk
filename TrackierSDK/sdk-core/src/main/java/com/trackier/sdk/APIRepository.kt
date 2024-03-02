@@ -1,5 +1,6 @@
 package com.trackier.sdk
 
+import android.util.Log
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -52,7 +53,7 @@ object APIRepository {
         return trackierApi.sendSessionData(body)
     }
     
-    private suspend fun sendDeeplinks(body: MutableMap<String, Any>): DeeplinkResponse {
+    private suspend fun sendDeeplinks(body: MutableMap<String, Any>): ResponseData {
         val logger = Factory.logger
         logger.info("Deeplinks body is: $body")
         return trackierDeeplinksApi.sendDeeplinksData(body)
@@ -64,6 +65,7 @@ object APIRepository {
             TrackierWorkRequest.KIND_EVENT -> sendEvent(workRequest.getEventData())
             TrackierWorkRequest.KIND_UNKNOWN -> null
             TrackierWorkRequest.KIND_SESSION_TRACK -> sendSession(workRequest.getSessionData())
+            TrackierWorkRequest.KIND_DEEPLINKS -> sendDeeplinks(workRequest.getDeeplinksData())
             else -> null
         }
     }
@@ -75,23 +77,6 @@ object APIRepository {
                 TrackierWorkRequest.KIND_EVENT -> sendEvent(workRequest.getEventData())
                 TrackierWorkRequest.KIND_UNKNOWN -> null
                 TrackierWorkRequest.KIND_SESSION_TRACK -> sendSession(workRequest.getSessionData())
-                else -> null
-            }
-        } catch (ex: Exception) {
-            null
-        }
-    }
-    
-    suspend fun doWorkDeeplinks(workRequest: TrackierWorkRequest): DeeplinkResponse? {
-        return when(workRequest.kind) {
-            TrackierWorkRequest.KIND_DEEPLINKS -> sendDeeplinks(workRequest.getDeeplinksData())
-            else -> null
-        }
-    }
-    
-    suspend fun processWorkDeeplinks(workRequest: TrackierWorkRequest): DeeplinkResponse? {
-        return try {
-            when(workRequest.kind) {
                 TrackierWorkRequest.KIND_DEEPLINKS -> sendDeeplinks(workRequest.getDeeplinksData())
                 else -> null
             }
@@ -99,5 +84,4 @@ object APIRepository {
             null
         }
     }
-
 }

@@ -117,6 +117,7 @@ class TrackierWorkRequest(
         body["osv"] = this.device.osVersion
         body["sdkv"] = Constants.SDK_VERSION
         body["apv"] = this.device.appVersion.toString()
+        body["insId"] = TrackierSDK.getTrackierId()
         body["appKey"] = appToken
         return body
     }

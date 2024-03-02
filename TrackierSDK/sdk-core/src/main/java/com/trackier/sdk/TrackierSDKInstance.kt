@@ -6,7 +6,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.Exception
 
 class TrackierSDKInstance {
     private val device = DeviceInfo()
@@ -317,19 +316,34 @@ class TrackierSDKInstance {
         } catch (e: Exception) {}
     }
     
-    suspend fun deeplinkData(url: String) {
+    suspend fun deeplinkData(url: String): ResponseData? {
+        var deeplinRes: ResponseData? = null
         val wrkRequest = makeWorkRequest(TrackierWorkRequest.KIND_DEEPLINKS)
         wrkRequest.deeplinkUrl = url
         try {
-            val resp = APIRepository.processWorkDeeplinks(wrkRequest)
-            if (resp?.success == true) {
-                Log.d("trackiersdk","deeplink_success"+resp.url)
+            deeplinRes = APIRepository.processWork(wrkRequest)
+            val resp3 = TrackierWorkRequest.enqueue(wrkRequest)
+           val resp1 = APIRepository.doWork(wrkRequest)
+            Log.d("trackiersdk","deeplink_success resp33 "+resp3.toString())
+            if (deeplinRes != null) {
+                Log.d("trackiersdk","deeplink_success "+deeplinRes.success.toString())
+                //Log.d("trackiersdk","deeplink_success intent "+resp.intent.toString())
+            }
+            if (resp1?.success == true) {
+                deeplinRes = resp1
+                Log.d("trackiersdk","deeplink_success resp1"+ resp1!!.success)
+                Log.d("trackiersdk","deeplink_success resp1"+ resp1!!.message)
+                Log.d("trackiersdk","deeplink_success resp1"+ resp1!!.data.toString())
             } else {
-                Log.d("trackiersdk","deeplink_fail"+resp.toString())
+                Log.d("trackiersdk","deeplink_fail resp1"+resp1.toString())
             }
         } catch (ex: Exception) {
-            APIRepository.doWorkDeeplinks(wrkRequest)
+            Log.d("trackiersdk","Excpetoion deeplinkdat " + ex.message)
+            Log.d("trackiersdk","Excpetoion deeplinkdat " + ex.toString())
+            APIRepository.doWork(wrkRequest)
         }
+        return deeplinRes
+        
     }
 
     fun callDeepLinkListener() {
@@ -350,6 +364,21 @@ class TrackierSDKInstance {
             dlResult = DeepLink(dlstr, false)
         }
         Util.setSharedPrefString(this.config.context, Constants.SHARED_PREF_DEEP_LINK_CALLED, "true")
+        dlt.onDeepLinking(dlResult)
+    }
+    
+    fun callDeepLinkListenerDynamic(dlObj: ResponseData ) {
+        val dlt = this.config.getDeepLinkListener() ?: return
+        val dlResult: DeepLink
+        Log.d("trackiersdk","callDeepLinkListenerDynamic--message "+ (dlObj.message ?: "error emp=ty"))
+        if (dlObj == null){
+            val ref = getReferrerDetails()
+            dlResult = DeepLink(ref.url, true)
+            Log.d("trackiersdk","callDeepLinkListenerDynamic--if "+ (dlObj.message ?: "error emp=ty"))
+        } else {
+            dlResult = dlObj.data?.let { it.url?.let { it1 -> DeepLink(it1, true) } }!!
+            Log.d("trackiersdk","callDeepLinkListenerDynamic--else ")
+        }
         dlt.onDeepLinking(dlResult)
     }
     
