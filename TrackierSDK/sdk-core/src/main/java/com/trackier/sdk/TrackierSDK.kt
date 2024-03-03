@@ -55,25 +55,30 @@ object TrackierSDK {
     }
 
     @JvmStatic
-    fun parseDeepLink(uri: Uri, context: Context) {
+    fun parseDeepLink(uri: Uri?, context: Context) {
+        uri ?: return
         val ctx = context.applicationContext
         val prefs = Util.getSharedPref(ctx)
-        var resData:  ResponseData? = null
+        var resData: ResponseData? = null
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                if (uri !== null) {
-                    resData = instance.deeplinkData(uri.toString())
+                if (uri != null) {
+                    resData = instance.deeplinkData(uri)
                     Log.d("trackiersdk"," deeplink response TrackierSDK resData " + resData)
-                } else {
-                    Log.d("trackiersdk","check null parse deeplink")
                 }
-            } catch (e: Exception) {
+            } catch (e: Exception) { }
+            if (uri != null) {
+                prefs.edit().putString(Constants.SHARED_PREF_DEEP_LINK, uri.query)
+                    .remove(Constants.SHARED_PREF_DEEP_LINK_CALLED).apply()
             }
-            prefs.edit().putString(Constants.SHARED_PREF_DEEP_LINK, uri.query)
-                .remove(Constants.SHARED_PREF_DEEP_LINK_CALLED).apply()
-        
             if (instance.isInitialized) {
-                resData?.let { instance.callDeepLinkListenerDynamic(it) }
+                try {
+                    if (resData != null) {
+                        resData?.let { instance.callDeepLinkListenerDynamic(it) }
+                    }
+                } catch (e: Exception) {
+                    Log.d("trackiersdk", "parse deeplink exception" + e.toString())
+                }
             }
         }
     }

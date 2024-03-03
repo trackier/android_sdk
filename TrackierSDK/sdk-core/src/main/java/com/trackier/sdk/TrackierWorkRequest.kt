@@ -1,5 +1,6 @@
 package com.trackier.sdk
 
+import android.net.Uri
 import androidx.work.*
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
@@ -36,7 +37,7 @@ class TrackierWorkRequest(
     var dob = ""
     var preinstallData: MutableMap<String, Any>? = null
     lateinit var storeRetargeting: Map<String, Any>
-    var deeplinkUrl = ""
+    var deeplinkUrl: Uri? = null
     
     private fun setDefaults(): MutableMap<String, Any> {
         val body = mutableMapOf<String, Any>()
@@ -112,7 +113,7 @@ class TrackierWorkRequest(
     
     fun getDeeplinksData(): MutableMap<String, Any> {
         val body = mutableMapOf<String, Any>()
-        body["url"] = this.deeplinkUrl
+        body["url"] = this.deeplinkUrl.toString()
         body["os"] = this.device.osName
         body["osv"] = this.device.osVersion
         body["sdkv"] = Constants.SDK_VERSION

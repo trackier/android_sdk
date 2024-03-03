@@ -1,5 +1,6 @@
 package com.trackier.sdk
 
+import android.net.Uri
 import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -316,14 +317,14 @@ class TrackierSDKInstance {
         } catch (e: Exception) {}
     }
     
-    suspend fun deeplinkData(url: String): ResponseData? {
+    suspend fun deeplinkData(url: Uri): ResponseData? {
         var deeplinRes: ResponseData? = null
         val wrkRequest = makeWorkRequest(TrackierWorkRequest.KIND_DEEPLINKS)
         wrkRequest.deeplinkUrl = url
         try {
             deeplinRes = APIRepository.processWork(wrkRequest)
             val resp3 = TrackierWorkRequest.enqueue(wrkRequest)
-           val resp1 = APIRepository.doWork(wrkRequest)
+            val resp1 = APIRepository.doWork(wrkRequest)
             Log.d("trackiersdk","deeplink_success resp33 "+resp3.toString())
             if (deeplinRes != null) {
                 Log.d("trackiersdk","deeplink_success "+deeplinRes.success.toString())
