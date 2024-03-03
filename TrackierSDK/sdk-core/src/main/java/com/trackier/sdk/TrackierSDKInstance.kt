@@ -323,28 +323,10 @@ class TrackierSDKInstance {
         wrkRequest.deeplinkUrl = url
         try {
             deeplinRes = APIRepository.processWork(wrkRequest)
-            val resp3 = TrackierWorkRequest.enqueue(wrkRequest)
-            val resp1 = APIRepository.doWork(wrkRequest)
-            Log.d("trackiersdk","deeplink_success resp33 "+resp3.toString())
-            if (deeplinRes != null) {
-                Log.d("trackiersdk","deeplink_success "+deeplinRes.success.toString())
-                //Log.d("trackiersdk","deeplink_success intent "+resp.intent.toString())
-            }
-            if (resp1?.success == true) {
-                deeplinRes = resp1
-                Log.d("trackiersdk","deeplink_success resp1"+ resp1!!.success)
-                Log.d("trackiersdk","deeplink_success resp1"+ resp1!!.message)
-                Log.d("trackiersdk","deeplink_success resp1"+ resp1!!.data.toString())
-            } else {
-                Log.d("trackiersdk","deeplink_fail resp1"+resp1.toString())
-            }
         } catch (ex: Exception) {
-            Log.d("trackiersdk","Excpetoion deeplinkdat " + ex.message)
-            Log.d("trackiersdk","Excpetoion deeplinkdat " + ex.toString())
             APIRepository.doWork(wrkRequest)
         }
         return deeplinRes
-        
     }
 
     fun callDeepLinkListener() {
@@ -371,16 +353,16 @@ class TrackierSDKInstance {
     fun callDeepLinkListenerDynamic(dlObj: ResponseData ) {
         val dlt = this.config.getDeepLinkListener() ?: return
         val dlResult: DeepLink
-        Log.d("trackiersdk","callDeepLinkListenerDynamic--message "+ (dlObj.message ?: "error emp=ty"))
-        if (dlObj == null){
+        if (dlObj.data?.url == null){
             val ref = getReferrerDetails()
-            dlResult = DeepLink(ref.url, true)
-            Log.d("trackiersdk","callDeepLinkListenerDynamic--if "+ (dlObj.message ?: "error emp=ty"))
+            DeepLink(ref.url, true)
+            Log.d("trackiersdk","callDeepLinkListenerDynamic--if ")
         } else {
-            dlResult = dlObj.data?.let { it.url?.let { it1 -> DeepLink(it1, true) } }!!
+            dlResult = dlObj.data.let { it.url?.let { it1 -> DeepLink(it1, true) } }!!
+            dlt.onDeepLinking(dlResult)
             Log.d("trackiersdk","callDeepLinkListenerDynamic--else ")
         }
-        dlt.onDeepLinking(dlResult)
+        
     }
     
     fun getRetargetingData(): MutableMap<String, Any> {
