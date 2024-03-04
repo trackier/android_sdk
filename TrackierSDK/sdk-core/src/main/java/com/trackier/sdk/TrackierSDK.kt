@@ -7,6 +7,7 @@ import androidx.annotation.Keep
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import java.util.Date
 
 @Keep
@@ -55,32 +56,13 @@ object TrackierSDK {
     }
 
     @JvmStatic
-    fun parseDeepLink(uri: Uri?, context: Context) {
-        uri ?: return
-        val ctx = context.applicationContext
-        val prefs = Util.getSharedPref(ctx)
-        var resData: ResponseData? = null
-        CoroutineScope(Dispatchers.Main).launch {
-            try {
-                if (uri != null) {
-                    resData = instance.deeplinkData(uri)
-                    Log.d("trackiersdk"," deeplink response TrackierSDK resData " + resData)
-                }
-            } catch (e: Exception) { }
-            if (uri != null) {
-                prefs.edit().putString(Constants.SHARED_PREF_DEEP_LINK, uri.query)
-                    .remove(Constants.SHARED_PREF_DEEP_LINK_CALLED).apply()
-            }
-            if (instance.isInitialized) {
-                try {
-                    if (resData != null) {
-                        resData?.let { instance.callDeepLinkListenerDynamic(it) }
-                    }
-                } catch (e: Exception) {
-                    Log.d("trackiersdk", "parse deeplink exception" + e.toString())
-                }
-            }
+    fun parseDeepLink(uri: Uri) {
+        try {
+            instance.parseDeepLink(uri)
+        } catch (e: Exception) {
+            Log.d("trackiersdk","parseDeeplink "+ e.message)
         }
+        
     }
 
     @JvmStatic

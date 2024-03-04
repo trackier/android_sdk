@@ -1,5 +1,6 @@
 package com.trackier.sdk
 
+import android.content.Context
 import android.net.Uri
 import android.util.Log
 import kotlinx.coroutines.CoroutineScope
@@ -350,10 +351,10 @@ class TrackierSDKInstance {
         dlt.onDeepLinking(dlResult)
     }
     
-    fun callDeepLinkListenerDynamic(dlObj: ResponseData ) {
+    fun callDeepLinkListenerDynamic(dlObj: ResponseData) {
         val dlt = this.config.getDeepLinkListener() ?: return
         val dlResult: DeepLink
-        if (dlObj.data?.url == null){
+        if (dlObj.data?.url!!.isBlank()){
             val ref = getReferrerDetails()
             DeepLink(ref.url, true)
             Log.d("trackiersdk","callDeepLinkListenerDynamic--if ")
@@ -370,5 +371,26 @@ class TrackierSDKInstance {
         body["rtgtime"] = Util.getSharedPrefString(this.config.context, Constants.STORE_RETARGETING_TIME)
         body["url"] = Util.getSharedPrefString(this.config.context, Constants.STORE_RETARGETING)
         return body
+    }
+    
+    fun parseDeepLink(uri: Uri) {
+        if (uri == null) return
+        var resData: ResponseData? = null
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                resData = deeplinkData(uri)
+                Log.d("trackiersdk"," deeplink response TrackierSDK resData " + resData)
+            } catch (e: Exception) { }
+            
+            if (isInitialized) {
+                try {
+                    if (resData != null) {
+                        resData?.let { callDeepLinkListenerDynamic(it) }
+                    }
+                } catch (e: Exception) {
+                    Log.d("trackiersdk", "parse deeplink exception" + e.toString())
+                }
+            }
+        }
     }
 }

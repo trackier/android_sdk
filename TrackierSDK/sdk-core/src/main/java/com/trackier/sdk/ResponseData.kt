@@ -27,11 +27,12 @@ data class ResponseData(
     var partner: String?,
     val isRetargeting: Boolean?,
     val message: String?,
-    val data: Data?
+    val data: DlData?
 )
 
 @JsonClass(generateAdapter = true)
-data class Data(
+data class DlData(
     @Json(name = "url") val url: String?,
+    @Json(name = "dlv") val dlv: String?,
     @Json(name = "sdkparams") val sdkParams: MutableMap<String, Any>?
 )
