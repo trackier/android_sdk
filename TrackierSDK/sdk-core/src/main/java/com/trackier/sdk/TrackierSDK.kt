@@ -56,13 +56,13 @@ object TrackierSDK {
     }
 
     @JvmStatic
-    fun parseDeepLink(uri: Uri?) {
-        uri ?: return
+    fun parseDeepLink(uri: Uri) {
         try {
             instance.parseDeepLink(uri)
         } catch (e: Exception) {
             Log.d("trackiersdk","parseDeeplink "+ e.message)
         }
+        
     }
 
     @JvmStatic
