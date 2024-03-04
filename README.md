@@ -19,6 +19,7 @@
     * [Retrieve Event Id from dashboard](#qs-retrieve-event-id)
     * [Track with Currency & Revenue Event](#qs-track-event-with-currencey)
     * [Add custom params with event](#qs-add-custom-parms-event)
+    * [Passing User Data to SDK](#qs-assosoiate-user-info)
 * [Defer Start SDK](#qs-defer-start-sdk)
 * [Disable Organic Tracking](#qs-disable-orgainic-tracking)
 * [Uninstall Tracking](#qs-track-uninstall)
@@ -720,16 +721,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void userDetails(){
-        
-        /* Passing the UserId and User EmailId Data */
-        TrackierSDK.setUserId("XXXXXXXX"); // Pass the UserId values here
+
+	TrackierEvent event = new TrackierEvent("sEMWSCTXeu");
+
+	TrackierSDK.setUserId("XXXXXXXX"); // Pass the UserId values here
         TrackierSDK.setUserEmail("abc@gmail.com"); // Pass the user email id in the argument.
-        
-        /* Passing the additional data */
+	TrackierSDK.setUserName("abc");
+	TrackierSDK.setUserPhone("983293829");
+
+	/* Passing the additional data */
         HashMap<String,Object> userDetails = new HashMap<>();
         userDetails.put("Name","Sanu"); // You can pass the Username data.
         userDetails.put("UserMobile","873287XXXX"); // You can pass user mobile number
         TrackierSDK.setUserAdditionalDetails(userDetails);
+
+        TrackierSDK.trackEvent(event);
     }
 }
 
