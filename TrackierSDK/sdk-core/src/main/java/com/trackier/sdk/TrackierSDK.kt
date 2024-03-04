@@ -4,9 +4,6 @@ import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.annotation.Keep
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.lang.Exception
 import java.util.Date
 
@@ -57,7 +54,7 @@ object TrackierSDK {
 
     @JvmStatic
     fun parseDeepLink(uri: Uri?) {
-        uri ?: return
+        if (uri == null) return
         try {
             instance.parseDeepLink(uri)
         } catch (e: Exception) {

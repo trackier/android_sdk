@@ -371,7 +371,7 @@ class TrackierSDKInstance {
         return body
     }
     
-    fun parseDeepLink(uri: Uri) {
+    fun parseDeepLink(uri: Uri?) {
         if (uri == null) return
         var resData: ResponseData? = null
         CoroutineScope(Dispatchers.Main).launch {
