@@ -357,11 +357,9 @@ class TrackierSDKInstance {
         if (dlObj.data?.url!!.isBlank()){
             val ref = getReferrerDetails()
             DeepLink(ref.url, true)
-            Log.d("trackiersdk","callDeepLinkListenerDynamic--if ")
         } else {
             dlResult = dlObj.data.let { it.url?.let { it1 -> DeepLink(it1, true) } }!!
             dlt.onDeepLinking(dlResult)
-            Log.d("trackiersdk","callDeepLinkListenerDynamic--else ")
         }
         
     }
@@ -379,7 +377,6 @@ class TrackierSDKInstance {
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 resData = deeplinkData(uri)
-                Log.d("trackiersdk"," deeplink response TrackierSDK resData " + resData)
             } catch (e: Exception) { }
             
             if (isInitialized) {
@@ -388,7 +385,6 @@ class TrackierSDKInstance {
                         resData?.let { callDeepLinkListenerDynamic(it) }
                     }
                 } catch (e: Exception) {
-                    Log.d("trackiersdk", "parse deeplink exception" + e.toString())
                 }
             }
         }

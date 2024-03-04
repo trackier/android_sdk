@@ -56,7 +56,8 @@ object TrackierSDK {
     }
 
     @JvmStatic
-    fun parseDeepLink(uri: Uri) {
+    fun parseDeepLink(uri: Uri?) {
+        uri ?: return
         try {
             instance.parseDeepLink(uri)
         } catch (e: Exception) {
