@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.annotation.Keep
+import java.lang.Exception
 import java.util.Date
 
 @Keep
@@ -52,15 +53,14 @@ object TrackierSDK {
     }
 
     @JvmStatic
-    fun parseDeepLink(uri: Uri, context: Context) {
-        val ctx = context.applicationContext
-        val prefs = Util.getSharedPref(ctx)
-        prefs.edit().putString(Constants.SHARED_PREF_DEEP_LINK, uri.query)
-            .remove(Constants.SHARED_PREF_DEEP_LINK_CALLED).apply()
-
-        if (instance.isInitialized) {
-            instance.callDeepLinkListener()
+    fun parseDeepLink(uri: Uri?) {
+        if (uri == null) return
+        try {
+            instance.parseDeepLink(uri)
+        } catch (e: Exception) {
+            Log.d("trackiersdk","parseDeeplink "+ e.message)
         }
+        
     }
 
     @JvmStatic

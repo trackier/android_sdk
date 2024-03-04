@@ -1,12 +1,13 @@
 package com.trackier.sdk
 
+import android.content.Context
+import android.net.Uri
 import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.Exception
 
 class TrackierSDKInstance {
     private val device = DeviceInfo()
@@ -316,6 +317,18 @@ class TrackierSDKInstance {
             }
         } catch (e: Exception) {}
     }
+    
+    suspend fun deeplinkData(url: Uri): ResponseData? {
+        var deeplinRes: ResponseData? = null
+        val wrkRequest = makeWorkRequest(TrackierWorkRequest.KIND_DEEPLINKS)
+        wrkRequest.deeplinkUrl = url
+        try {
+            deeplinRes = APIRepository.processWork(wrkRequest)
+        } catch (ex: Exception) {
+            APIRepository.doWork(wrkRequest)
+        }
+        return deeplinRes
+    }
 
     fun callDeepLinkListener() {
         val dlt = this.config.getDeepLinkListener() ?: return
@@ -338,10 +351,42 @@ class TrackierSDKInstance {
         dlt.onDeepLinking(dlResult)
     }
     
+    fun callDeepLinkListenerDynamic(dlObj: ResponseData) {
+        val dlt = this.config.getDeepLinkListener() ?: return
+        val dlResult: DeepLink
+        if (dlObj.data?.url!!.isBlank()){
+            val ref = getReferrerDetails()
+            DeepLink(ref.url, true)
+        } else {
+            dlResult = dlObj.data.let { it.url?.let { it1 -> DeepLink(it1, true) } }!!
+            dlt.onDeepLinking(dlResult)
+        }
+        
+    }
+    
     fun getRetargetingData(): MutableMap<String, Any> {
         val body = mutableMapOf<String, Any>()
         body["rtgtime"] = Util.getSharedPrefString(this.config.context, Constants.STORE_RETARGETING_TIME)
         body["url"] = Util.getSharedPrefString(this.config.context, Constants.STORE_RETARGETING)
         return body
+    }
+    
+    fun parseDeepLink(uri: Uri?) {
+        if (uri == null) return
+        var resData: ResponseData? = null
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                resData = deeplinkData(uri)
+            } catch (e: Exception) { }
+            
+            if (isInitialized) {
+                try {
+                    if (resData != null) {
+                        resData?.let { callDeepLinkListenerDynamic(it) }
+                    }
+                } catch (e: Exception) {
+                }
+            }
+        }
     }
 }

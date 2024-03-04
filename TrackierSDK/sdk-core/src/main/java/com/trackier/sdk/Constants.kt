@@ -2,10 +2,11 @@ package com.trackier.sdk
 
 
 object Constants {
-    const val SDK_VERSION = "1.6.52"
+    const val SDK_VERSION = "1.6.53"
     const val USER_AGENT = "com.cloudstuff.trackiersdk:trackier-android:" + SDK_VERSION
     const val API_VERSION = "v1"
     const val BASE_URL = "https://events.trackier.io/" + API_VERSION + "/"
+    const val BASE_URL_DL = " https://sdkr.apptracking.io/dl/" //"https://eo6vxppz8n3ly04.m.pipedream.net/"
     const val LOG_TAG = "trackiersdk"
     const val LOG_WORK_TAG = "trackiersdk:work"
     const val LOG_WORK_INPUT_KEY = "trackiersdk:work_request"

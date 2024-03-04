@@ -1,5 +1,6 @@
 package com.trackier.sdk
 
+import android.util.Log
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -23,6 +24,16 @@ object APIRepository {
 
         retrofit.create(APIService::class.java)
     }
+    
+    private val trackierDeeplinksApi: APIService by lazy {
+        val retrofit = Retrofit.Builder()
+            .baseUrl(Constants.BASE_URL_DL)
+            .addConverterFactory(MoshiConverterFactory.create().asLenient())
+            .client(client)
+            .build()
+        
+        retrofit.create(APIService::class.java)
+    }
 
     private suspend fun sendInstall(body: MutableMap<String, Any>): ResponseData {
         val logger = Factory.logger
@@ -41,6 +52,10 @@ object APIRepository {
         logger.info("Session body is: $body")
         return trackierApi.sendSessionData(body)
     }
+    
+    private suspend fun sendDeeplinks(body: MutableMap<String, Any>): ResponseData {
+        return trackierDeeplinksApi.sendDeeplinksData(body)
+    }
 
     suspend fun doWork(workRequest: TrackierWorkRequest): ResponseData? {
         return when(workRequest.kind) {
@@ -48,6 +63,7 @@ object APIRepository {
             TrackierWorkRequest.KIND_EVENT -> sendEvent(workRequest.getEventData())
             TrackierWorkRequest.KIND_UNKNOWN -> null
             TrackierWorkRequest.KIND_SESSION_TRACK -> sendSession(workRequest.getSessionData())
+            TrackierWorkRequest.KIND_DEEPLINKS -> sendDeeplinks(workRequest.getDeeplinksData())
             else -> null
         }
     }
@@ -59,11 +75,11 @@ object APIRepository {
                 TrackierWorkRequest.KIND_EVENT -> sendEvent(workRequest.getEventData())
                 TrackierWorkRequest.KIND_UNKNOWN -> null
                 TrackierWorkRequest.KIND_SESSION_TRACK -> sendSession(workRequest.getSessionData())
+                TrackierWorkRequest.KIND_DEEPLINKS -> sendDeeplinks(workRequest.getDeeplinksData())
                 else -> null
             }
         } catch (ex: Exception) {
             null
         }
     }
-
 }

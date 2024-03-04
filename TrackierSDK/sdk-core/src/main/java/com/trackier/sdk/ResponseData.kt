@@ -1,6 +1,7 @@
 package com.trackier.sdk
 
 import androidx.annotation.Keep
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @Keep
@@ -24,6 +25,14 @@ data class ResponseData(
     var dlv: String?,
     var pid: String?,
     var partner: String?,
-    val isRetargeting: Boolean?
-) {
-}
+    val isRetargeting: Boolean?,
+    val message: String?,
+    val data: DlData?
+)
+
+@JsonClass(generateAdapter = true)
+data class DlData(
+    @Json(name = "url") val url: String?,
+    @Json(name = "dlv") val dlv: String?,
+    @Json(name = "sdkparams") val sdkParams: MutableMap<String, Any>?
+)

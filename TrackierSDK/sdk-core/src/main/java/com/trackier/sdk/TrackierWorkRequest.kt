@@ -1,5 +1,6 @@
 package com.trackier.sdk
 
+import android.net.Uri
 import androidx.work.*
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
@@ -36,6 +37,7 @@ class TrackierWorkRequest(
     var dob = ""
     var preinstallData: MutableMap<String, Any>? = null
     lateinit var storeRetargeting: Map<String, Any>
+    var deeplinkUrl: Uri? = null
     
     private fun setDefaults(): MutableMap<String, Any> {
         val body = mutableMapOf<String, Any>()
@@ -108,12 +110,25 @@ class TrackierWorkRequest(
         body["lastSessionTime"] = this.sessionTime
         return body
     }
+    
+    fun getDeeplinksData(): MutableMap<String, Any> {
+        val body = mutableMapOf<String, Any>()
+        body["url"] = this.deeplinkUrl.toString()
+        body["os"] = this.device.osName
+        body["osv"] = this.device.osVersion
+        body["sdkv"] = Constants.SDK_VERSION
+        body["apv"] = this.device.appVersion.toString()
+        body["insId"] = TrackierSDK.getTrackierId()
+        body["appKey"] = appToken
+        return body
+    }
 
     companion object {
         const val KIND_UNKNOWN = "unknown"
         const val KIND_INSTALL = "install"
         const val KIND_EVENT = "event"
         const val KIND_SESSION_TRACK = "session_track"
+        const val KIND_DEEPLINKS = "deeplinks"
 
         private fun getConstraints(): Constraints {
             return Constraints.Builder()
