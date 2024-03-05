@@ -7,7 +7,6 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.content.pm.PackageManager.NameNotFoundException
 import android.content.res.Configuration
-import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.os.SystemClock
@@ -18,7 +17,6 @@ import java.io.File
 import java.io.FileReader
 import java.lang.reflect.Method
 import java.math.BigDecimal
-import java.net.URI
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
 import java.util.*
