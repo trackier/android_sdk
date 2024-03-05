@@ -359,7 +359,7 @@ class TrackierSDKInstance {
             val urlString = list.joinToString("&")
             val urlBuilder = dlObj.data.url?.let { StringBuilder(it) }
             urlBuilder?.append("?")?.append(urlString)
-            val dlResult = DeepLink(urlString, false)
+            val dlResult = DeepLink(urlBuilder.toString(), false)
             dlt.onDeepLinking(dlResult)
         } else if (dlObj.data?.url?.isNotEmpty() == true) {
             val dlResult = DeepLink(dlObj.data.url, false)
