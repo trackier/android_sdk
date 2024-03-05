@@ -357,7 +357,10 @@ class TrackierSDKInstance {
             val list: MutableList<String> = ArrayList()
             dlObj.data.sdkParams.forEach { entry -> list.add("${entry.key}=${entry.value}") }
             val urlString = list.joinToString("&")
-            val dlResult = dlObj.data.let { it.url?.let { it1 -> DeepLink(urlString, true) } }!!
+            val dlResult = DeepLink(urlString, false)
+            dlt.onDeepLinking(dlResult)
+        } else if (dlObj.data?.url?.isNotEmpty() == true) {
+            val dlResult = DeepLink(dlObj.data.url, false)
             dlt.onDeepLinking(dlResult)
         }
     }
