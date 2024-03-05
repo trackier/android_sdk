@@ -353,15 +353,10 @@ class TrackierSDKInstance {
     
     fun callDeepLinkListenerDynamic(dlObj: ResponseData) {
         val dlt = this.config.getDeepLinkListener() ?: return
-        val dlResult: DeepLink
-        if (dlObj.data?.url!!.isBlank()){
-            val ref = getReferrerDetails()
-            DeepLink(ref.url, true)
-        } else {
-            dlResult = dlObj.data.let { it.url?.let { it1 -> DeepLink(it1, true) } }!!
+        if (dlObj.data?.url?.isNotEmpty() == true) {
+            val dlResult = DeepLink(dlObj.data.url, false)
             dlt.onDeepLinking(dlResult)
         }
-        
     }
     
     fun getRetargetingData(): MutableMap<String, Any> {
