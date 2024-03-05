@@ -51,7 +51,7 @@ Screenshot[1]
 You can find the latest version [here](https://search.maven.org/artifact/com.trackier/android-sdk)
 
 ```gradle 
-  implementation 'com.trackier:android-sdk:1.6.53' // Add this Trackier SDK dependency in the build.gradle
+  implementation 'com.trackier:android-sdk:1.6.54' // Add this Trackier SDK dependency in the build.gradle
 ```
 Also, please check the screenshot[2] in the below section for reference.
 
@@ -64,7 +64,7 @@ Add the Android Install Referrer as a dependency. You can find the latest versio
     // make sure to use the latest SDK version:
     // https://mvnrepository.com/artifact/com.trackier/android-sdk   
   
-    implementation 'com.trackier:android-sdk:1.6.53' // Add this Trackier SDK dependency in the build.gradle
+    implementation 'com.trackier:android-sdk:1.6.54' // Add this Trackier SDK dependency in the build.gradle
     implementation 'com.android.installreferrer:installreferrer:2.2' // Add this install referrer dependency in the build.gradle
   }
 ```
@@ -73,7 +73,7 @@ Sync the project to retrieve the dependencies – see the following screenshot.
 
 Screenshot[2]
 
-<img width="1432" alt="Screenshot 2024-02-16 at 3 59 20 PM" src="https://github.com/trackier/android_sdk/assets/16884982/18af8f5c-4011-48b7-b62d-86b4b05ccff8">
+<img width="1432" alt="Screenshot 2024-02-16 at 3 59 20 PM" src="https://github.com/trackier/android_sdk/assets/16884982/5f01afcc-5838-467f-ae62-bbab49ab4f4a">
 
 ## <a id="qs-add-xiaomi-install-referrer"></a>Adding Xiaomi GetApps store referrer
 
