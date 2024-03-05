@@ -72,9 +72,17 @@ object Util {
         }
     }
 
-    fun getQueryParams(query: String): Map<String, String> {
+    fun getQueryParams(uri: String): Map<String, String> {
         val map = mutableMapOf<String, String>()
         try {
+            val urlParts = uri.split("?")
+            var query: String = "";
+            if (urlParts.size == 1) {
+                query = urlParts[0]
+            } else if (urlParts.size > 1) {
+                query = urlParts[1]
+            }
+
             val params = query.split("&")
             for (param in params) {
                 val parts = param.split("=")

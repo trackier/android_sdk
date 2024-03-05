@@ -353,15 +353,7 @@ class TrackierSDKInstance {
     
     fun callDeepLinkListenerDynamic(dlObj: ResponseData) {
         val dlt = this.config.getDeepLinkListener() ?: return
-        if (dlObj.data?.sdkParams?.isNotEmpty() == true) {
-            val list: MutableList<String> = ArrayList()
-            dlObj.data.sdkParams.forEach { entry -> list.add("${entry.key}=${entry.value}") }
-            val urlString = list.joinToString("&")
-            val urlBuilder = dlObj.data.url?.let { StringBuilder(it) }
-            urlBuilder?.append("?")?.append(urlString)
-            val dlResult = DeepLink(urlBuilder.toString(), false)
-            dlt.onDeepLinking(dlResult)
-        } else if (dlObj.data?.url?.isNotEmpty() == true) {
+        if (dlObj.data?.url?.isNotEmpty() == true) {
             val dlResult = DeepLink(dlObj.data.url, false)
             dlt.onDeepLinking(dlResult)
         }
