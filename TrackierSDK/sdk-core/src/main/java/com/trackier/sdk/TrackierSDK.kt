@@ -5,6 +5,7 @@ import android.net.Uri
 import android.util.Log
 import androidx.annotation.Keep
 import java.lang.Exception
+import java.net.NetworkInterface
 import java.util.Date
 
 @Keep
@@ -21,7 +22,9 @@ object TrackierSDK {
         }
         isInitialized = true
         logger.info("Trackier SDK ${Constants.SDK_VERSION} initialized")
-        instance.initialize(config)
+        try {
+            instance.initialize(config)
+        } catch (e: Exception){}
     }
 
     @JvmStatic

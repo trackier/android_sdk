@@ -17,6 +17,7 @@ import java.io.File
 import java.io.FileReader
 import java.lang.reflect.Method
 import java.math.BigDecimal
+import java.net.URLDecoder
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
 import java.util.*
@@ -74,9 +75,10 @@ object Util {
 
     fun getQueryParams(uri: String): Map<String, String> {
         val map = mutableMapOf<String, String>()
+        val decodedUrl = URLDecoder.decode(uri, "UTF-8").toString()
         try {
-            val urlParts = uri.split("?")
-            var query = uri
+            val urlParts = decodedUrl.split("?")
+            var query = decodedUrl
             if (urlParts.size == 1) {
                 query = urlParts[0]
             } else if (urlParts.size >= 2) {
