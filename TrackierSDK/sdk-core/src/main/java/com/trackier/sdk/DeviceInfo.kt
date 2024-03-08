@@ -170,8 +170,10 @@ data class DeviceInfo(
                         !it.isLoopbackAddress && it is Inet4Address
                     }?.let { ipaddr = it.hostAddress }
                 }
+            } catch (e: NullPointerException) {
+                // do nothing
             } catch (e: Exception) {
-                e.printStackTrace()
+                // e.printStackTrace()
             }
             return ipaddr
         }

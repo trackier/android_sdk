@@ -209,7 +209,7 @@ object Util {
                 .invoke(null, path) as String
             logger.info("Get system property $value")
         } catch (e: Exception) {
-            e.printStackTrace()
+            // e.printStackTrace()
         }
         return value
     }
@@ -240,7 +240,7 @@ object Util {
                 return Constants.PRE_DEFINED_PATH2
             }
         } catch (e: Exception) {
-            e.printStackTrace()
+            // e.printStackTrace()
         }
         return ""
     }
@@ -267,7 +267,7 @@ object Util {
                 return getData
             }
         } catch (e: Exception) {
-            e.printStackTrace()
+            // e.printStackTrace()
         }
         return getData
     }
@@ -295,10 +295,10 @@ object Util {
 //            logger.info( "getManifestData \$propertyName = $tempValue")
         } catch (e: NameNotFoundException) {
             logger.info( "getManifestData NameNotFound = " + e.message)
-            e.printStackTrace()
+            // e.printStackTrace()
         } catch (e: Exception) {
             logger.info( "getManifestData Exception = " + e.message)
-            e.printStackTrace()
+            // e.printStackTrace()
         }
         return tempValue
     }
@@ -323,7 +323,7 @@ object Util {
                 return true
             }
         } catch (e: NameNotFoundException) {
-            e.printStackTrace() // TODO Can handle as your logic
+            // e.printStackTrace() // TODO Can handle as your logic
         }
         return false
     }
@@ -338,7 +338,7 @@ object Util {
                 return true
             }
         } catch (e: NameNotFoundException) {
-            e.printStackTrace() // TODO Can handle as your logic
+            // e.printStackTrace() // TODO Can handle as your logic
         }
         return false
     }
@@ -373,7 +373,7 @@ object Util {
             val deviceActivationTime = bootTime - SystemClock.uptimeMillis()
             activationDate = Date(deviceActivationTime).toString()
         } catch (e: Exception) {
-            e.printStackTrace()
+            // e.printStackTrace()
         }
         return activationDate
     }
