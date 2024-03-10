@@ -17,6 +17,7 @@ import java.io.File
 import java.io.FileReader
 import java.lang.reflect.Method
 import java.math.BigDecimal
+import java.net.URLDecoder
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
 import java.util.*
@@ -74,9 +75,10 @@ object Util {
 
     fun getQueryParams(uri: String): Map<String, String> {
         val map = mutableMapOf<String, String>()
+        val decodedUrl = URLDecoder.decode(uri, "UTF-8").toString()
         try {
-            val urlParts = uri.split("?")
-            var query = uri
+            val urlParts = decodedUrl.split("?")
+            var query = decodedUrl
             if (urlParts.size == 1) {
                 query = urlParts[0]
             } else if (urlParts.size >= 2) {
@@ -207,7 +209,7 @@ object Util {
                 .invoke(null, path) as String
             logger.info("Get system property $value")
         } catch (e: Exception) {
-            e.printStackTrace()
+            // e.printStackTrace()
         }
         return value
     }
@@ -238,7 +240,7 @@ object Util {
                 return Constants.PRE_DEFINED_PATH2
             }
         } catch (e: Exception) {
-            e.printStackTrace()
+            // e.printStackTrace()
         }
         return ""
     }
@@ -265,7 +267,7 @@ object Util {
                 return getData
             }
         } catch (e: Exception) {
-            e.printStackTrace()
+            // e.printStackTrace()
         }
         return getData
     }
@@ -293,10 +295,10 @@ object Util {
 //            logger.info( "getManifestData \$propertyName = $tempValue")
         } catch (e: NameNotFoundException) {
             logger.info( "getManifestData NameNotFound = " + e.message)
-            e.printStackTrace()
+            // e.printStackTrace()
         } catch (e: Exception) {
             logger.info( "getManifestData Exception = " + e.message)
-            e.printStackTrace()
+            // e.printStackTrace()
         }
         return tempValue
     }
@@ -321,7 +323,7 @@ object Util {
                 return true
             }
         } catch (e: NameNotFoundException) {
-            e.printStackTrace() // TODO Can handle as your logic
+            // e.printStackTrace() // TODO Can handle as your logic
         }
         return false
     }
@@ -336,7 +338,7 @@ object Util {
                 return true
             }
         } catch (e: NameNotFoundException) {
-            e.printStackTrace() // TODO Can handle as your logic
+            // e.printStackTrace() // TODO Can handle as your logic
         }
         return false
     }
@@ -371,7 +373,7 @@ object Util {
             val deviceActivationTime = bootTime - SystemClock.uptimeMillis()
             activationDate = Date(deviceActivationTime).toString()
         } catch (e: Exception) {
-            e.printStackTrace()
+            // e.printStackTrace()
         }
         return activationDate
     }
