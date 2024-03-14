@@ -321,7 +321,7 @@ class TrackierSDKInstance {
     suspend fun deeplinkData(url: Uri): ResponseData? {
         var deeplinRes: ResponseData? = null
         val wrkRequest = makeWorkRequest(TrackierWorkRequest.KIND_DEEPLINKS)
-        wrkRequest.deeplinkUrl = url
+        wrkRequest.deeplinkUrl = url.toString()
         try {
             deeplinRes = APIRepository.processWork(wrkRequest)
         } catch (ex: Exception) {

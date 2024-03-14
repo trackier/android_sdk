@@ -37,7 +37,7 @@ class TrackierWorkRequest(
     var dob = ""
     var preinstallData: MutableMap<String, Any>? = null
     lateinit var storeRetargeting: Map<String, Any>
-    var deeplinkUrl: Uri? = null
+    var deeplinkUrl = ""
     
     private fun setDefaults(): MutableMap<String, Any> {
         val body = mutableMapOf<String, Any>()
