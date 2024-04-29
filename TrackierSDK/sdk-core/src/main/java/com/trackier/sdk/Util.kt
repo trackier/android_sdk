@@ -75,7 +75,8 @@ object Util {
 
     fun getQueryParams(uri: String): Map<String, String> {
         val map = mutableMapOf<String, String>()
-        val decodedUrl = URLDecoder.decode(uri, "UTF-8").toString()
+        val decodedUrl = uri
+//        val decodedUrl = URLDecoder.decode(uri, "UTF-8").toString()
         try {
             val urlParts = decodedUrl.split("?")
             var query = decodedUrl
@@ -91,7 +92,7 @@ object Util {
                 val parts = modifiedParam[0].split("=")
                 if (parts.size == 2) {
                     val name = parts[0]
-                    val value = parts[1]
+                    val value = URLDecoder.decode(parts[1], "UTF-8").toString()
                     map[name] = value
                 }
             }
