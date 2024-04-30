@@ -51,7 +51,7 @@ Screenshot[1]
 You can find the latest version [here](https://search.maven.org/artifact/com.trackier/android-sdk)
 
 ```gradle 
-  implementation 'com.trackier:android-sdk:1.6.56' // Add this Trackier SDK dependency in the build.gradle
+  implementation 'com.trackier:android-sdk:1.6.57' // Add this Trackier SDK dependency in the build.gradle
 ```
 Also, please check the screenshot[2] in the below section for reference.
 
@@ -64,7 +64,7 @@ Add the Android Install Referrer as a dependency. You can find the latest versio
     // make sure to use the latest SDK version:
     // https://mvnrepository.com/artifact/com.trackier/android-sdk   
   
-    implementation 'com.trackier:android-sdk:1.6.56' // Add this Trackier SDK dependency in the build.gradle
+    implementation 'com.trackier:android-sdk:1.6.57' // Add this Trackier SDK dependency in the build.gradle
     implementation 'com.android.installreferrer:installreferrer:2.2' // Add this install referrer dependency in the build.gradle
   }
 ```
@@ -73,7 +73,8 @@ Sync the project to retrieve the dependencies – see the following screenshot.
 
 Screenshot[2]
 
-<img width="1432" alt="Screenshot 2024-02-16 at 3 59 20 PM" src="https://github.com/trackier/android_sdk/assets/16884982/5f01afcc-5838-467f-ae62-bbab49ab4f4a">
+<img width="1432" alt="Screenshot 2024-02-16 at 3 59 20 PM" src="https://github.com/trackier/android_sdk/assets/16884982/fdda64e3-585e-4acd-affe-e492f2939a1b">
+
 
 ## <a id="qs-add-xiaomi-install-referrer"></a>Adding Xiaomi GetApps store referrer
 
@@ -346,7 +347,8 @@ those events. Just need to implements events in the app projects.
 
 Screenshot[9]
 
-<img width="1000" alt="Screenshot 2022-06-10 at 1 23 01 PM" src="https://user-images.githubusercontent.com/16884982/173018185-3356c117-8b9f-46d1-bfd5-c41653f9ac9e.png">
+<img width="1000" alt="Screenshot 2022-06-10 at 1 23 01 PM" src="https://github.com/trackier/android_sdk/assets/16884982/d4bae171-a6f5-4bc8-9adb-b7e6adcc928b">
+
 
 ### Example code for calling Built-in events
 
@@ -474,7 +476,8 @@ orderId, revenue, currency, param1, param2, param3 ,param4, param5, param6, para
 
 Screenshot[10]
 
-<img width="1000" alt="Screenshot 2022-06-10 at 3 49 22 PM" src="https://user-images.githubusercontent.com/16884982/173045367-28cf3ead-9123-4bf3-ab86-54f38c9149db.png">
+<img width="1000" alt="Screenshot 2022-06-10 at 3 49 22 PM" src="https://github.com/trackier/android_sdk/assets/16884982/e3f16dea-2f87-4706-928d-ed781a7cc0c4">
+
 
 ### Example code for calling Customs Events
 
@@ -1037,15 +1040,15 @@ class MainApplication : Application() {
 Following below are the steps to retrieve the secretId and secretKey :-
 
 - Login your Trackier Panel and select your application.
-- In the Dashboard, click on the `SDK Integration` option on the left side of panel. 
-- Under on the SDK Integration, click on the Advanced tab. 
-- Under the Advanced tab, you will get the secretId and secretKey.
+- In the Dashboard, click the three dot in left bottom. 
+- You can see the SDK key there and click on Advanced tab to generate the Id and Key.
+- Click on the Add secret key button to generate the Id and key.
 
 Please check on the below screenshot
 
 Screenshot[11]
 
-<img width="1000" alt="Screenshot 11" src="https://user-images.githubusercontent.com/16884982/185338826-bcf802d0-c493-4a67-adb3-a9b52bae289e.png">
+<img width="1000" alt="Screenshot 11" src="https://github.com/trackier/android_sdk/assets/16884982/6e933fb2-2f14-437c-ab74-a232ec93cff5">
 
 
 Check below the example code for passing the secretId and secretKey to the SDK
@@ -1428,7 +1431,7 @@ btn_event_track.setOnClickListener(View.OnClickListener {
 ## <a id="qs-progaurd-trackier-sdk"></a>Proguard Settings 
 
 
-If your app is using proguard then add these lines to the proguard config file 
+It is mandatory to add this setting in android app when your app is using proguard. Add below code in proguard file. 
 
 ``` 
   -keep class com.trackier.sdk.** { *; }
