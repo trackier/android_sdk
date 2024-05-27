@@ -123,7 +123,7 @@ data class DeviceInfo(
             setCarrierInfo(deviceInfo, context)
             deviceInfo.isEmulator = checkIsEmulator()
 
-            deviceInfo.fbAttributionId = getFBAttributionId(context.contentResolver)
+            //deviceInfo.fbAttributionId = getFBAttributionId(context.contentResolver)
             deviceInfo.locale = Locale.getDefault().toString()
 
             if (VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -445,7 +445,7 @@ data class DeviceInfo(
         }
 
 
-        @SuppressLint("Range")
+        /*@SuppressLint("Range")
         fun getFBAttributionId(contentResolver: ContentResolver): String {
             try {
                 val attributionIdContentUri =
@@ -467,7 +467,7 @@ data class DeviceInfo(
             } catch (e: Exception) {
                 return ""
             }
-        }
+        }*/
     }
 }
 
