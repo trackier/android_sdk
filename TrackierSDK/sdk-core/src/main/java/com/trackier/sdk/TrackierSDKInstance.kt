@@ -1,5 +1,6 @@
 package com.trackier.sdk
 
+import android.app.Application
 import android.content.Context
 import android.net.Uri
 import android.util.Log
@@ -54,6 +55,8 @@ class TrackierSDKInstance {
         this.isManualInstall = config.getManualMode()
         this.disableOrganicTrack = config.getOrganicTracking()
         DeviceInfo.init(device, this.config.context)
+        SensorsData.init(this.config.context as Application)
+        
         CoroutineScope(Dispatchers.IO).launch {
             for (i in 1..5) {
                val gadid =  initGaid()
