@@ -8,6 +8,8 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class TrackierEvent(val id: String) {
     @JvmField var orderId: String? = null
+    @Json(name = "product_id")
+    @JvmField var productId: String?= null
     @JvmField var currency: String? = null
     @JvmField var param1: String? = null
     @JvmField var param2: String? = null
