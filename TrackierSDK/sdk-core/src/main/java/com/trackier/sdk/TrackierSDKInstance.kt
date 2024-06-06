@@ -54,8 +54,8 @@ class TrackierSDKInstance {
         this.firstInstallTime = getFirstInstallTS()
         this.isManualInstall = config.getManualMode()
         this.disableOrganicTrack = config.getOrganicTracking()
-        DeviceInfo.init(device, this.config.context)
-        SensorsData.init(this.config.context as Application)
+        DeviceInfo.init(device, this.config.context, this.config.context as Application)
+        //SensorsData.init(this.config.context as Application)
         
         CoroutineScope(Dispatchers.IO).launch {
             for (i in 1..5) {

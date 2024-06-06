@@ -1,31 +1,38 @@
 package com.trackier.sdk
 
-import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.ActivityManager
-import android.content.ContentResolver
+import android.app.Application
 import android.content.Context
 import android.content.Context.*
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.database.Cursor
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.media.AudioDeviceInfo
 import android.media.AudioManager
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
-import android.net.Uri
 import android.os.BatteryManager
 import android.os.Build
 import android.os.Build.VERSION
+import android.os.Bundle
 import android.os.Environment
 import android.os.StatFs
 import android.telephony.TelephonyManager
 import android.util.DisplayMetrics
+import android.util.Log
 import androidx.annotation.Keep
 import androidx.annotation.RequiresApi
 import com.squareup.moshi.JsonClass
+import org.json.JSONArray
+import org.json.JSONException
+import org.json.JSONObject
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
@@ -33,6 +40,7 @@ import java.lang.ref.WeakReference
 import java.net.Inet4Address
 import java.net.NetworkInterface
 import java.util.*
+
 
 @Keep
 @JsonClass(generateAdapter = true)
@@ -97,9 +105,15 @@ data class DeviceInfo(
     var availableMemory: String? = null
     var totalMemory: String? = null
     var screenDensityNumber: Int = 0
+    
 
     companion object {
-        fun init(deviceInfo: DeviceInfo, context: Context) {
+        lateinit var sensorManager: SensorManager
+        private var gyroscopeSensor: Sensor? = null
+        private var magnetometer: Sensor? = null
+        private var accelerometer: Sensor? = null
+       
+        fun init(deviceInfo: DeviceInfo, context: Context, application: Application) {
             deviceInfo.packageName = context.packageName
             deviceInfo.appVersion = appVersion(context)
             deviceInfo.appInstallTime = appInstallTime(context)
@@ -108,7 +122,7 @@ data class DeviceInfo(
             val locale = Util.getLocale(config)
             deviceInfo.language = locale?.language
             deviceInfo.country = locale?.country
-
+        
             val screenLayout = context.resources.configuration.screenLayout
             val displayMetrics = context.resources.displayMetrics
             deviceInfo.deviceType = getDeviceType(screenLayout)
@@ -118,14 +132,14 @@ data class DeviceInfo(
             deviceInfo.screenDensityNumber = displayMetrics.densityDpi
             deviceInfo.displayWidth = "${displayMetrics.widthPixels}"
             deviceInfo.displayHeight = "${displayMetrics.heightPixels}"
-
+        
             deviceInfo.connectionType = getConnectionType(context)
             setCarrierInfo(deviceInfo, context)
             deviceInfo.isEmulator = checkIsEmulator()
-
+        
             //deviceInfo.fbAttributionId = getFBAttributionId(context.contentResolver)
             deviceInfo.locale = Locale.getDefault().toString()
-
+        
             if (VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 deviceInfo.batteryLevel = getBatteryLevel(context)
             }
@@ -148,8 +162,113 @@ data class DeviceInfo(
             deviceInfo.availableMemory = availableMemory
             deviceInfo.sdkVersion = Constants.SDK_VERSION
             deviceInfo.timezone = TimeZone.getDefault().id
+    
+            sensorManager = application.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+            gyroscopeSensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE)
+            magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
+            accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+            //registerActivityLifecycleCallbacks(application)
+            val sensorsToRegister = listOf(gyroscopeSensor, magnetometer, accelerometer)
+            val sensorNames = listOf("gyroscopeSensor", "magnetometer", "accelerometer")
+    
+            for ((index, sensor) in sensorsToRegister.withIndex()) {
+                if (sensor != null) {
+                    Log.d("trackiersdk", "onActivityResumed ------------- ${sensorNames[index]}")
+                    sensorManager.registerListener(sensorListener, sensor, SensorManager.SENSOR_DELAY_NORMAL)
+                }
+            }
         }
-
+    
+        private fun registerActivityLifecycleCallbacks(application: Application) {
+            application.registerActivityLifecycleCallbacks(object : Application.ActivityLifecycleCallbacks {
+                override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
+                }
+                override fun onActivityStarted(activity: Activity) {
+                }
+                override fun onActivityResumed(activity: Activity) {
+                    val sensorsToRegister = listOf(gyroscopeSensor, magnetometer, accelerometer)
+                    val sensorNames = listOf("gyroscopeSensor", "magnetometer", "accelerometer")
+                    for ((index, sensor) in sensorsToRegister.withIndex()) {
+                        if (sensor != null) {
+                            Log.d("trackiersdk", "onActivityResumed ------------- ${sensorNames[index]}")
+                            sensorManager.registerListener(sensorListener, sensor, SensorManager.SENSOR_DELAY_NORMAL)
+                        }
+                    }
+                }
+                override fun onActivityPaused(activity: Activity) {}
+            
+                override fun onActivityStopped(activity: Activity) {}
+            
+                override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {}
+            
+                override fun onActivityDestroyed(activity: Activity) {}
+            })
+        }
+    
+        val sensorListener = object : SensorEventListener {
+            override fun onSensorChanged(event: SensorEvent) {
+                val sVS = JSONArray()
+                val jsonObj = JSONObject()
+                val floatValues = event!!.values
+                Log.d("trackiersdk","SensorEvent -------------Device info"+ event.sensor.type)
+                when (event.sensor.type) {
+                    Sensor.TYPE_GYROSCOPE -> {
+                        Log.d("trackiersdk","TYPE_GYROSCOPE ------------- Devicd Info")
+                        val timestamp = System.currentTimeMillis()
+                        try {
+                            jsonObj.put("sT", timestamp)
+                            for (gyroValue in floatValues) {
+                                sVS.put(gyroValue)
+                            }
+                            jsonObj.put("sVS", sVS)
+                            jsonObj.put("sV", event.sensor.name)
+                            jsonObj.put("sN", event.sensor.stringType)
+                            val json = jsonObj.toString()
+                            Log.d("trackiersdk", "Gyroscope data $json")
+                        } catch (e: JSONException) {
+                            e.printStackTrace()
+                        }
+                    }
+                    Sensor.TYPE_MAGNETIC_FIELD -> {
+                        Log.d("trackiersdk","TYPE_MAGNETIC_FIELD ------------- Devicd Info")
+                        try {
+                            jsonObj.put("sT", event.timestamp)
+                            for (value in floatValues) {
+                                sVS.put(value)
+                            }
+                            jsonObj.put("sVS", sVS)
+                            jsonObj.put("sV", event.sensor.name)
+                            jsonObj.put("sN", event.sensor.stringType)
+                            Log.d("trackiersdk", "TYPE_MAGNETIC_FIELD data ${jsonObj.toString()}") // Print with indentation for readability
+                        
+                        } catch (e: JSONException) {
+                            e.printStackTrace()
+                        }
+                    }
+                    Sensor.TYPE_ACCELEROMETER -> {
+                        Log.d("trackiersdk","TYPE_ACCELEROMETER ------------- Devicd Info")
+                        try {
+                            jsonObj.put("sT", event.timestamp)
+                            for (value in floatValues) {
+                                sVS.put(value)
+                            }
+                            jsonObj.put("sVS", sVS)
+                            jsonObj.put("sV", event.sensor.name)
+                            jsonObj.put("sN", event.sensor.stringType)
+                            Log.d("trackiersdk", "TYPE_ACCELEROMETER data ${jsonObj.toString()}") // Print with indentation for readability
+        
+                        } catch (e: JSONException) {
+                            e.printStackTrace()
+                        }
+                    }
+                }
+            }
+    
+            override fun onAccuracyChanged(sensor: Sensor, acc: Int) {
+                // Do nothing for this implementation
+            }
+        }
+    
         private fun getDeviceBootTime(): String? {
             return try {
                 val bootTime =
@@ -160,7 +279,7 @@ data class DeviceInfo(
                 null
             }
         }
-        
+    
         private fun getIpv4HostAddress(): String {
             var ipaddr: String = ""
             try {
@@ -177,14 +296,14 @@ data class DeviceInfo(
             }
             return ipaddr
         }
-        
+    
         private fun getDeviceOrientation(context: Context): String {
             val orientation = context.resources.configuration.orientation
             return if (orientation == Configuration.ORIENTATION_PORTRAIT)
                 "portrait"
             else "landscape"
         }
-
+    
         private fun getTotalAvailableMemory(context: Context): Pair<String?, String?> {
             return try {
                 val actManager = context.getSystemService(ACTIVITY_SERVICE) as ActivityManager
@@ -197,7 +316,7 @@ data class DeviceInfo(
                 Pair(null, null)
             }
         }
-        
+    
         @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
         fun getTotalAvailableStorage(): Pair<String?, String?> {
             val iPath: File = Environment.getDataDirectory()
@@ -206,7 +325,7 @@ data class DeviceInfo(
             val iTotalSpace = StatFs(iPath.path).blockCountLong * StatFs(iPath.path).blockSizeLong
             return Pair("$iAvailableSpace", "$iTotalSpace")
         }
-
+    
         private fun getDeviceChargingStatus(context: Context): String? {
             return try {
                 val batteryStatus: Intent? =
@@ -222,7 +341,7 @@ data class DeviceInfo(
                 null
             }
         }
-
+    
         @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
         fun getBatteryLevel(context: Context): String? {
             return try {
@@ -233,7 +352,7 @@ data class DeviceInfo(
                 null
             }
         }
-
+    
         private fun getSystemVolume(context: Context): String? {
             return try {
                 val am = context.getSystemService(AUDIO_SERVICE) as AudioManager
@@ -243,7 +362,7 @@ data class DeviceInfo(
                 null
             }
         }
-
+    
         private fun appVersion(context: Context): String? {
             return try {
                 val pm = context.packageManager
@@ -253,7 +372,7 @@ data class DeviceInfo(
                 null
             }
         }
-
+    
         private fun getDeviceType(screenLayout: Int): String? {
             return when (screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK) {
                 Configuration.SCREENLAYOUT_SIZE_SMALL, Configuration.SCREENLAYOUT_SIZE_NORMAL -> "phone"
@@ -261,7 +380,7 @@ data class DeviceInfo(
                 else -> null
             }
         }
-
+    
         private fun screenSize(screenLayout: Int): String? {
             return when (screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK) {
                 Configuration.SCREENLAYOUT_SIZE_SMALL -> "small"
@@ -271,7 +390,7 @@ data class DeviceInfo(
                 else -> null
             }
         }
-
+    
         private fun screenFormat(screenLayout: Int): String? {
             return when (screenLayout and Configuration.SCREENLAYOUT_LONG_MASK) {
                 Configuration.SCREENLAYOUT_LONG_YES -> "long"
@@ -279,7 +398,7 @@ data class DeviceInfo(
                 else -> null
             }
         }
-
+    
         private fun screenDensity(density: Int): String? {
             val low = (DisplayMetrics.DENSITY_MEDIUM + DisplayMetrics.DENSITY_LOW) / 2
             val high = (DisplayMetrics.DENSITY_MEDIUM + DisplayMetrics.DENSITY_HIGH) / 2
@@ -290,7 +409,7 @@ data class DeviceInfo(
                 else -> "medium"
             }
         }
-
+    
         @RequiresApi(Build.VERSION_CODES.M)
         private fun getHeadphonesPlugged(context: Context): Boolean {
             return try {
@@ -308,7 +427,7 @@ data class DeviceInfo(
                 false
             }
         }
-
+    
         private fun getCPUDetails(): String {
             val processBuilder: ProcessBuilder
             var cpuDetails = ""
@@ -329,8 +448,8 @@ data class DeviceInfo(
             }
             return cpuDetails
         }
-
-
+    
+    
         private fun appInstallTime(context: Context): String? {
             return try {
                 val pm = context.packageManager
@@ -343,7 +462,7 @@ data class DeviceInfo(
                 null
             }
         }
-
+    
         private fun getAppUpdateTime(context: Context): String? {
             return try {
                 val pm = context.packageManager
@@ -356,7 +475,7 @@ data class DeviceInfo(
                 null
             }
         }
-
+    
         private fun getConnectionType(context: Context): String? {
             return try {
                 val conn =
@@ -387,7 +506,7 @@ data class DeviceInfo(
                 null
             }
         }
-
+    
         private fun setCarrierInfo(deviceInfo: DeviceInfo, context: Context) {
             try {
                 val tm = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager?
@@ -396,7 +515,7 @@ data class DeviceInfo(
             } catch (ex: Exception) {
             }
         }
-
+    
         private fun checkIsEmulator(): Boolean {
             return (Build.BRAND.startsWith("generic") && Build.DEVICE.startsWith("generic")
                     || Build.FINGERPRINT.startsWith("generic")
@@ -416,7 +535,7 @@ data class DeviceInfo(
                     || Build.PRODUCT.contains("emulator")
                     || Build.PRODUCT.contains("simulator"))
         }
-
+    
         suspend fun getGAID(context: Context): Pair<String?, Boolean> {
             try {
                 val weakContext = WeakReference(context)
@@ -424,7 +543,7 @@ data class DeviceInfo(
                     Class.forName("com.google.android.gms.ads.identifier.AdvertisingIdClient")
                         .getDeclaredMethod("getAdvertisingIdInfo", Context::class.java)
                 val adInfo = adIdMethod.invoke(null, *arrayOf<Any?>(weakContext.get()))
-
+            
                 val getIdMethod =
                     Class.forName("com.google.android.gms.ads.identifier.AdvertisingIdClient\$Info")
                         .getDeclaredMethod("getId")
@@ -433,7 +552,7 @@ data class DeviceInfo(
                 if (deviceId.equals(Constants.UUID_EMPTY)) {
                     deviceId = null
                 }
-
+            
                 val getLATMethod =
                     Class.forName("com.google.android.gms.ads.identifier.AdvertisingIdClient\$Info")
                         .getDeclaredMethod("isLimitAdTrackingEnabled")
@@ -443,32 +562,35 @@ data class DeviceInfo(
                 return Pair(null, false)
             }
         }
-
-
+        
         /*@SuppressLint("Range")
-        fun getFBAttributionId(contentResolver: ContentResolver): String {
-            try {
-                val attributionIdContentUri =
-                    Uri.parse("content://com.facebook.katana.provider.AttributionIdProvider")
-                val attributionIdColumnName = "aid"
+       fun getFBAttributionId(contentResolver: ContentResolver): String {
+           try {
+               val attributionIdContentUri =
+                   Uri.parse("content://com.facebook.katana.provider.AttributionIdProvider")
+               val attributionIdColumnName = "aid"
 
-                if (contentResolver == null) return ""
+               if (contentResolver == null) return ""
 
-                val projection = arrayOf(attributionIdColumnName)
-                val c: Cursor? =
-                    contentResolver.query(attributionIdContentUri, projection, null, null, null)
-                if (c == null || !c.moveToFirst()) {
-                    return ""
-                }
-                val attributionId: String = c.getString(c.getColumnIndex(attributionIdColumnName))
-                c.close()
+               val projection = arrayOf(attributionIdColumnName)
+               val c: Cursor? =
+                   contentResolver.query(attributionIdContentUri, projection, null, null, null)
+               if (c == null || !c.moveToFirst()) {
+                   return ""
+               }
+               val attributionId: String = c.getString(c.getColumnIndex(attributionIdColumnName))
+               c.close()
 
-                return attributionId
-            } catch (e: Exception) {
-                return ""
-            }
-        }*/
+               return attributionId
+           } catch (e: Exception) {
+               return ""
+           }
+       }*/
     }
 }
+
+
+
+
 
 
