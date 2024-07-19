@@ -112,6 +112,17 @@ object TrackierSDK {
     }
     
     @JvmStatic
+    fun setIMEI(imei1: String, imei2: String) {
+        instance.imei1 = imei1
+        instance.imei2 = imei2
+    }
+
+    @JvmStatic
+    fun setMacAddress(macAddress: String) {
+        instance.macAddress =  macAddress
+    }
+    
+    @JvmStatic
     fun getAd(): String {
         return Util.getSharedPrefString(instance.config.context, Constants.SHARED_PREF_AD)
     }
