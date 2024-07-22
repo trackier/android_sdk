@@ -119,7 +119,7 @@ object TrackierSDK {
 
     @JvmStatic
     fun setMacAddress(macAddress: String) {
-        instance.mac =  macAddress
+        instance.mac = macAddress
     }
     
     @JvmStatic
