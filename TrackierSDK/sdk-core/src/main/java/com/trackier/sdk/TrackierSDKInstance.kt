@@ -30,6 +30,9 @@ class TrackierSDKInstance {
     var customerEmail = ""
     var customerName = ""
     var customerPhoneNumber = ""
+    var imei1 = ""
+    var imei2 = ""
+    var mac = ""
     var customerOptionals: MutableMap<String, Any>? = null
 
     var firstInstallTime = ""
@@ -174,6 +177,9 @@ class TrackierSDKInstance {
         if (this.config.getAndroidId().isNotEmpty()) {
             device.androidId = this.config.getAndroidId()
         }
+        device.imei1 = this.imei1
+        device.imei2 = this.imei2
+        device.mac = this.mac
         trackierWorkRequest.device = device
         trackierWorkRequest.gaid = gaid
         trackierWorkRequest.refDetails = getReferrerDetails()

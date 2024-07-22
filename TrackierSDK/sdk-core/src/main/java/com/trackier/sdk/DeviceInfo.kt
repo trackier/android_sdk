@@ -97,6 +97,9 @@ data class DeviceInfo(
     var availableMemory: String? = null
     var totalMemory: String? = null
     var screenDensityNumber: Int = 0
+    var imei1: String? = ""
+    var imei2: String? = ""
+    var mac: String? = ""
 
     companion object {
         fun init(deviceInfo: DeviceInfo, context: Context) {
