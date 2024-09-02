@@ -1257,8 +1257,11 @@ Java_com_example_myapplication_MainApplication_getKey(JNIEnv *env, jobject insta
 
 return (*env)-> NewStringUTF(env, "sanugupta");
 }
+```
 
-4. Then add the below code in build.gradle file
+## Then add the below code in build.gradle file
+
+```
 externalNativeBuild {
 ndkBuild {
 path "src/main/jni/Android.mk"//path of Android.mk file
@@ -1267,7 +1270,7 @@ path "src/main/jni/Android.mk"//path of Android.mk file
 
 ```
 
-Add the below code in MainApplication class
+## Add the below code in MainApplication class
 
 ```
 static {
