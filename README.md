@@ -1125,7 +1125,7 @@ class MainApplication : Application() {
 
 ```
 ## <a id="qs-keys-hiding"></a>Keys Hiding
-#### Hiding the keys using NDK. Just follow the below steps for hiding SDK Key, Secret ID and Secert Key.  
+#### 1. Hiding the keys using NDK. Just follow the below steps for hiding SDK Key, Secret ID and Secert Key.  
 
 1.Add plugin to your module level build.gradle:
 
@@ -1220,6 +1220,63 @@ val secretKey = new Secrets().getSecretKey(packageName)
 
 ```
 
+## 2. Keys Hiding with below steps
+
+Create one folder in project under src → main, folder name - jni
+1. Then, add three below file in jni folder
+   Android.mk
+   Application.mk
+   keys.c
+2. Then, add the following code in respective file
+
+## Android.mk
+
+```
+LOCAL_PATH := $(call my-dir)
+include $(CLEAR_VARS)
+LOCAL_MODULE := keys
+LOCAL_SRC_FILES := keys.c
+include $(BUILD_SHARED_LIBRARY)
+
+```
+
+## Application.mk
+
+```
+APP_ABI := all
+
+```
+
+## Keys.c
+
+```
+#include <jni.h>
+
+JNIEXPORT jstring JNICALL
+Java_com_example_myapplication_MainApplication_getKey(JNIEnv *env, jobject instance) {
+
+return (*env)-> NewStringUTF(env, "sanugupta");
+}
+
+4. Then add the below code in build.gradle file
+externalNativeBuild {
+ndkBuild {
+path "src/main/jni/Android.mk"//path of Android.mk file
+   }
+}
+
+```
+
+Add the below code in MainApplication class
+
+```
+static {
+System.loadLibrary("keys");
+}
+
+public native String getKey(); //You can create more function accordind to need.
+
+```
 
 	
 # <a id="qs-deeplinking"></a>Deep linking Android
