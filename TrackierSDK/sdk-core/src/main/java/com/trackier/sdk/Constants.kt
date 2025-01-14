@@ -68,4 +68,10 @@ object Constants {
     const val UNKNOWN_EVENT = "unknown"
 
     const val EPOCH_YEAR = 1970
+    const val TIMEOUT_OKHTTPCLIENT: Long = 60L
+    const val BYTEARRAY_SIZE = 1024
+    const val DELAY_TIMEMILLIS = 1000
+    const val FOR_ITERATION = 5
+    const val FOR_SECRETKEY = 10
+    
 }

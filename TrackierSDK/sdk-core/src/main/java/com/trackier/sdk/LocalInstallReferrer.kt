@@ -39,7 +39,7 @@ class LocalInstallReferrer(val context: Context, val delimeter: String) {
     }
 
     suspend fun getRefDetails(): RefererDetails {
-        for (i in 1..5) {
+        for (i in 1..Constants.FOR_ITERATION) {
             return getInfo()
         }
         return RefererDetails.default()

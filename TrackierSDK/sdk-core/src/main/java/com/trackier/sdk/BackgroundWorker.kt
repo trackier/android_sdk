@@ -43,3 +43,4 @@ class BackgroundWorker(appContext: Context, val workerParameters: WorkerParamete
         }
     }
 }
+

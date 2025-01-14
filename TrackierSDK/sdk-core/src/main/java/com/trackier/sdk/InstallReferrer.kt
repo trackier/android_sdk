@@ -72,13 +72,13 @@ class InstallReferrer(private val context: Context) {
     }
     
     suspend fun getRefDetails(): RefererDetails {
-        for (i in 1..5) {
+        for (i in 1..Constants.FOR_ITERATION) {
             try {
                 return getInfo()
             } catch (ex: InstallReferrerException) {
-                delay(1000 * i.toLong())
+                delay(Constants.DELAY_TIMEMILLIS * i.toLong())
             } catch (ex: Exception) {
-                delay(1000 * i.toLong())
+                delay(Constants.DELAY_TIMEMILLIS * i.toLong())
             }
         }
         return RefererDetails.default()
@@ -92,10 +92,13 @@ class InstallReferrer(private val context: Context) {
                 OK -> {
                     val response: GetAppsReferrerDetails = referrerClient.installReferrer
                     val referrerUrl: String = response.installReferrer.toString()
-                    return XiaomiReferrerDetails(referrerUrl, response.referrerClickTimestampSeconds.toInt(), response.installBeginTimestampSeconds.toInt())
+                    return XiaomiReferrerDetails(referrerUrl, response.referrerClickTimestampSeconds.toInt(),
+                        response.installBeginTimestampSeconds.toInt())
                 }
-                FEATURE_NOT_SUPPORTED -> logger.info("XiaomiReferrer onGetAppsReferrerSetupFinished: FEATURE_NOT_SUPPORTED")
-                SERVICE_UNAVAILABLE -> logger.info("XiaomiReferrer onGetAppsReferrerSetupFinished: SERVICE_UNAVAILABLE")
+                FEATURE_NOT_SUPPORTED ->
+                    logger.info("XiaomiReferrer onGetAppsReferrerSetupFinished: FEATURE_NOT_SUPPORTED")
+                SERVICE_UNAVAILABLE ->
+                    logger.info("XiaomiReferrer onGetAppsReferrerSetupFinished: SERVICE_UNAVAILABLE")
             }
         return null
     }
@@ -127,13 +130,13 @@ class InstallReferrer(private val context: Context) {
     }
     
     suspend fun getXiaomiRefDetails(): XiaomiReferrerDetails? {
-        for (i in 1..5) {
+        for (i in 1..Constants.FOR_ITERATION) {
             try {
                 return getXiaomiInfo()
             } catch (ex: InstallReferrerException) {
-                delay(1000 * i.toLong())
+                delay(Constants.DELAY_TIMEMILLIS * i.toLong())
             } catch (ex: Exception) {
-                delay(1000 * i.toLong())
+                delay(Constants.DELAY_TIMEMILLIS * i.toLong())
             }
         }
         return XiaomiReferrerDetails.default()

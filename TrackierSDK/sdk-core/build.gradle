@@ -3,6 +3,8 @@ plugins {
     id 'kotlin-android'
     id 'maven-publish'
     id("com.google.devtools.ksp").version("1.6.10-1.0.4")
+    id 'org.jetbrains.kotlin.android'
+    id "io.gitlab.arturbosch.detekt" version "1.23.7"
 //    id 'kotlin-android-extensions'
 }
 
@@ -15,6 +17,14 @@ repositories {
     //jcenter()
     maven {
         url "https://plugins.gradle.org/m2/"
+    }
+    maven {
+        name = "nexus"
+        url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
+        credentials {
+            username = findProperty("ossrhToken") as String
+            password = findProperty("ossrhTokenPassword") as String
+        }
     }
 }
 
@@ -57,6 +67,7 @@ dependencies {
 
     implementation "androidx.annotation:annotation:1.4.0"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0"
+    implementation 'androidx.core:core-ktx:+'
 
     def work_version = "2.7.1"
     implementation "androidx.work:work-runtime-ktx:$work_version"
@@ -73,4 +84,5 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation "com.miui.referrer:homereferrer:1.0.0.6"
+    implementation 'com.google.code.gson:gson:2.11.0'
 }

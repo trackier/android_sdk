@@ -58,12 +58,12 @@ class TrackierSDKInstance {
         this.disableOrganicTrack = config.getOrganicTracking()
         DeviceInfo.init(device, this.config.context)
         CoroutineScope(Dispatchers.IO).launch {
-            for (i in 1..5) {
+            for (i in 1..Constants.FOR_ITERATION) {
                val gadid =  initGaid()
                 if(!"".equals(gadid)){
                     break
                 }
-                delay(1000 * i.toLong())
+                delay(Constants.DELAY_TIMEMILLIS * i.toLong())
             }
             if (!isManualInstall) {
                 initAttributionInfo()
@@ -75,14 +75,14 @@ class TrackierSDKInstance {
     }
 
     private suspend fun initGaid(): String {
-        for (i in 1..5) {
+        for (i in 1..Constants.FOR_ITERATION) {
             val (gaid, isLat) = DeviceInfo.getGAID(this.config.context)
             this.gaid = gaid
             this.isLAT = isLat
             if (this.gaid != null) {
                 break
             }
-            delay(1000 * i.toLong())
+            delay(Constants.DELAY_TIMEMILLIS * i.toLong())
         }
         return this.gaid.toString()
     }
@@ -278,8 +278,8 @@ class TrackierSDKInstance {
         }
         if (!isInstallTracked()) {
             CoroutineScope(Dispatchers.IO).launch {
-                for (i in 1..5) {
-                    delay(1000 * i.toLong())
+                for (i in 1..Constants.FOR_ITERATION) {
+                    delay(Constants.DELAY_TIMEMILLIS * i.toLong())
                     if (isInstallTracked()) {
                         _trackEvent(event)
                         break

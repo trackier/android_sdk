@@ -301,7 +301,8 @@ data class DeviceInfo(
                 val audioDevices = audioManager.getDevices(AudioManager.GET_DEVICES_INPUTS)
                 var headPhonesPlugged = false
                 for (deviceInfo in audioDevices) {
-                    if (deviceInfo.type == AudioDeviceInfo.TYPE_WIRED_HEADPHONES || deviceInfo.type == AudioDeviceInfo.TYPE_WIRED_HEADSET) {
+                    if (deviceInfo.type == AudioDeviceInfo.TYPE_WIRED_HEADPHONES
+                        || deviceInfo.type == AudioDeviceInfo.TYPE_WIRED_HEADSET) {
                         headPhonesPlugged = true
                         break
                     }
@@ -318,7 +319,7 @@ data class DeviceInfo(
             val data = arrayOf("/system/bin/cat", "/proc/cpuinfo")
             val `is`: InputStream
             val process: Process
-            val bArray = ByteArray(1024)
+            val bArray = ByteArray(Constants.BYTEARRAY_SIZE)
             try {
                 processBuilder = ProcessBuilder(*data)
                 process = processBuilder.start()

@@ -7,6 +7,10 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import java.util.*
 import java.util.concurrent.TimeUnit
+import com.google.gson.Gson
+import com.google.gson.JsonElement
+import com.google.gson.JsonObject
+import com.google.gson.JsonArray
 
 class TrackierWorkRequest(
     val kind: String,
@@ -70,7 +74,7 @@ class TrackierWorkRequest(
         if (customerOptionals != null) {
             body["opts"] = customerOptionals!!
         }
-        if (secretKey.length > 10) {
+        if (secretKey.length > Constants.FOR_SECRETKEY) {
             body["secretId"] = secretId
             body["sigv"] = "v1.0.0"
             body["signature"] = Util.createSignature(

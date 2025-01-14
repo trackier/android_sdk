@@ -40,16 +40,27 @@ object Util {
         }
     }
 
+//    fun getTimeInUnix(date: String): String {
+//        try {
+//            val sdf = SimpleDateFormat(Constants.DATE_TIME_FORMAT, Locale.US)
+//            val dateObj: Date = sdf.parse(date)
+//            val time = dateObj.time.toDouble()
+//            val inUnix: Double = (time / 1000)
+//
+//            return String.format("%.6f", BigDecimal(inUnix))
+//        } catch (e: Exception) {
+//            return  ""
+//        }
+//    }
+    
     fun getTimeInUnix(date: String): String {
-        try {
+        return try {
             val sdf = SimpleDateFormat(Constants.DATE_TIME_FORMAT, Locale.US)
             val dateObj: Date = sdf.parse(date)
-            val time = dateObj.time.toDouble()
-            val inUnix: Double = (time / 1000)
-
-            return String.format("%.6f", BigDecimal(inUnix))
+            val inUnix: Long = dateObj.time / Constants.DELAY_TIMEMILLIS
+            inUnix.toString()
         } catch (e: Exception) {
-            return  ""
+            ""
         }
     }
 
@@ -164,9 +175,9 @@ object Util {
     fun loadAddress(interfaceName: String): String? {
         try {
             val filePath = "/sys/class/net/$interfaceName/address"
-            val fileData = StringBuilder(1000)
-            val reader = BufferedReader(FileReader(filePath), 1024)
-            val buf = CharArray(1024)
+            val fileData = StringBuilder(Constants.DELAY_TIMEMILLIS)
+            val reader = BufferedReader(FileReader(filePath), Constants.BYTEARRAY_SIZE)
+            val buf = CharArray(Constants.BYTEARRAY_SIZE)
             var numRead: Int
 
             var readData: String
@@ -275,7 +286,8 @@ object Util {
 
     private fun getApplicationInfo(context: Context): ApplicationInfo {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            return context.packageManager.getApplicationInfo(context.packageName, PackageManager.ApplicationInfoFlags.of(PackageManager.GET_META_DATA.toLong()))
+            return context.packageManager.getApplicationInfo(context.packageName,
+                PackageManager.ApplicationInfoFlags.of(PackageManager.GET_META_DATA.toLong()))
         }
         return context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
     }
@@ -354,7 +366,7 @@ object Util {
         }
         if (buildDate.isNotEmpty()) {
             try {
-                val activationTimestamp = buildDate.toLong() * 1000L
+                val activationTimestamp = buildDate.toLong() * Constants.DELAY_TIMEMILLIS
                 val activationDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date(activationTimestamp))
                 println("Activation Date: $activationDate")
                 logger.info("Activation Date = $activationDate")
@@ -396,8 +408,10 @@ object Util {
     private fun preinstallAttribution(context: Context): MutableMap<String, String> {
         val params = mutableMapOf<String, String>()
         params["preInstallAttribution_Pid"] = getSharedPrefString(context, Constants.PRE_INSTALL_ATTRIBUTION_PID)
-        params["preInstallAttribution_Camapign"] = getSharedPrefString(context, Constants.PRE_INSTALL_ATTRIBUTION_CAMPAIGN)
-        params["preInstallAttribution_CamapignId"] = getSharedPrefString(context, Constants.PRE_INSTALL_ATTRIBUTION_CAMPAIGNID)
+        params["preInstallAttribution_Camapign"] =
+            getSharedPrefString(context, Constants.PRE_INSTALL_ATTRIBUTION_CAMPAIGN)
+        params["preInstallAttribution_CamapignId"] =
+            getSharedPrefString(context, Constants.PRE_INSTALL_ATTRIBUTION_CAMPAIGNID)
         return params
     }
     
