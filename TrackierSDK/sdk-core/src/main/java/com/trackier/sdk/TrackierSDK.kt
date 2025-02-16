@@ -4,6 +4,10 @@ import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.annotation.Keep
+import com.example.trackier_library.dynamic_link.DynamicLink
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.lang.Exception
 import java.util.Date
 
@@ -12,6 +16,7 @@ object TrackierSDK {
     private var isInitialized = false
     private val logger = Factory.logger
     private var instance = TrackierSDKInstance()
+    private var appKey = ""
 
     @JvmStatic
     fun initialize(config: TrackierSDKConfig) {
@@ -21,6 +26,7 @@ object TrackierSDK {
         }
         isInitialized = true
         logger.info("Trackier SDK ${Constants.SDK_VERSION} initialized")
+        appKey = config.appToken
         instance.initialize(config)
     }
 
@@ -50,6 +56,11 @@ object TrackierSDK {
     @JvmStatic
     suspend fun trackSession() {
         instance.trackSession()
+    }
+
+    @JvmStatic
+    fun getAppToken(): String {
+        return appKey
     }
 
     @JvmStatic
@@ -238,5 +249,23 @@ object TrackierSDK {
         Util.setSharedPrefString(ctx, Constants.STORE_RETARGETING, uri)
         Util.setSharedPrefString(ctx, Constants.STORE_RETARGETING_TIME, Util.dateFormatter.format(
             Date()))
+    }
+
+    @JvmStatic
+    fun createDynamicLink(
+        dynamicLink: DynamicLink,
+        onSuccess: (String) -> Unit,
+        onFailure: (String) -> Unit
+    ) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = instance.createDynamicLink(dynamicLink)
+            if (response.success) {
+                response.data?.link?.let { link ->
+                    onSuccess(link)
+                } ?: onFailure("Failed to retrieve link")
+            } else {
+                onFailure("Failed to create dynamic link: ${response.message}")
+            }
+        }
     }
 }

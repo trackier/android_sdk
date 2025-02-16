@@ -1,6 +1,9 @@
 package com.trackier.sdk
 
 import android.util.Log
+import com.example.trackier_library.dynamic_link.DynamicLinkResponse
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -16,9 +19,11 @@ object APIRepository {
     }
 
     private val trackierApi: APIService by lazy {
+        val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
         val retrofit = Retrofit.Builder()
             .baseUrl(Constants.BASE_URL)
-            .addConverterFactory(MoshiConverterFactory.create().asLenient())
+            //.addConverterFactory(MoshiConverterFactory.create().asLenient())
+            .addConverterFactory(MoshiConverterFactory.create(moshi).asLenient())
             .client(client)
             .build()
 
@@ -26,12 +31,26 @@ object APIRepository {
     }
     
     private val trackierDeeplinksApi: APIService by lazy {
+        val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
         val retrofit = Retrofit.Builder()
             .baseUrl(Constants.BASE_URL_DL)
-            .addConverterFactory(MoshiConverterFactory.create().asLenient())
+            //.addConverterFactory(MoshiConverterFactory.create().asLenient())
+            .addConverterFactory(MoshiConverterFactory.create(moshi).asLenient())
             .client(client)
             .build()
         
+        retrofit.create(APIService::class.java)
+    }
+
+    private val trackierDynamiclinkApi: APIService by lazy {
+        val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+        val retrofit = Retrofit.Builder()
+            .baseUrl(Constants.BASE_URL_DYNAMIC_LINK)
+            //.addConverterFactory(MoshiConverterFactory.create().asLenient())
+            .addConverterFactory(MoshiConverterFactory.create(moshi).asLenient())
+            .client(client)
+            .build()
+
         retrofit.create(APIService::class.java)
     }
 
@@ -55,6 +74,10 @@ object APIRepository {
     
     private suspend fun sendDeeplinks(body: MutableMap<String, Any>): ResponseData {
         return trackierDeeplinksApi.sendDeeplinksData(body)
+    }
+
+    suspend fun sendDynamiclinks(body: MutableMap<String, Any>): DynamicLinkResponse {
+        return trackierDynamiclinkApi.sendDynamicLinkData(body)
     }
 
     suspend fun doWork(workRequest: TrackierWorkRequest): ResponseData? {
