@@ -40,6 +40,7 @@ class BackgroundWorker(appContext: Context, val workerParameters: WorkerParamete
             return Result.success()
         } catch (ex: Exception) {
             return Result.failure()
+            Log.d("background_worker fail", "${ex}")
         }
     }
 }

@@ -253,6 +253,7 @@ class TrackierSDKInstance {
             TrackierWorkRequest.enqueue(wrkRequest)
         } catch (ex: Exception) {
             APIRepository.processWork(wrkRequest)
+            Log.d("trackiersdk","TrackierSDKInstance Install" + "${ex}")
         }
 
         setInstallTracked()
@@ -266,6 +267,7 @@ class TrackierSDKInstance {
             TrackierWorkRequest.enqueue(wrkRequest)
         } catch (ex: Exception) {
             APIRepository.processWork(wrkRequest)
+            Log.d("trackiersdk","TrackierSDKInstance Events" + "${ex}")
         }
     }
 
