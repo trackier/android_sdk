@@ -4,6 +4,10 @@ import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.annotation.Keep
+import com.trackier.sdk.dynamic_link.DynamicLink
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.lang.Exception
 import java.util.Date
 
@@ -238,5 +242,29 @@ object TrackierSDK {
         Util.setSharedPrefString(ctx, Constants.STORE_RETARGETING, uri)
         Util.setSharedPrefString(ctx, Constants.STORE_RETARGETING_TIME, Util.dateFormatter.format(
             Date()))
+    }
+
+    @JvmStatic
+    fun createDynamicLink(
+        dynamicLink: DynamicLink,
+        onSuccess: (String) -> Unit,
+        onFailure: (String) -> Unit
+    ) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = instance.createDynamicLink(dynamicLink)
+            if (response.success) {
+                response.data?.link?.let { link ->
+                    logger.info("Dynamic Link : "+ link)
+                    onSuccess(link)
+                } ?: onFailure("Failed to retrieve link")
+            } else {
+                val errorMessage = response.error?.let {
+                    "Error ${it.statusCode} (${it.errorCode}): ${it.codeMsg} - ${it.message}"
+                } ?: response.message ?: "Unknown error"
+
+                Log.e("TrackierSDK", errorMessage)
+                onFailure(errorMessage)
+            }
+        }
     }
 }
