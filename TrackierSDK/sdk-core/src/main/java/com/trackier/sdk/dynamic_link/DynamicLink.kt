@@ -1,8 +1,10 @@
 package com.trackier.sdk.dynamic_link
 
 import android.net.Uri
+import android.util.Log
 import com.trackier.sdk.TrackierSDK
 import com.trackier.sdk.TrackierSDKInstance
+import com.trackier.sdk.TrackierWorkRequest
 
 class DynamicLink private constructor() {
     private var templateId: String = ""
@@ -63,18 +65,9 @@ class DynamicLink private constructor() {
     }
 
     fun toDynamicLinkConfig(): DynamicLinkConfig {
-        var instance = TrackierSDKInstance()
-
-        // want to use work request class for getting both key and id
-
-    //    val sdkInstance = TrackierSDKInstance()
-    //    var installId = Util.getSharedPrefString(sdkInstance.config.context, Constants.SHARED_PREF_INSTALL_ID)
-
-      //  Log.d("TrackierDynamiclinksdk","The id is "+installId)
-
         return DynamicLinkConfig(
            installId = TrackierSDK.getTrackierId(),
-            appKey = instance.getAppToken(),
+            appKey = TrackierSDK.getAppToken(),
             templateId = templateId,
             link = link?.toString() ?: "",
             brandDomain = domainUriPrefix,

@@ -16,6 +16,7 @@ object TrackierSDK {
     private var isInitialized = false
     private val logger = Factory.logger
     private var instance = TrackierSDKInstance()
+    private var appToken = ""
 
     @JvmStatic
     fun initialize(config: TrackierSDKConfig) {
@@ -24,6 +25,7 @@ object TrackierSDK {
             return
         }
         isInitialized = true
+        appToken = config.appToken
         logger.info("Trackier SDK ${Constants.SDK_VERSION} initialized")
         instance.initialize(config)
     }
@@ -124,6 +126,11 @@ object TrackierSDK {
     @JvmStatic
     fun setMacAddress(macAddress: String) {
         instance.mac = macAddress
+    }
+
+    @JvmStatic
+    fun getAppToken(): String {
+        return appToken
     }
     
     @JvmStatic
