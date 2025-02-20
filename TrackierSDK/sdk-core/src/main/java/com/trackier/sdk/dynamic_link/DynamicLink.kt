@@ -74,7 +74,7 @@ class DynamicLink private constructor() {
 
         return DynamicLinkConfig(
            installId = TrackierSDK.getTrackierId(),
-            appKey = instance.to,
+            appKey = instance.getAppToken(),
             templateId = templateId,
             link = link?.toString() ?: "",
             brandDomain = domainUriPrefix,
