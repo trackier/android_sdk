@@ -41,3 +41,27 @@
 -keep class androidx.** { *; }
 -keep interface androidx.** { *; }
 
+-keep class com.squareup.moshi.** { *; }
+-keep @com.squareup.moshi.JsonClass class * { *; }
+-keepclassmembers,allowobfuscation @com.squareup.moshi.JsonClass class * { *; }
+
+# Keep generated Moshi adapters
+-keepnames class *JsonAdapter
+-keepclassmembers class * {
+    @com.squareup.moshi.* <fields>;
+}
+
+# Keep Retrofit interfaces & models
+-keep interface com.trackier.sdk.** { *; }
+-keep class com.trackier.sdk.** { *; }
+-keepclassmembers class com.trackier.sdk.** {
+    @com.squareup.moshi.JsonClass *;
+}
+
+# Keep WorkManager related classes (if used)
+-keep class androidx.work.** { *; }
+
+-keep class kotlin.Metadata { *; }
+-keep class kotlin.reflect.jvm.internal.** { *; }
+-keep class kotlin.** { *; }
+-dontwarn kotlin.**

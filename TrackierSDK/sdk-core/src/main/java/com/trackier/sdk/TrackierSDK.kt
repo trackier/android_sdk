@@ -4,6 +4,10 @@ import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.annotation.Keep
+import com.trackier.sdk.dynamic_link.DynamicLink
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.lang.Exception
 import java.util.Date
 
@@ -12,6 +16,7 @@ object TrackierSDK {
     private var isInitialized = false
     private val logger = Factory.logger
     private var instance = TrackierSDKInstance()
+    private var appToken = ""
 
     @JvmStatic
     fun initialize(config: TrackierSDKConfig) {
@@ -20,6 +25,7 @@ object TrackierSDK {
             return
         }
         isInitialized = true
+        appToken = config.appToken
         logger.info("Trackier SDK ${Constants.SDK_VERSION} initialized")
         instance.initialize(config)
     }
@@ -120,6 +126,11 @@ object TrackierSDK {
     @JvmStatic
     fun setMacAddress(macAddress: String) {
         instance.mac = macAddress
+    }
+
+    @JvmStatic
+    fun getAppToken(): String {
+        return appToken
     }
     
     @JvmStatic
@@ -238,5 +249,29 @@ object TrackierSDK {
         Util.setSharedPrefString(ctx, Constants.STORE_RETARGETING, uri)
         Util.setSharedPrefString(ctx, Constants.STORE_RETARGETING_TIME, Util.dateFormatter.format(
             Date()))
+    }
+
+    @JvmStatic
+    fun createDynamicLink(
+        dynamicLink: DynamicLink,
+        onSuccess: (String) -> Unit,
+        onFailure: (String) -> Unit
+    ) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = instance.createDynamicLink(dynamicLink)
+            if (response.success) {
+                response.data?.link?.let { link ->
+                    logger.info("Dynamic Link : "+ link)
+                    onSuccess(link)
+                } ?: onFailure("Failed to retrieve link")
+            } else {
+                val errorMessage = response.error?.let {
+                    "Error ${it.statusCode} (${it.errorCode}): ${it.codeMsg} - ${it.message}"
+                } ?: response.message ?: "Unknown error"
+
+                Log.e("TrackierSDK", errorMessage)
+                onFailure(errorMessage)
+            }
+        }
     }
 }
