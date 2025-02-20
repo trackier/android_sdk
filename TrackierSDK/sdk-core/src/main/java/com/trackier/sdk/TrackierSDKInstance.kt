@@ -3,10 +3,14 @@ package com.trackier.sdk
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import com.example.trackier_library.dynamic_link.DynamicLink
+import com.example.trackier_library.dynamic_link.DynamicLinkResponse
+import com.example.trackier_library.dynamic_link.LinkData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
 
 class TrackierSDKInstance {
@@ -389,6 +393,19 @@ class TrackierSDKInstance {
                     }
                 } catch (e: Exception) {
                 }
+            }
+        }
+    }
+
+    suspend fun createDynamicLink(dynamicLink: DynamicLink): DynamicLinkResponse {
+        val configMap = dynamicLink.toDynamicLinkConfig()
+        return withContext(Dispatchers.IO) {
+            try {
+                APIRepository.sendDynamiclinks(configMap.toMutableMap())
+            } catch (e: Exception) {
+                // Log the error and return a failure response
+                Factory.logger.severe("Error creating dynamic link: ${e.message}")
+                DynamicLinkResponse(success = false, message = "Failed to create link ${e.message}", data = LinkData(link = ""))
             }
         }
     }

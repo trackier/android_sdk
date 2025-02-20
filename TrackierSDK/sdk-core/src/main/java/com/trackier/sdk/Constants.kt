@@ -7,6 +7,7 @@ object Constants {
     const val API_VERSION = "v1"
     const val BASE_URL = "https://events.trackier.io/" + API_VERSION + "/"
     const val BASE_URL_DL = " https://sdkr.apptracking.io/dl/" //"https://eo6vxppz8n3ly04.m.pipedream.net/"
+    const val BASE_URL_DYNAMIC_LINK = "https://sdkr.apptracking.io/api/v4/ug/dlg/"
     const val LOG_TAG = "trackiersdk"
     const val LOG_WORK_TAG = "trackiersdk:work"
     const val LOG_WORK_INPUT_KEY = "trackiersdk:work_request"
