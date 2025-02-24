@@ -308,6 +308,16 @@ class TrackierSDKInstance {
                 .apply()
     }
 
+    private fun getLastSessionDate(): String {
+        return Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_LAST_SESSION_DATE)
+    }
+
+    private fun setLastSessionDate(time: String) {
+        val prefs = Util.getSharedPref(this.config.context)
+        prefs.edit().putString(Constants.SHARED_PREF_LAST_SESSION_DATE, time)
+            .apply()
+    }
+
     suspend fun trackSession() {
         if (!isEnabled || !configLoaded) {
             return
@@ -317,14 +327,19 @@ class TrackierSDKInstance {
         }
         val currentTs = Date().time
         val currentTime = Util.dateFormatter.format(currentTs)
+        val currentDate = Util.dateFormatter.format(Date())
+        Log.d("trackiersdk","currentDate $ currentTime "+ currentDate +" "+currentTime)
         try {
             val lastSessionTime = getLastSessionTime()
-
-            val wrkRequest = makeWorkRequest(TrackierWorkRequest.KIND_SESSION_TRACK)
-            wrkRequest.sessionTime = lastSessionTime
-            val resp = APIRepository.processWork(wrkRequest)
-            if (resp?.success == true) {
+            val lastSessionDate = getLastSessionDate()
+            Log.d("trackiersdk","try === lastSessionDate"+ lastSessionDate)
+            if (lastSessionDate != currentDate) {
+                Log.d("trackiersdk","If === lastSessionDate"+ lastSessionDate)
+                val wrkRequest = makeWorkRequest(TrackierWorkRequest.KIND_SESSION_TRACK)
+                wrkRequest.sessionTime = lastSessionTime
+                APIRepository.processWork(wrkRequest)
                 setLastSessionTime(currentTime)
+                setLastSessionDate(currentDate)
             }
         } catch (e: Exception) {}
     }
