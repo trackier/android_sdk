@@ -10,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
 import java.util.*
 
 class TrackierSDKInstance {
@@ -327,19 +328,19 @@ class TrackierSDKInstance {
         }
         val currentTs = Date().time
         val currentTime = Util.dateFormatter.format(currentTs)
-        val currentDate = Util.dateFormatter.format(Date())
-        Log.d("trackiersdk","currentDate $ currentTime "+ currentDate +" "+currentTime)
+        //val currentDate = Util.dateFormatter.format(Date())
+        val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
         try {
             val lastSessionTime = getLastSessionTime()
             val lastSessionDate = getLastSessionDate()
-            Log.d("trackiersdk","try === lastSessionDate"+ lastSessionDate)
             if (lastSessionDate != currentDate) {
-                Log.d("trackiersdk","If === lastSessionDate"+ lastSessionDate)
                 val wrkRequest = makeWorkRequest(TrackierWorkRequest.KIND_SESSION_TRACK)
                 wrkRequest.sessionTime = lastSessionTime
                 APIRepository.processWork(wrkRequest)
                 setLastSessionTime(currentTime)
                 setLastSessionDate(currentDate)
+            } else {
+                Log.d("trackiersdk","already called for today")
             }
         } catch (e: Exception) {}
     }
