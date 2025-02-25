@@ -2,7 +2,7 @@ package com.trackier.sdk
 
 
 object Constants {
-    const val SDK_VERSION = "1.6.63"
+    const val SDK_VERSION = "1.6.64"
     const val USER_AGENT = "com.cloudstuff.trackiersdk:trackier-android:" + SDK_VERSION
     const val API_VERSION = "v1"
     const val BASE_URL = "https://events.trackier.io/" + API_VERSION + "/"
@@ -54,6 +54,7 @@ object Constants {
     const val SYSTEM_PATH = "/system/app/"
     const val PRE_INSTALL_MANIFEST_NAME = "TR_PRE_INSTALL_NAME"
     const val SHARED_PREF_LAST_SESSION_TIME = "last_session_time"
+    const val SHARED_PREF_LAST_SESSION_DATE = "last_session_date"
     const val SHARED_PREF_FIRST_INSTALL = "first_install"
     const val DEVICE_BRAND = "xiaomi"
     const val STORE_RETARGETING = "retargeting"
