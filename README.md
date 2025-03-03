@@ -1507,6 +1507,10 @@ It is mandatory to add this setting in android app when your app is using progua
       boolean isLimitAdTrackingEnabled();
   }
   -keep public class com.android.installreferrer.** { *; }
+  -keep class kotlin.Metadata { *; }
+  -keep class kotlin.reflect.jvm.internal.** { *; }
+  -keep class kotlin.** { *; }
+  -dontwarn kotlin.**
 ```
 
 
