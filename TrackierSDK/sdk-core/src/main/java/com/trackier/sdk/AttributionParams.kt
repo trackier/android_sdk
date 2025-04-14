@@ -8,7 +8,8 @@ data class AttributionParams(var parterId: String = "",
                              var subSiteID: String = "",
                              var channel: String = "",
                              var ad : String = "",
-                             var adId: String = "") {
+                             var adId: String = "",
+                             var agid: String = "") {
 
     fun getData(): MutableMap<String, Any> {
         val body = mutableMapOf<String, Any>()
@@ -18,6 +19,7 @@ data class AttributionParams(var parterId: String = "",
         body["ch"] =  this.channel
         body["ad"] = this.ad
         body["adid"] = this.adId
+        body["agid"] = this.agid
         return body
     }
 }
