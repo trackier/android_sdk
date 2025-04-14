@@ -69,6 +69,8 @@ object APIRepository {
     }
     
     private suspend fun sendDeeplinks(body: MutableMap<String, Any>): ResponseData {
+        val logger = Factory.logger
+        logger.info("Deeplink body is: $body")
         return trackierDeeplinksApi.sendDeeplinksData(body)
     }
 

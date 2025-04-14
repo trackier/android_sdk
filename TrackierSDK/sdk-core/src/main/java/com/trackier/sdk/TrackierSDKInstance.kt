@@ -351,6 +351,7 @@ class TrackierSDKInstance {
         wrkRequest.deeplinkUrl = url.toString()
         try {
             deeplinRes = APIRepository.processWork(wrkRequest)
+            Log.d("trackiersdk","APIRepository.processWork(wrkRequest)"+deeplinRes.toString())
         } catch (ex: Exception) {
             APIRepository.doWork(wrkRequest)
         }
