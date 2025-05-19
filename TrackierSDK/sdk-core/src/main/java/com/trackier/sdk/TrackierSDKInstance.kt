@@ -367,9 +367,9 @@ class TrackierSDKInstance {
         val dlResult: DeepLink
         if (dlstr.isBlank()) {
             val ref = getReferrerDetails()
-            if (!ref.isDeepLink) {
-                return
-            }
+//            if (!ref.isDeepLink) {
+//                return
+//            }
             dlResult = DeepLink(ref.url, true)
         } else {
             Util.delSharedPrefKey(this.config.context, Constants.SHARED_PREF_DEEP_LINK)
