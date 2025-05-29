@@ -274,4 +274,35 @@ object TrackierSDK {
             }
         }
     }
+
+
+    fun resolveDeeplinkUrl(inputUrl: String, onResult: (String) -> Unit) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val instanceConfig = instance.config
+                val device = instanceConfig.context.let { ctx ->
+                    val dev = DeviceInfo()
+                    DeviceInfo.init(dev, ctx)
+                    dev
+                }
+
+                val body = mutableMapOf<String, Any>().apply {
+                    put("url", inputUrl)
+                    put("os", device.osName)
+                    put("osv", device.osVersion)
+                    put("sdkv", Constants.SDK_VERSION)
+                    put("apv", device.appVersion.toString())
+                    put("insId", getTrackierId())
+                    put("appKey", getAppToken())
+                }
+
+                val response = APIRepository.publicResolveDeeplinks(body)
+                val resolvedUrl = response.data?.url ?: ""
+                onResult(resolvedUrl)
+
+            } catch (e: Exception) {
+                onResult("") // or null if you prefer
+            }
+        }
+    }
 }
