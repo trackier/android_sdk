@@ -127,6 +127,11 @@ object APIRepository {
         }
     }
 
+    // Expose a public wrapper for sendDeeplinks without changing its visibility
+    suspend fun publicResolveDeeplinks(body: MutableMap<String, Any>): ResponseData {
+        return sendDeeplinks(body)
+    }
+
     suspend fun doWork(workRequest: TrackierWorkRequest): ResponseData? {
         return when(workRequest.kind) {
             TrackierWorkRequest.KIND_INSTALL -> sendInstall(workRequest.getData())
