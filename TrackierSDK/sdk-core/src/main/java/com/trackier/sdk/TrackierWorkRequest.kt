@@ -120,6 +120,11 @@ class TrackierWorkRequest(
         body["apv"] = this.device.appVersion.toString()
         body["insId"] = TrackierSDK.getTrackierId()
         body["appKey"] = appToken
+        body["inst"] = refDetails.installTime
+        body["refr"] = refDetails.url
+        body["dm"] = device.model
+        body["lcl"] = device.locale.toString()
+        body["tz"] = device.timezone.toString()
         return body
     }
 
