@@ -275,8 +275,11 @@ object TrackierSDK {
         }
     }
 
-
-    fun resolveDeeplinkUrl(inputUrl: String, onResult: (String) -> Unit) {
+    fun resolveDeeplinkUrl(
+        inputUrl: String,
+        onSuccess: (DlData) -> Unit,
+        onError: (Throwable) -> Unit
+    ) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val instanceConfig = instance.config
@@ -297,11 +300,15 @@ object TrackierSDK {
                 }
 
                 val response = APIRepository.publicResolveDeeplinks(body)
-                val resolvedUrl = response.data?.url ?: ""
-                onResult(resolvedUrl)
+                val resolvedUrl = response.data
+                if (resolvedUrl != null) {
+                    onSuccess(resolvedUrl)
+                } else {
+                    onError(NullPointerException("Deeplink resolution returned null"))
+                }
 
             } catch (e: Exception) {
-                onResult("") // or null if you prefer
+                onError(e)
             }
         }
     }
