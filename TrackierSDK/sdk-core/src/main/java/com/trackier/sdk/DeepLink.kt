@@ -1,6 +1,6 @@
 package com.trackier.sdk
 
-class DeepLink(private val uri: String, val deferred: Boolean) {
+class DeepLink(private val uri: String, val deferred: Boolean, private val sdkParams: Map<String, Any>? = null) {
     private var data: Map<String, String> = Util.getQueryParams(uri)
 
     fun isDeferred(): Boolean {
@@ -57,5 +57,13 @@ class DeepLink(private val uri: String, val deferred: Boolean) {
 
     fun getStringValue(key: String): String {
         return Util.getMapStringVal(data, key)
+    }
+
+    fun getSdkParams(): Map<String, Any>? {
+        return sdkParams
+    }
+
+    fun getSdkParamValue(key: String): Any? {
+        return sdkParams?.get(key)
     }
 }
