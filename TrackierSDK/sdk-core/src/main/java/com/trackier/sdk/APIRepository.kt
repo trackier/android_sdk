@@ -21,8 +21,15 @@ object APIRepository {
     }
 
     private val trackierApi: APIService by lazy {
+        val region = Factory.getConfig().getRegion()
+        Log.d("trackiersdk","regionnn--"+region)
+        val baseUrl = if (region.isNotEmpty()) {
+            "$region-${Constants.BASE_URL}"
+        } else {
+            Constants.BASE_URL
+        }
         val retrofit = Retrofit.Builder()
-            .baseUrl(Constants.BASE_URL)
+            .baseUrl(baseUrl)
             .addConverterFactory(MoshiConverterFactory.create().asLenient())
             .client(client)
             .build()

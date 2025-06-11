@@ -27,6 +27,9 @@ object TrackierSDK {
         isInitialized = true
         appToken = config.appToken
         logger.info("Trackier SDK ${Constants.SDK_VERSION} initialized")
+        if (config.getRegion().isNotEmpty()){
+            logger.info("Regions has been selected ${config.getRegion()}")
+        }
         instance.initialize(config)
     }
 
@@ -275,6 +278,7 @@ object TrackierSDK {
         }
     }
 
+    @JvmStatic
     fun resolveDeeplinkUrl(
         inputUrl: String,
         onSuccess: (DlData) -> Unit,
