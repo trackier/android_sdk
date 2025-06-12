@@ -22,7 +22,6 @@ object APIRepository {
 
     private val trackierApi: APIService by lazy {
         val region = Factory.getConfig().getRegion()
-        Log.d("trackiersdk","regionnn--"+region)
         val baseUrl = if (region.isNotEmpty()) {
             "$region-${Constants.BASE_URL}"
         } else {
