@@ -16,12 +16,14 @@ class TrackierSDKConfig(var context: Context, val appToken: String, val env: Str
     private var secretId: String = ""
     private var secretKey: String = ""
     private var androidId: String = ""
+    private var region: String = ""
 
     init {
         context = context.applicationContext
         val level = if (env == Constants.ENV_PRODUCTION) Level.SEVERE else Level.FINEST
         Factory.setLogLevel(level)
         logger = Factory.logger
+        Factory.setConfig(this)
     }
 
     fun setAppSecret(secretId: String, secretKey: String) {
@@ -106,5 +108,16 @@ class TrackierSDKConfig(var context: Context, val appToken: String, val env: Str
     fun getAndroidId(): String {
         return this.androidId
     }
-    
+
+    enum class Region {
+        IN, GLOBAL
+    }
+
+    fun setRegion(value: Region) {
+        this.region = value.name.lowercase()
+    }
+
+    fun getRegion(): String {
+        return this.region
+    }
 }
