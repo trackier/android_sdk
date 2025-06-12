@@ -15,6 +15,10 @@ object Factory {
     }
 
     fun setConfig(sdkConfig: TrackierSDKConfig) {
+        if (config != null) {
+            logger.warning("TrackierSDKConfig was already initialised – second initialisation ignored.")
+            return
+        }
         config = sdkConfig
     }
 
