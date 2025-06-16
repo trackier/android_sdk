@@ -23,9 +23,9 @@ object APIRepository {
     private val trackierApi: APIService by lazy {
         val region = Factory.getConfig().getRegion()
         val baseUrl = if (region.isNotEmpty()) {
-            "$region-${Constants.BASE_URL}"
+            "${Constants.SCHEME}$region-${Constants.BASE_URL}"
         } else {
-            Constants.BASE_URL
+            "${Constants.SCHEME}${Constants.BASE_URL}"
         }
         val retrofit = Retrofit.Builder()
             .baseUrl(baseUrl)
