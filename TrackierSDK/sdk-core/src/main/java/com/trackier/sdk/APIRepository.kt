@@ -21,8 +21,14 @@ object APIRepository {
     }
 
     private val trackierApi: APIService by lazy {
+        val region = Factory.getConfig().getRegion()
+        val baseUrl = if (region.isNotEmpty()) {
+            "${Constants.SCHEME}$region-${Constants.BASE_URL}"
+        } else {
+            "${Constants.SCHEME}${Constants.BASE_URL}"
+        }
         val retrofit = Retrofit.Builder()
-            .baseUrl(Constants.BASE_URL)
+            .baseUrl(baseUrl)
             .addConverterFactory(MoshiConverterFactory.create().asLenient())
             .client(client)
             .build()
@@ -31,23 +37,52 @@ object APIRepository {
     }
     
     private val trackierDeeplinksApi: APIService by lazy {
+        val region = Factory.getConfig().getRegion()
+        val baseUrl = if (region.isNotEmpty()) {
+            "${Constants.SCHEME}$region-${Constants.BASE_URL_DL}"
+        } else {
+            "${Constants.SCHEME}${Constants.BASE_URL_DL}"
+        }
         val retrofit = Retrofit.Builder()
-            .baseUrl(Constants.BASE_URL_DL)
+            .baseUrl(baseUrl)
             .addConverterFactory(MoshiConverterFactory.create().asLenient())
             .client(client)
             .build()
-        
+
         retrofit.create(APIService::class.java)
+
+
+//        val retrofit = Retrofit.Builder()
+//            .baseUrl(Constants.BASE_URL_DL)
+//            .addConverterFactory(MoshiConverterFactory.create().asLenient())
+//            .client(client)
+//            .build()
+//
+//        retrofit.create(APIService::class.java)
     }
 
     private val trackierDynamiclinkApi: APIService by lazy {
+        val region = Factory.getConfig().getRegion()
+        val baseUrl = if (region.isNotEmpty()) {
+            "${Constants.SCHEME}$region-${Constants.BASE_URL_DYNAMIC_LINK}"
+        } else {
+            "${Constants.SCHEME}${Constants.BASE_URL_DYNAMIC_LINK}"
+        }
         val retrofit = Retrofit.Builder()
-            .baseUrl(Constants.BASE_URL_DYNAMIC_LINK)
+            .baseUrl(baseUrl)
             .addConverterFactory(MoshiConverterFactory.create().asLenient())
             .client(client)
             .build()
 
         retrofit.create(APIService::class.java)
+
+//        val retrofit = Retrofit.Builder()
+//            .baseUrl(Constants.BASE_URL_DYNAMIC_LINK)
+//            .addConverterFactory(MoshiConverterFactory.create().asLenient())
+//            .client(client)
+//            .build()
+
+//        retrofit.create(APIService::class.java)
     }
 
     private suspend fun sendInstall(body: MutableMap<String, Any>): ResponseData {
