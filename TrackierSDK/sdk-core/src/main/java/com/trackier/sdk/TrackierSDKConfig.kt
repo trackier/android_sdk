@@ -17,6 +17,7 @@ class TrackierSDKConfig(var context: Context, val appToken: String, val env: Str
     private var secretKey: String = ""
     private var androidId: String = ""
     private var region: String = ""
+    private var facebookAppId: String = ""
 
     init {
         context = context.applicationContext
@@ -37,6 +38,23 @@ class TrackierSDKConfig(var context: Context, val appToken: String, val env: Str
 
     fun getAppSecretKey(): String {
         return this.secretKey
+    }
+
+    /**
+     * Set Facebook App ID for Meta Install Referrer support
+     * This enables collection of install referrer data from Facebook, Instagram, and Facebook Lite apps
+     * @param facebookAppId Your Facebook App ID from Meta for Developers
+     */
+    fun setFacebookAppId(facebookAppId: String) {
+        this.facebookAppId = facebookAppId
+    }
+
+    /**
+     * Get the configured Facebook App ID
+     * @return Facebook App ID if configured, empty string otherwise
+     */
+    fun getFacebookAppId(): String {
+        return this.facebookAppId
     }
 
     fun setLogLevel(value: Level) {

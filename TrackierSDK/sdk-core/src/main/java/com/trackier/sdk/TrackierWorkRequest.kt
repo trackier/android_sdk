@@ -18,6 +18,7 @@ class TrackierWorkRequest(
     lateinit var device: DeviceInfo
     var event = TrackierEvent(Constants.UNKNOWN_EVENT)
     var refDetails = RefererDetails.default()
+    var metaReferrerDetails = MetaReferrerDetails.default()
     private val createdAt = Util.dateFormatter.format(Date())
     var installID = ""
     var sessionTime = ""
@@ -92,6 +93,22 @@ class TrackierWorkRequest(
         body["cname"] = customerName
         body["getPreLoadAndPAIdata"] = preinstallData.toString()
         body["storeRetargeting"] = storeRetargeting
+        
+        // Add Meta SDK referrer data
+        if (metaReferrerDetails.installReferrer.isNotEmpty() && 
+            metaReferrerDetails.source.isNotEmpty()) {
+            val metaSdkReferrer = mutableMapOf<String, Any>()
+            metaSdkReferrer["install_referrer"] = metaReferrerDetails.installReferrer
+            metaSdkReferrer["actual_timestamp"] = metaReferrerDetails.actualTimestamp
+            metaSdkReferrer["is_ct"] = metaReferrerDetails.isCT
+            metaSdkReferrer["source"] = metaReferrerDetails.source
+            val campaignData = metaReferrerDetails.campaignData
+            if (campaignData != null && campaignData.isNotEmpty()) {
+                metaSdkReferrer["campaign_data"] = campaignData
+            }
+            body["meta_sdk_referrer"] = metaSdkReferrer
+        }
+        
         return body
     }
 
