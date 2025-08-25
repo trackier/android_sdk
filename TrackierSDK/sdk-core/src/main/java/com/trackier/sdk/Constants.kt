@@ -2,7 +2,7 @@ package com.trackier.sdk
 
 
 object Constants {
-    const val SDK_VERSION = "1.6.73"
+    const val SDK_VERSION = "1.6.75"
     const val USER_AGENT = "com.cloudstuff.trackiersdk:trackier-android:" + SDK_VERSION
     const val API_VERSION = "v1"
     const val BASE_URL = "events.trackier.io/" + API_VERSION + "/"
@@ -59,6 +59,13 @@ object Constants {
     const val DEVICE_BRAND = "xiaomi"
     const val STORE_RETARGETING = "retargeting"
     const val STORE_RETARGETING_TIME = "rtgtime"
+
+    // Meta Install Referrer constants
+    const val SHARED_PREF_META_INSTALL_REFERRER = "meta_install_referrer"
+    const val SHARED_PREF_META_ACTUAL_TIMESTAMP = "meta_actual_timestamp"
+    const val SHARED_PREF_META_IS_CT = "meta_is_ct"
+    const val SHARED_PREF_META_SOURCE = "meta_source"
+    const val SHARED_PREF_META_CAMPAIGN_DATA = "meta_campaign_data"
 
     const val ENV_PRODUCTION = "production"
     const val ENV_SANDBOX = "sandbox"

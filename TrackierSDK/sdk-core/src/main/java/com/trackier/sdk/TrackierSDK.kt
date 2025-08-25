@@ -4,7 +4,12 @@ import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.annotation.Keep
+import com.trackier.sdk.dynamic_link.AndroidParameters
+import com.trackier.sdk.dynamic_link.DesktopParameters
 import com.trackier.sdk.dynamic_link.DynamicLink
+import com.trackier.sdk.dynamic_link.IosParameters
+import com.trackier.sdk.dynamic_link.SocialMetaTagParameters
+import com.trackier.sdk.dynamic_link.UnityDynamicLinkCallback
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -27,6 +32,7 @@ object TrackierSDK {
         isInitialized = true
         appToken = config.appToken
         logger.info("Trackier SDK ${Constants.SDK_VERSION} initialized")
+
         if (config.getRegion().isNotEmpty()){
             logger.info("Regions has been selected ${config.getRegion()}")
         }
@@ -279,6 +285,65 @@ object TrackierSDK {
     }
 
     @JvmStatic
+    fun createDynamicLinkFromUnity(
+        params: HashMap<String, String>,
+        callback: UnityDynamicLinkCallback
+    ) {
+
+        val sdkParams = params.filterKeys { it.startsWith("sdk_") }
+            .mapKeys { it.key.removePrefix("sdk_") } // Remove 'sdk_' prefix
+
+        val builder = DynamicLink.Builder()
+            .setTemplateId(params["templateId"].toString())
+            .setLink(Uri.parse(params["link"]))
+            .setDomainUriPrefix(params["domainUriPrefix"].toString())
+            .setDeepLinkValue(params["deepLinkValue"].toString())
+
+            .setAndroidParameters(
+                AndroidParameters.Builder()
+                    .setRedirectLink(params["androidRedirectLink"].toString())
+                    .build()
+            )
+            .setIosParameters(
+                IosParameters.Builder()
+                    .setRedirectLink(params["iosRedirectLink"].toString())
+                    .build()
+            )
+            .setDesktopParameters(
+                DesktopParameters.Builder()
+                    .setRedirectLink(params["desktopRedirectLink"].toString())
+                    .build()
+            )
+            .setAttributionParameters(
+                channel = params["channel"].toString(),
+                mediaSource = params["mediaSource"].toString(),
+                campaign = params["campaign"].toString()
+            )
+            .setSocialMetaTagParameters(
+                SocialMetaTagParameters.Builder()
+                    .setTitle(params["metaTitle"].toString())
+                    .setDescription(params["metaDescription"].toString())
+                    .setImageLink(params["metaImage"].toString())
+                    .build()
+            )
+            .setSDKParameters(sdkParams)
+            .build()
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val result = instance.createDynamicLink(builder)
+            if (result.success) {
+                result.data?.link?.let {
+                    callback.onSuccess(it)
+                } ?: callback.onFailure("No link returned")
+            } else {
+                val errorMessage = result.error?.message ?: "Unknown error"
+                callback.onFailure(errorMessage)
+            }
+        }
+    }
+
+
+    @JvmStatic
     fun resolveDeeplinkUrl(
         inputUrl: String,
         onSuccess: (DlData) -> Unit,
@@ -313,6 +378,40 @@ object TrackierSDK {
 
             } catch (e: Exception) {
                 onError(e)
+            }
+        }
+    }
+
+    fun resolveDeeplinkUrlUnity(inputUrl: String, callback: UnityDynamicLinkCallback) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val instanceConfig = instance.config
+                val device = instanceConfig.context.let { ctx ->
+                    val dev = DeviceInfo()
+                    DeviceInfo.init(dev, ctx)
+                    dev
+                }
+
+                val body = mutableMapOf<String, Any>().apply {
+                    put("url", inputUrl)
+                    put("os", device.osName)
+                    put("osv", device.osVersion)
+                    put("sdkv", Constants.SDK_VERSION)
+                    put("apv", device.appVersion.toString())
+                    put("insId", getTrackierId())
+                    put("appKey", getAppToken())
+                }
+
+                val response = APIRepository.publicResolveDeeplinks(body)
+                val resolvedUrl = response.data
+                if (resolvedUrl != null) {
+                    callback.onSuccess(resolvedUrl.toString()) // convert DlData to string
+                } else {
+                    callback.onFailure("Deeplink resolution returned null")
+                }
+
+            } catch (e: Exception) {
+                callback.onFailure(e.message ?: "Unknown error")
             }
         }
     }
