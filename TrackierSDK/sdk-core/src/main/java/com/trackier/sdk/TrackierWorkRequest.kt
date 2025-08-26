@@ -95,17 +95,11 @@ class TrackierWorkRequest(
         body["storeRetargeting"] = storeRetargeting
         
         // Add Meta SDK referrer data
-        if (metaReferrerDetails.installReferrer.isNotEmpty() && 
-            metaReferrerDetails.source.isNotEmpty()) {
+        if (metaReferrerDetails.installReferrer.isNotEmpty()) {
             val metaSdkReferrer = mutableMapOf<String, Any>()
             metaSdkReferrer["install_referrer"] = metaReferrerDetails.installReferrer
             metaSdkReferrer["actual_timestamp"] = metaReferrerDetails.actualTimestamp
             metaSdkReferrer["is_ct"] = metaReferrerDetails.isCT
-            metaSdkReferrer["source"] = metaReferrerDetails.source
-            val campaignData = metaReferrerDetails.campaignData
-            if (campaignData != null && campaignData.isNotEmpty()) {
-                metaSdkReferrer["campaign_data"] = campaignData
-            }
             body["meta_sdk_referrer"] = metaSdkReferrer
         }
         

@@ -8,9 +8,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
-import java.util.*
-import org.json.JSONObject
-import org.json.JSONException
 
 class MetaInstallReferrer(private val context: Context, private val facebookAppId: String) {
     
@@ -49,21 +46,17 @@ class MetaInstallReferrer(private val context: Context, private val facebookAppI
             try {
                 val projection = arrayOf("install_referrer", "is_ct", "actual_timestamp")
                 var providerUri: Uri? = null
-                var source = ""
                 
                 // Try Facebook first, then Instagram, then Facebook Lite
                 when {
                     context.packageManager.resolveContentProvider(FACEBOOK_PROVIDER, 0) != null -> {
                         providerUri = Uri.parse("content://$FACEBOOK_PROVIDER/$facebookAppId")
-                        source = "facebook"
                     }
                     context.packageManager.resolveContentProvider(INSTAGRAM_PROVIDER, 0) != null -> {
                         providerUri = Uri.parse("content://$INSTAGRAM_PROVIDER/$facebookAppId")
-                        source = "instagram"
                     }
                     context.packageManager.resolveContentProvider(FACEBOOK_LITE_PROVIDER, 0) != null -> {
                         providerUri = Uri.parse("content://$FACEBOOK_LITE_PROVIDER/$facebookAppId")
-                        source = "facebook_lite"
                     }
                     else -> {
                         Log.d(TAG, "No Meta content providers found")
@@ -87,17 +80,12 @@ class MetaInstallReferrer(private val context: Context, private val facebookAppI
                 val actualTimestamp = cursor.getLong(timestampIndex)
                 val isCT = cursor.getInt(isCTIndex)
                 
-                Log.d(TAG, "Meta referrer data: referrer=$installReferrer, timestamp=$actualTimestamp, isCT=$isCT, source=$source")
-                
-                // Parse and decrypt the install referrer if available
-                val campaignData = parseInstallReferrer(installReferrer)
+                Log.d(TAG, "Meta referrer data collected: referrer=$installReferrer, timestamp=$actualTimestamp, isCT=$isCT")
                 
                 val metaReferrerDetails = MetaReferrerDetails(
                     installReferrer = installReferrer ?: "",
                     actualTimestamp = actualTimestamp,
-                    isCT = isCT,
-                    source = source,
-                    campaignData = campaignData
+                    isCT = isCT
                 )
                 
                 continuation.resume(metaReferrerDetails)
@@ -108,52 +96,6 @@ class MetaInstallReferrer(private val context: Context, private val facebookAppI
             } finally {
                 cursor?.close()
             }
-        }
-    }
-    
-    private fun parseInstallReferrer(installReferrer: String?): Map<String, Any>? {
-        if (installReferrer.isNullOrBlank()) {
-            return null
-        }
-        
-        return try {
-            val jsonObject = JSONObject(installReferrer)
-            
-            val campaignData = mutableMapOf<String, Any>()
-            
-            // Extract basic UTM parameters
-            jsonObject.optString("utm_campaign")?.let { if (it.isNotEmpty()) campaignData["utm_campaign"] = it }
-            jsonObject.optString("utm_source")?.let { if (it.isNotEmpty()) campaignData["utm_source"] = it }
-            jsonObject.optString("utm_content")?.let { if (it.isNotEmpty()) campaignData["utm_content"] = it }
-            jsonObject.optString("utm_medium")?.let { if (it.isNotEmpty()) campaignData["utm_medium"] = it }
-            jsonObject.optString("utm_term")?.let { if (it.isNotEmpty()) campaignData["utm_term"] = it }
-            
-            // Extract utm_content.source data if available
-            val utmContent = jsonObject.optJSONObject("utm_content")
-            if (utmContent != null) {
-                val source = utmContent.optJSONObject("source")
-                if (source != null) {
-                    val data = source.optString("data")
-                    val nonce = source.optString("nonce")
-                    
-                    if (data.isNotEmpty() && nonce.isNotEmpty()) {
-                        // Note: Decryption would require the GPIR decryption key
-                        // For now, we store the encrypted data
-                        campaignData["encrypted_data"] = data
-                        campaignData["nonce"] = nonce
-                        campaignData["app_id"] = utmContent.optString("a", "")
-                        campaignData["timestamp"] = utmContent.optString("t", "")
-                    }
-                }
-            }
-            
-            campaignData
-        } catch (ex: JSONException) {
-            Log.e(TAG, "Error parsing install referrer JSON: ${ex.message}")
-            null
-        } catch (ex: Exception) {
-            Log.e(TAG, "Error processing install referrer: ${ex.message}")
-            null
         }
     }
 } 

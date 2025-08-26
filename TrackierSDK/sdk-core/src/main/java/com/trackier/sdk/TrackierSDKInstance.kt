@@ -109,10 +109,6 @@ class TrackierSDKInstance {
         return url.isNotBlank()
     }
 
-    private fun isMetaReferrerStored(): Boolean {
-        val metaReferrer = Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_META_INSTALL_REFERRER)
-        return metaReferrer.isNotBlank()
-    }
 
     private fun getReferrerDetails(): RefererDetails {
         if (refDetails != null) {
@@ -128,41 +124,6 @@ class TrackierSDKInstance {
         return refDetails!!
     }
 
-    private fun getMetaReferrerDetails(): MetaReferrerDetails {
-        if (metaReferrerDetails != null) {
-            return metaReferrerDetails!!
-        }
-        val installReferrer = Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_META_INSTALL_REFERRER)
-        val actualTimestamp = Util.getSharedPrefLong(this.config.context, Constants.SHARED_PREF_META_ACTUAL_TIMESTAMP, 0L)
-        val isCT = Util.getSharedPrefInt(this.config.context, Constants.SHARED_PREF_META_IS_CT, 0)
-        val source = Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_META_SOURCE)
-        val campaignDataJson = Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_META_CAMPAIGN_DATA)
-        
-        val campaignData = if (campaignDataJson.isNotEmpty()) {
-            try {
-                val jsonObject = org.json.JSONObject(campaignDataJson)
-                val map = mutableMapOf<String, Any>()
-                val keys = jsonObject.keys()
-                while (keys.hasNext()) {
-                    val key = keys.next()
-                    map[key] = jsonObject.get(key)
-                }
-                map
-            } catch (ex: Exception) {
-                null
-            }
-        } else null
-        
-        metaReferrerDetails = MetaReferrerDetails(
-            installReferrer = installReferrer,
-            actualTimestamp = actualTimestamp,
-            isCT = isCT,
-            source = source,
-            campaignData = campaignData
-        )
-        return metaReferrerDetails!!
-    }
-
     private fun setReferrerDetails(refererDetails: RefererDetails) {
         refDetails = refererDetails
         try {
@@ -171,28 +132,6 @@ class TrackierSDKInstance {
                     .putString(Constants.SHARED_PREF_CLICK_TIME, refererDetails.clickTime)
                     .putString(Constants.SHARED_PREF_INSTALL_TIME, refererDetails.installTime)
                     .apply()
-        } catch (ex: Exception) {}
-    }
-    
-    private fun setMetaReferrerDetails(metaReferrerDetails: MetaReferrerDetails) {
-        this.metaReferrerDetails = metaReferrerDetails
-        try {
-            val prefs = Util.getSharedPref(this.config.context)
-            val campaignDataJson = if (metaReferrerDetails.campaignData != null) {
-                val jsonObject = org.json.JSONObject()
-                metaReferrerDetails.campaignData.forEach { (key, value) ->
-                    jsonObject.put(key, value)
-                }
-                jsonObject.toString()
-            } else ""
-            
-            prefs.edit()
-                .putString(Constants.SHARED_PREF_META_INSTALL_REFERRER, metaReferrerDetails.installReferrer)
-                .putLong(Constants.SHARED_PREF_META_ACTUAL_TIMESTAMP, metaReferrerDetails.actualTimestamp)
-                .putInt(Constants.SHARED_PREF_META_IS_CT, metaReferrerDetails.isCT)
-                .putString(Constants.SHARED_PREF_META_SOURCE, metaReferrerDetails.source)
-                .putString(Constants.SHARED_PREF_META_CAMPAIGN_DATA, campaignDataJson)
-                .apply()
         } catch (ex: Exception) {}
     }
     
@@ -250,7 +189,7 @@ class TrackierSDKInstance {
         trackierWorkRequest.device = device
         trackierWorkRequest.gaid = gaid
         trackierWorkRequest.refDetails = getReferrerDetails()
-        trackierWorkRequest.metaReferrerDetails = getMetaReferrerDetails()
+        trackierWorkRequest.metaReferrerDetails = this.metaReferrerDetails ?: MetaReferrerDetails.default()
         trackierWorkRequest.installID = installId
         trackierWorkRequest.customerId = this.customerId
         trackierWorkRequest.customerEmail = this.customerEmail
@@ -313,22 +252,21 @@ class TrackierSDKInstance {
             }
             
             // Collect Meta referrer data if Facebook App ID is configured
-            if (!isMetaReferrerStored()) {
-                val facebookAppId = this.config.getFacebookAppId()
-                if (facebookAppId.isNotEmpty() && facebookAppId != "your_facebook_app_id_here") {
-                    try {
-                        val metaInstallRef = MetaInstallReferrer(this.config.context, facebookAppId)
-                        val metaRefDetails = metaInstallRef.getMetaReferrerDetails()
-                        if (metaRefDetails.installReferrer.isNotEmpty()) {
-                            this.setMetaReferrerDetails(metaRefDetails)
-                            Factory.logger.info("Meta referrer data collected: ${metaRefDetails.source}")
-                        }
-                    } catch (ex: Exception) {
-                        Factory.logger.warning("Unable to get Meta referrer data on install: ${ex.message}")
+            val facebookAppId = this.config.getFacebookAppId()
+            Log.d("trackiersdk","TrackierSDKInstance facebook ID is " + "${facebookAppId}")
+            if (facebookAppId.isNotEmpty() && facebookAppId != "your_facebook_app_id_here") {
+                try {
+                    val metaInstallRef = MetaInstallReferrer(this.config.context, facebookAppId)
+                    val metaRefDetails = metaInstallRef.getMetaReferrerDetails()
+                    if (metaRefDetails.installReferrer.isNotEmpty()) {
+                        this.metaReferrerDetails = metaRefDetails
+                        Factory.logger.info("Meta referrer data collected")
                     }
-                } else {
-                    Factory.logger.info("Facebook App ID not configured, skipping Meta referrer collection")
+                } catch (ex: Exception) {
+                    Factory.logger.warning("Unable to get Meta referrer data on install: ${ex.message}")
                 }
+            } else {
+                Factory.logger.info("Facebook App ID not configured, skipping Meta referrer collection")
             }
         } catch (ex: Exception) {
             Factory.logger.warning("Unable to get referrer data on install")

@@ -119,50 +119,20 @@ object Util {
     }
 
     fun getSharedPrefString(context: Context, key: String): String {
-        return try {
-            val prefs = getSharedPref(context)
-            prefs.getString(key, "") ?: ""
-        } catch (ex: Exception) {
-            ""
-        }
-    }
-
-    fun getSharedPrefLong(context: Context, key: String, defaultValue: Long): Long {
-        return try {
-            val prefs = getSharedPref(context)
-            prefs.getLong(key, defaultValue)
-        } catch (ex: Exception) {
-            defaultValue
-        }
-    }
-
-    fun getSharedPrefInt(context: Context, key: String, defaultValue: Int): Int {
-        return try {
-            val prefs = getSharedPref(context)
-            prefs.getInt(key, defaultValue)
-        } catch (ex: Exception) {
-            defaultValue
-        }
+        val prefs = getSharedPref(context)
+        try {
+            val data = prefs.getString(key, "")
+            if (data?.isBlank() == false) {
+                return data
+            }
+        } catch (ex: Exception) {}
+        return ""
     }
 
     fun setSharedPrefString(context: Context, key: String, value: String) {
         try {
             val prefs = getSharedPref(context)
             prefs.edit().putString(key, value).apply()
-        } catch (ex: Exception) {}
-    }
-
-    fun setSharedPrefLong(context: Context, key: String, value: Long) {
-        try {
-            val prefs = getSharedPref(context)
-            prefs.edit().putLong(key, value).apply()
-        } catch (ex: Exception) {}
-    }
-
-    fun setSharedPrefInt(context: Context, key: String, value: Int) {
-        try {
-            val prefs = getSharedPref(context)
-            prefs.edit().putInt(key, value).apply()
         } catch (ex: Exception) {}
     }
 

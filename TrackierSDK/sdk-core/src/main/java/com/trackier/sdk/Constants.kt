@@ -40,13 +40,6 @@ object Constants {
     const val SHARED_PREF_PARTNER = "partner"
     const val SHARED_PREF_ISRETARGETING = "isRetargeting"
     
-    // Meta Install Referrer constants
-    const val SHARED_PREF_META_INSTALL_REFERRER = "meta_install_referrer"
-    const val SHARED_PREF_META_ACTUAL_TIMESTAMP = "meta_actual_timestamp"
-    const val SHARED_PREF_META_IS_CT = "meta_is_ct"
-    const val SHARED_PREF_META_SOURCE = "meta_source"
-    const val SHARED_PREF_META_CAMPAIGN_DATA = "meta_campaign_data"
-    
     const val PRE_INSTALL_MANIFEST_KEY = "TR_PRE_INSTALL_PATH"
     const val SYSTEM_PROPERTIES_PRE_INSTALL_PATH = "ro.trackier.preinstall.path"
     const val SYSTEM_PROPERTIES_DEVICE_BUILD_ANDROID = "ro.build.date.utc"
