@@ -8,9 +8,7 @@ import com.squareup.moshi.JsonClass
 data class MetaReferrerDetails(
     val installReferrer: String,
     val actualTimestamp: Long,
-    val isCT: Int,
-    val source: String = "", // "facebook", "instagram", "facebook_lite"
-    val campaignData: Map<String, Any>? = null
+    val isCT: Int
 ) {
     companion object {
         fun default(): MetaReferrerDetails {
