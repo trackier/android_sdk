@@ -44,6 +44,7 @@ class TrackierSDKInstance {
     var gender = ""
     var dob = ""
     var preinstallData: MutableMap<String, Any>? = null
+    private var metaReferrerDetails: MetaReferrerDetails? = null
     
 
     /**
@@ -61,6 +62,9 @@ class TrackierSDKInstance {
         this.isManualInstall = config.getManualMode()
         this.disableOrganicTrack = config.getOrganicTracking()
         DeviceInfo.init(device, this.config.context)
+        if (!isManualInstall) {
+            initAttributionInfo()
+        }
         CoroutineScope(Dispatchers.IO).launch {
             for (i in 1..5) {
                val gadid =  initGaid()
@@ -70,7 +74,6 @@ class TrackierSDKInstance {
                 delay(1000 * i.toLong())
             }
             if (!isManualInstall) {
-                initAttributionInfo()
                 trackInstall()
             }
             trackSession()
@@ -91,7 +94,7 @@ class TrackierSDKInstance {
         return this.gaid.toString()
     }
 
-    private suspend fun initAttributionInfo() {
+    private fun initAttributionInfo() {
         isInitialized = true
     }
 
@@ -106,6 +109,11 @@ class TrackierSDKInstance {
     private fun isReferrerStored(): Boolean {
         val url = Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_INSTALL_URL)
         return url.isNotBlank()
+    }
+
+    private fun isMetaReferrerStored(): Boolean {
+        val metaReferrer = Util.getSharedPrefString(this.config.context, Constants.SHARED_PREF_META_INSTALL_REFERRER)
+        return metaReferrer.isNotBlank()
     }
 
     private fun getReferrerDetails(): RefererDetails {
@@ -204,6 +212,7 @@ class TrackierSDKInstance {
         trackierWorkRequest.customerPhoneNumber = this.customerPhoneNumber
         trackierWorkRequest.preinstallData = this.preinstallData
         trackierWorkRequest.storeRetargeting = getRetargetingData()
+        trackierWorkRequest.metaReferrerDetails = this.metaReferrerDetails ?: MetaReferrerDetails.default()
         
         return trackierWorkRequest
     }
@@ -246,11 +255,28 @@ class TrackierSDKInstance {
                         this.setXiaomiReferrerDetails(xiaomiInstallRef)
                     }
                 }
-                
             }
         } catch (ex: Exception) {
             Factory.logger.warning("Unable to get referrer data on install")
         }
+
+        val facebookAppId = this.config.getFacebookAppId()
+        Log.d("trackiersdk","TrackierSDKInstance facebook ID is " + "${facebookAppId}")
+        if (facebookAppId.isNotEmpty() && facebookAppId != "your_facebook_app_id_here") {
+            try {
+                val metaInstallRef = MetaInstallReferrer(this.config.context, facebookAppId)
+                val metaRefDetails = metaInstallRef.getMetaReferrerDetails()
+                if (metaRefDetails.installReferrer.isNotEmpty()) {
+                    this.metaReferrerDetails = metaRefDetails
+                    Factory.logger.info("Meta referrer data collected")
+                }
+            } catch (ex: Exception) {
+                Factory.logger.warning("Unable to get Meta referrer data on install: ${ex.message}")
+            }
+        } else {
+            Factory.logger.info("Facebook App ID not configured, skipping Meta referrer collection")
+        }
+
         preinstallData = Util.getPreLoadAndPAIdata(config.context)
         val wrkRequest = makeWorkRequest(TrackierWorkRequest.KIND_INSTALL)
         try {

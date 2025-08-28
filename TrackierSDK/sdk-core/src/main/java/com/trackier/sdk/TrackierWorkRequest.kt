@@ -38,6 +38,7 @@ class TrackierWorkRequest(
     var preinstallData: MutableMap<String, Any>? = null
     lateinit var storeRetargeting: Map<String, Any>
     var deeplinkUrl = ""
+    var metaReferrerDetails = MetaReferrerDetails.default()
     
     private fun setDefaults(): MutableMap<String, Any> {
         val body = mutableMapOf<String, Any>()
@@ -92,6 +93,13 @@ class TrackierWorkRequest(
         body["cname"] = customerName
         body["getPreLoadAndPAIdata"] = preinstallData.toString()
         body["storeRetargeting"] = storeRetargeting
+        if (metaReferrerDetails.installReferrer.isNotEmpty()) {
+            val metaSdkReferrer = mutableMapOf<String, Any>()
+            metaSdkReferrer["install_referrer"] = metaReferrerDetails.installReferrer
+            metaSdkReferrer["actual_timestamp"] = metaReferrerDetails.actualTimestamp
+            metaSdkReferrer["is_ct"] = metaReferrerDetails.isCT
+            body["meta_sdk_referrer"] = metaSdkReferrer
+        }
         return body
     }
 

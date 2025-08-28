@@ -4,7 +4,7 @@
 
 
 #proguard  rules for intallreferrer
--keep public class com.android.installreferrer.* { *; }
+-keep class com.android.installreferrer.* { *; }
 -keep public class com.android.installreferrer.api.** { *; }
 
 # proguard- rules OkHttp, Retrofit and Moshi
